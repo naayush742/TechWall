@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programming Languages: Binary to Python — TechWall</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar">
+  <a href="../index.html" class="nav-logo">TECH<span class="accent">WALL</span></a>
+  <div class="nav-links">
+    <a href="../index.html#about">About</a>
+    <a href="../index.html#wall">The Wall</a>
+    <a href="../index.html#materials">Materials</a>
+    <a href="../index.html#gallery">Gallery</a>
+    <a href="../index.html#contact">Contact</a>
+  </div>
+  <a href="../index.html#contact" class="nav-cta">GET INVOLVED</a>
+</nav>
+
+<!-- ─── TICKER ─── -->
+<div class="ticker-wrap" style="margin-top:64px;">
+  <div class="ticker-track">
+    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
+    <span>PROGRAMMING LANGUAGES</span><span class="sep">◈</span>
+    <span>BINARY</span><span class="sep">◈</span>
+    <span>ASSEMBLY</span><span class="sep">◈</span>
+    <span>FORTRAN</span><span class="sep">◈</span>
+    <span>COBOL</span><span class="sep">◈</span>
+    <span>C</span><span class="sep">◈</span>
+    <span>C++</span><span class="sep">◈</span>
+    <span>C#</span><span class="sep">◈</span>
+    <span>PYTHON</span><span class="sep">◈</span>
+    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
+    <span>PROGRAMMING LANGUAGES</span><span class="sep">◈</span>
+    <span>BINARY</span><span class="sep">◈</span>
+    <span>ASSEMBLY</span><span class="sep">◈</span>
+    <span>FORTRAN</span><span class="sep">◈</span>
+    <span>COBOL</span><span class="sep">◈</span>
+    <span>C</span><span class="sep">◈</span>
+    <span>C++</span><span class="sep">◈</span>
+    <span>C#</span><span class="sep">◈</span>
+    <span>PYTHON</span><span class="sep">◈</span>
+  </div>
+</div>
+
+<main class="section-z" style="padding: 100px 0;">
+    <div class="subpage-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar reveal-l">
+            <span class="sidebar-h">NAVIGATION</span>
+            <ul class="sidebar-links">
+                <li><a href="#binary">Binary</a></li>
+                <li><a href="#assembly">Assembly</a></li>
+                <li><a href="#fortran">Fortran</a></li>
+                <li><a href="#cobol">COBOL</a></li>
+                <li><a href="#c">C</a></li>
+                <li><a href="#cpp">C++</a></li>
+                <li><a href="#csharp">C#</a></li>
+                <li><a href="#python">Python</a></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="content-section reveal in" style="flex: 1; max-width: 1000px;">
+            <h1>Evolution of Programming Languages</h1>
+    
+            <p>This page traces the history of programming from the raw machine code to the high-level languages that power today's world.</p>
+
+            <hr>
+
+            <section id="binary" style="margin-top: 50px;">
+                <h2>Binary & Machine Code</h2>
+                <p><strong>Binary</strong> is the fundamental language of computers, consisting of only 0s and 1s. It represents the electrical signals (on/off) that a CPU processes. Every piece of software, regardless of the language it was written in, eventually compiles down to machine code.</p>
+                <p>Historically, early programmers had to manually toggle switches or use punch cards to input these instructions. Today, binary remains the base layer of all computing, the rawest form of digital logic.</p>
+            </section>
+
+            <section id="assembly" style="margin-top: 50px;">
+                <h2>Assembly Language</h2>
+                <p><strong>Assembly</strong> is a low-level programming language that provides a human-readable representation of machine code. It uses mnemonics like `MOV`, `ADD`, and `PUSH` to represent specific CPU instructions.</p>
+                <p>Assembly gives programmers direct control over hardware and memory, making it essential for writing operating system kernels, device drivers, and high-performance embedded systems where every byte and clock cycle counts.</p>
+            </section>
+
+            <section id="fortran" style="margin-top: 50px;">
+                <h2>Fortran</h2>
+                <p>Launched in 1957 by IBM, <strong>Fortran</strong> (Formula Translation) was the first successful high-level programming language. It was designed specifically for scientific and numerical computing.</p>
+                <p>Even today, Fortran remains the gold standard for high-performance computing (HPC), powering some of the world's most complex simulations in climate modeling, physics, and aerospace engineering.</p>
+            </section>
+
+            <section id="cobol" style="margin-top: 50px;">
+                <h2>COBOL</h2>
+                <p>Created in 1959, <strong>COBOL</strong> (Common Business-Oriented Language) was designed for administrative and financial data processing. It was pioneered by Rear Admiral Grace Hopper with the goal of making code more English-like and readable.</p>
+                <p>COBOL is the "invisible engine" of the global economy, still processing over 70% of all business transactions today, particularly in banking and government systems.</p>
+            </section>
+
+            <section id="c" style="margin-top: 50px;">
+                <h2>C</h2>
+                <p>Developed at Bell Labs in the early 1970s by Dennis Ritchie, <strong>C</strong> is often called the "Mother of All Languages." It was used to rewrite the Unix operating system, making it portable for the first time.</p>
+                <p>C provides a perfect balance between low-level hardware access and high-level structure. Its syntax and concepts influenced nearly every modern language, and it remains the standard for system programming.</p>
+            </section>
+
+            <section id="cpp" style="margin-top: 50px;">
+                <h2>C++</h2>
+                <p>Created by Bjarne Stroustrup in 1979 as "C with Classes," <strong>C++</strong> added Object-Oriented Programming (OOP) features to the C language. It was designed to handle complex software without sacrificing performance.</p>
+                <p>C++ is the powerhouse behind AAA game engines (like Unreal Engine), web browsers, and high-frequency trading platforms, where speed and resource management are critical.</p>
+            </section>
+
+            <section id="csharp" style="margin-top: 50px;">
+                <h2>C# (C-Sharp)</h2>
+                <p>Developed by Microsoft around 2000 as part of the .NET initiative, <strong>C#</strong> is a modern, object-oriented language. While influenced by C++ and Java, it was designed to be simpler and more productive.</p>
+                <p>C# is the primary language for Windows enterprise applications and is the engine behind the Unity game engine, making it a favorite for both business software and indie game development.</p>
+            </section>
+
+            <section id="python" style="margin-top: 50px;">
+                <h2>Python</h2>
+                <p>Released in 1991 by Guido van Rossum, <strong>Python</strong> emphasizes code readability and simplicity. Its "batteries included" philosophy and vast library ecosystem have made it incredibly versatile.</p>
+                <p>Today, Python is the leading language for Artificial Intelligence, Machine Learning, and Data Science, while remaining the most popular language for beginners and rapid prototyping.</p>
+            </section>
+
+            <br><br>
+            <hr>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="../index.html#wall" class="nav-cta">← BACK TO THE WALL</a>
+            </div>
+
+            <br><br>
+            <p><em>Document Version: 1.0.0 (Programming)</em></p>
+            <p><em>Programmer Notes: From the raw pulse of the CPU to the elegance of modern scripts.</em></p>
+            
+            <br><br><br><br>
+        </div>
+    </div>
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="f-brand-name">TECH<span class="a">WALL</span></span>
+      <p>An e-waste art installation celebrating the IT field through the creative reuse of discarded technology. Every component has a second life.</p>
+    </div>
+    <div>
+      <div class="f-col-h">Navigate</div>
+      <ul class="f-lnks">
+        <li><a href="../index.html#about">About</a></li>
+        <li><a href="../index.html#wall">The Wall</a></li>
+        <li><a href="../index.html#materials">Materials</a></li>
+        <li><a href="../index.html#gallery">Gallery</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-col-h">Contribute</div>
+      <ul class="f-lnks">
+        <li><a href="../index.html#contact">Donate Components</a></li>
+        <li><a href="../index.html#contact">Sponsor a Logo</a></li>
+        <li><a href="../index.html#contact">Volunteer</a></li>
+        <li><a href="../index.html#contact">Partnership</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-col-h">Connect</div>
+      <ul class="f-lnks">
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">Twitter / X</a></li>
+        <li><a href="#">Press Kit</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-btm">
+    <span class="f-copy">© 2025 TECHWALL PROJECT — BUILT FROM WHAT OTHERS DISCARDED</span>
+    <span class="f-status"><span class="f-dot"></span>INSTALLATION IN PROGRESS</span>
+  </div>
+</footer>
+
+<script src="../data.js"></script>
+<script src="../main.js"></script>
+</body>
+</html>

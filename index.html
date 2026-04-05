@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechWall — E-Waste Art Installation</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">TECH<span class="accent">WALL</span></a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#wall">The Wall</a>
+    <a href="#materials">Materials</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="#contact" class="nav-cta">GET INVOLVED</a>
+</nav>
+
+<!-- ─── TICKER ─── -->
+<div class="ticker-wrap" style="margin-top:64px;">
+  <div class="ticker-track">
+    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
+    <span>CPU CHIPS</span><span class="sep">◈</span>
+    <span>KEYBOARD KEYS</span><span class="sep">◈</span>
+    <span>RAM STICKS</span><span class="sep">◈</span>
+    <span>CIRCUIT BOARDS</span><span class="sep">◈</span>
+    <span>HARD DRIVES</span><span class="sep">◈</span>
+    <span>MOUSE PARTS</span><span class="sep">◈</span>
+    <span>IT ART INSTALLATION</span><span class="sep">◈</span>
+    <span>PYTHON</span><span class="sep">◈</span>
+    <span>JAVASCRIPT</span><span class="sep">◈</span>
+    <span>LINUX</span><span class="sep">◈</span>
+    <span>REACT</span><span class="sep">◈</span>
+    <span>DOCKER</span><span class="sep">◈</span>
+    <span>KUBERNETES</span><span class="sep">◈</span>
+    <!-- duplicate for seamless loop -->
+    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
+    <span>CPU CHIPS</span><span class="sep">◈</span>
+    <span>KEYBOARD KEYS</span><span class="sep">◈</span>
+    <span>RAM STICKS</span><span class="sep">◈</span>
+    <span>CIRCUIT BOARDS</span><span class="sep">◈</span>
+    <span>HARD DRIVES</span><span class="sep">◈</span>
+    <span>MOUSE PARTS</span><span class="sep">◈</span>
+    <span>IT ART INSTALLATION</span><span class="sep">◈</span>
+    <span>PYTHON</span><span class="sep">◈</span>
+    <span>JAVASCRIPT</span><span class="sep">◈</span>
+    <span>LINUX</span><span class="sep">◈</span>
+    <span>REACT</span><span class="sep">◈</span>
+    <span>DOCKER</span><span class="sep">◈</span>
+    <span>KUBERNETES</span><span class="sep">◈</span>
+  </div>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="hero section-z" id="home">
+  <div class="hero-orb o1"></div>
+  <div class="hero-orb o2"></div>
+  <div class="hero-orb o3"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow reveal d1">
+      <span class="pulse"></span>
+      E-WASTE ART INSTALLATION
+    </div>
+
+    <h1 class="hero-title">
+      <span class="t1 reveal d2">WHERE DEAD</span>
+      <span class="t2 reveal d3">TECH LIVES</span>
+      <span class="t3 reveal d4">FOREVER</span>
+    </h1>
+
+    <p class="hero-sub reveal d5">
+      A monumental wall crafted from <strong>discarded IT components</strong> — CPUs, keyboards,
+      circuit boards, hard drives — transformed into icons of the technologies that shaped our digital world.
+    </p>
+
+    <div class="hero-btns reveal d6">
+      <a href="#wall" class="btn-primary">EXPLORE THE WALL</a>
+      <a href="#about" class="btn-secondary">DISCOVER HOW</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <span class="sh-line"></span>
+  </div>
+</section>
+
+<!-- ─── STATS BAR ─── -->
+<div class="stats-wrap section-z">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <span class="stat-num">100+</span>
+      <span class="stat-label">KG E-Waste</span>
+      <span class="stat-bar"></span>
+    </div>
+    <div class="stat-item reveal d1">
+      <span class="stat-num" style="color:var(--cyan)">40</span>
+      <span class="stat-label">Tech Icons</span>
+      <span class="stat-bar" style="background:linear-gradient(90deg,var(--cyan),var(--purple))"></span>
+    </div>
+    <div class="stat-item reveal d2">
+      <span class="stat-num" style="color:var(--orange)">20+</span>
+      <span class="stat-label">Component Types</span>
+      <span class="stat-bar" style="background:linear-gradient(90deg,var(--orange),var(--gold))"></span>
+    </div>
+    <div class="stat-item reveal d3">
+      <span class="stat-num" style="color:var(--purple)">9m²</span>
+      <span class="stat-label">Wall Area</span>
+      <span class="stat-bar" style="background:linear-gradient(90deg,var(--purple),var(--pink))"></span>
+    </div>
+    <div class="stat-item reveal d4">
+      <span class="stat-num" style="color:var(--gold)">9</span>
+      <span class="stat-label">Student Builders</span>
+      <span class="stat-bar" style="background:linear-gradient(90deg,var(--gold),var(--orange))"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MARQUEE ─── -->
+<div class="marquee-section section-z">
+  <div class="marquee-track">
+    <span class="m-item">WHERE DEAD TECH LIVES ON <span class="m-dot">◈</span></span>
+    <span class="m-item">E-WASTE IS ART <span class="m-dot">◈</span></span>
+    <span class="m-item">SECOND LIFE FOR SILICON <span class="m-dot">◈</span></span>
+    <span class="m-item">CIRCUITS BECOME CANVAS <span class="m-dot">◈</span></span>
+    <span class="m-item">CPU MOSAICS <span class="m-dot">◈</span></span>
+    <span class="m-item">KEYBOARD KEY ART <span class="m-dot">◈</span></span>
+    <span class="m-item">RAM FRAME BORDERS <span class="m-dot">◈</span></span>
+    <span class="m-item">HDD PLATTER RINGS <span class="m-dot">◈</span></span>
+    <!-- dup -->
+    <span class="m-item">WHERE DEAD TECH LIVES ON <span class="m-dot">◈</span></span>
+    <span class="m-item">E-WASTE IS ART <span class="m-dot">◈</span></span>
+    <span class="m-item">SECOND LIFE FOR SILICON <span class="m-dot">◈</span></span>
+    <span class="m-item">CIRCUITS BECOME CANVAS <span class="m-dot">◈</span></span>
+    <span class="m-item">CPU MOSAICS <span class="m-dot">◈</span></span>
+    <span class="m-item">KEYBOARD KEY ART <span class="m-dot">◈</span></span>
+    <span class="m-item">RAM FRAME BORDERS <span class="m-dot">◈</span></span>
+    <span class="m-item">HDD PLATTER RINGS <span class="m-dot">◈</span></span>
+  </div>
+</div>
+
+<!-- ─── ABOUT ─── -->
+<section class="about-section section-z" id="about">
+  <div class="about-inner">
+
+    <div class="wall-canvas reveal-l">
+      <div class="wall-grid" id="wallGrid"></div>
+    </div>
+
+    <div class="about-text reveal-r">
+      <div class="eyebrow">The Concept</div>
+      <h2 class="s-heading">Art Born From<br><span class="hl">Digital Waste</span></h2>
+      
+
+      <!-- Build period banner -->
+      <div class="about-period reveal d1">
+        <div class="period-block">
+          <span class="period-label">BUILD STARTED</span>
+          <span class="period-date">OCT 2025</span>
+        </div>
+        <div class="period-arrow">
+          <span class="period-line"></span>
+          <span class="period-tag">5 MONTHS IN PROGRESS</span>
+          <span class="period-line"></span>
+        </div>
+        <div class="period-block">
+          <span class="period-label">COMPLETED</span>
+          <span class="period-date">MAR 2026</span>
+        </div>
+      </div>
+
+      <!-- University sourcing note -->
+      <div class="about-source reveal d2">
+        <span class="src-icon">🏛️</span>
+        <div class="src-body">
+          <strong>Sourced from Uttaranchal University</strong>
+          <span>All e-waste components — CPUs, keyboards, RAM, circuit boards and HDDs — were collected from various departments across Uttaranchal University, giving discarded campus tech a permanent second life on this wall.</span>
+        </div>
+      </div>
+
+      <div class="feature-pills">
+        <div class="f-pill reveal d3" style="--fp-c:var(--green)">
+          <span class="fp-icon">♻️</span>
+          <div class="fp-t">
+            <strong>100% E-Waste Sourced</strong>
+            <span>Every component was headed for landfill — now it's art that lasts forever</span>
+          </div>
+        </div>
+        <div class="f-pill reveal d4" style="--fp-c:var(--cyan)">
+          <span class="fp-icon">⌨️</span>
+          <div class="fp-t">
+            <strong>Recognizable Tech Icons</strong>
+            <span>Python, Linux, React, Git and 100+ more crafted from real components</span>
+          </div>
+        </div>
+        <div class="f-pill reveal d5" style="--fp-c:var(--orange)">
+          <span class="fp-icon">📱</span>
+          <div class="fp-t">
+            <strong>Interactive QR Experience</strong>
+            <span>Scan any section to explore documentation, history and insights</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TECH WALL ─── -->
+<section class="tech-section section-z" id="wall">
+  <div class="tech-header">
+    <div class="reveal-l">
+      <div class="eyebrow">The Collection</div>
+      <h2 class="s-heading">Technologies<br><span class="hl">On The Wall</span></h2>
+      <p class="s-body">48 icons and counting — each one built from e-waste.</p>
+    </div>
+    <div class="filter-row reveal-r">
+      <button class="fpill on"     onclick="filterTech('all',this)">ALL</button>
+      <button class="fpill"        onclick="filterTech('lang',this)">LANGUAGES</button>
+      <button class="fpill"        onclick="filterTech('framework',this)">FRAMEWORKS</button>
+      <button class="fpill"        onclick="filterTech('os',this)">OS & TOOLS</button>
+      <button class="fpill"        onclick="filterTech('cloud',this)">CLOUD</button>
+      <button class="fpill"        onclick="filterTech('db',this)">DATABASES</button>
+    </div>
+  </div>
+  <div class="tech-grid" id="techGrid"></div>
+</section>
+
+<!-- ─── MATERIALS ─── -->
+<section class="materials-section section-z" id="materials">
+  <div class="mat-inner">
+
+    <div>
+      <div class="eyebrow reveal">Raw Materials</div>
+      <h2 class="s-heading reveal d1">The Components<br><span class="hl">Behind The Art</span></h2>
+      <p class="s-body reveal d2">Collected from donation drives, IT recycling centers, and tech departments — these are the building blocks of TechWall.</p>
+
+      <div class="mat-grid">
+        <div class="mat-card reveal d1" data-i="01">
+          <span class="m-icon">🖥</span>
+          <span class="m-name">CPU CHIPS</span>
+          <span class="m-desc">Intel & AMD processors of all generations form dense mosaic tiles</span>
+        </div>
+        <div class="mat-card reveal d2" data-i="02">
+          <span class="m-icon">⌨️</span>
+          <span class="m-name">KEYBOARD KEYS</span>
+          <span class="m-desc">Individual keycaps sorted by color create pixel-art lettering</span>
+        </div>
+        <div class="mat-card reveal d3" data-i="03">
+          <span class="m-icon">💾</span>
+          <span class="m-name">HDD PLATTERS</span>
+          <span class="m-desc">Reflective hard drive discs used as accent pieces and backgrounds</span>
+        </div>
+        <div class="mat-card reveal d4" data-i="04">
+          <span class="m-icon">🐭</span>
+          <span class="m-name">MOUSE PARTS</span>
+          <span class="m-desc">Scroll wheels, sensors and buttons for fine detail work</span>
+        </div>
+        <div class="mat-card reveal d5" data-i="05">
+          <span class="m-icon">🔌</span>
+          <span class="m-name">CIRCUIT BOARDS</span>
+          <span class="m-desc">PCB segments with etched copper traces form intricate patterns</span>
+        </div>
+        <div class="mat-card reveal d6" data-i="06">
+          <span class="m-icon">🔋</span>
+          <span class="m-name">RAM STICKS</span>
+          <span class="m-desc">Memory modules act as structural bars and framing elements</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="eyebrow reveal">Process</div>
+      <h2 class="s-heading reveal d1">From Collection<br><span class="hl">To Creation</span></h2>
+
+      <div class="timeline">
+        <div class="tl-item reveal d1">
+          <div class="tl-num" style="--tc:var(--green)">01</div>
+          <div>
+            <div class="tl-phase" style="--tc:var(--green)">Phase 01 — Collection</div>
+            <div class="tl-title">E-Waste Gathering Drive</div>
+            <div class="tl-desc">Community drop-offs, IT department donations, and recycling centers contribute over 3 months.</div>
+          </div>
+        </div>
+        <div class="tl-item reveal d2">
+          <div class="tl-num" style="--tc:var(--cyan)">02</div>
+          <div>
+            <div class="tl-phase" style="--tc:var(--cyan)">Phase 02 — Sorting</div>
+            <div class="tl-title">Categorization & Prep</div>
+            <div class="tl-desc">Components sorted by type, color, and size. Cleaned and catalogued for use.</div>
+          </div>
+        </div>
+        <div class="tl-item reveal d3">
+          <div class="tl-num" style="--tc:var(--orange)">03</div>
+          <div>
+            <div class="tl-phase" style="--tc:var(--orange)">Phase 03 — Design</div>
+            <div class="tl-title">Digital Blueprint</div>
+            <div class="tl-desc">Each tech icon is digitally mapped to specific components. Pixel-by-pixel planning.</div>
+          </div>
+        </div>
+        <div class="tl-item reveal d4">
+          <div class="tl-num" style="--tc:var(--purple)">04</div>
+          <div>
+            <div class="tl-phase" style="--tc:var(--purple)">Phase 04 — Construction</div>
+            <div class="tl-title">Assembly & Mounting</div>
+            <div class="tl-desc">Components mounted onto reinforced wall panels section by section.</div>
+          </div>
+        </div>
+        <div class="tl-item reveal d5">
+          <div class="tl-num" style="--tc:var(--gold)">05</div>
+          <div>
+            <div class="tl-phase" style="--tc:var(--gold)">Phase 05 — Launch</div>
+            <div class="tl-title">Unveiling & Exhibition</div>
+            <div class="tl-desc">Public unveiling with guided tours, QR experiences, and e-waste workshops.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── GALLERY ─── -->
+<!-- <section class="gallery-section section-z" id="gallery"> 
+  <div class="gallery-center">
+    <div class="eyebrow reveal">Visual Preview</div>
+    <h2 class="s-heading reveal d1">The Wall<br><span class="hl">In Progress</span></h2>
+    <p class="s-body reveal d2" style="margin:0 auto">From raw components to assembled icons — a glimpse into the process.</p>
+  </div>
+
+  <div class="gallery-mosaic">
+    <div class="g-cell reveal-s d1">
+      <div class="g-vis" style="font-size:1.1rem">
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;width:85%;height:76%;align-content:center">
+          <div style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">🐍</div>
+          <div style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.2);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">⚛️</div>
+          <div style="background:rgba(255,107,43,0.08);border:1px solid rgba(255,107,43,0.2);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">🐧</div>
+          <div style="background:rgba(155,89,255,0.08);border:1px solid rgba(155,89,255,0.2);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">🐳</div>
+          <div style="background:rgba(255,184,77,0.08);border:1px solid rgba(255,184,77,0.2);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">☕</div>
+          <div style="background:rgba(0,255,136,0.06);border:1px solid rgba(0,255,136,0.15);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">🔮</div>
+          <div style="background:rgba(255,77,77,0.08);border:1px solid rgba(255,77,77,0.2);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">🦀</div>
+          <div style="background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.15);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">🌐</div>
+          <div style="background:rgba(155,89,255,0.06);border:1px solid rgba(155,89,255,0.15);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">⚙️</div>
+          <div style="background:rgba(255,107,43,0.06);border:1px solid rgba(255,107,43,0.15);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">🔷</div>
+          <div style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">📦</div>
+          <div style="background:rgba(255,184,77,0.06);border:1px solid rgba(255,184,77,0.15);padding:7px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:transform .2s" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform=''">⚡</div>
+        </div>
+        <span class="g-tag">SECTION A — LANGUAGES ROW</span>
+      </div>
+      <div class="g-over"><span class="g-lbl">VIEW SECTION A</span></div>
+    </div>
+
+    <div class="g-cell reveal-s d2">
+      <div class="g-vis">
+        <div style="display:grid;grid-template-columns:repeat(3,14px);gap:4px">
+          <div style="width:14px;height:14px;background:rgba(0,212,255,0.6)"></div>
+          <div style="width:14px;height:14px;background:rgba(0,212,255,0.3)"></div>
+          <div style="width:14px;height:14px;background:rgba(0,212,255,0.6)"></div>
+          <div style="width:14px;height:14px;background:rgba(0,212,255,0.2)"></div>
+          <div style="width:14px;height:14px;background:rgba(0,212,255,0.7)"></div>
+          <div style="width:14px;height:14px;background:rgba(0,212,255,0.2)"></div>
+          <div style="width:14px;height:14px;background:rgba(0,212,255,0.6)"></div>
+          <div style="width:14px;height:14px;background:rgba(0,212,255,0.3)"></div>
+          <div style="width:14px;height:14px;background:rgba(0,212,255,0.6)"></div>
+        </div>
+        <span style="font-family:var(--font-mono);font-size:.55rem;color:var(--cyan);margin-top:8px;letter-spacing:2px">CPU MOSAIC</span>
+        <span class="g-tag">CPU CHIP ART</span>
+      </div>
+      <div class="g-over"><span class="g-lbl">CPU MOSAIC</span></div>
+    </div>
+
+    <div class="g-cell reveal-s d3">
+      <div class="g-vis">
+        <div style="display:flex;flex-direction:column;gap:4px;width:82%">
+          <div style="height:8px;background:linear-gradient(90deg,rgba(0,255,136,.6),rgba(0,212,255,.6));border-radius:1px"></div>
+          <div style="height:8px;background:rgba(6,13,22,.8);border:1px solid var(--border)"></div>
+          <div style="height:8px;background:linear-gradient(90deg,rgba(0,212,255,.4),rgba(155,89,255,.4));border-radius:1px"></div>
+          <div style="height:8px;background:rgba(6,13,22,.8);border:1px solid var(--border)"></div>
+          <div style="height:8px;background:linear-gradient(90deg,rgba(255,107,43,.5),rgba(255,77,77,.5));border-radius:1px"></div>
+        </div>
+        <span style="font-family:var(--font-mono);font-size:.55rem;color:var(--orange);margin-top:10px;letter-spacing:2px">RAM FRAMES</span>
+        <span class="g-tag">RAM STICK FRAMES</span>
+      </div>
+      <div class="g-over"><span class="g-lbl">RAM FRAMES</span></div>
+    </div>
+
+    <div class="g-cell reveal-s d4">
+      <div class="g-vis">
+        <div style="display:flex;gap:5px;flex-wrap:wrap;width:84%;justify-content:center">
+          <span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);padding:6px 10px;font-family:var(--font-mono);font-size:.72rem;color:var(--green)">Q</span>
+          <span style="background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);padding:6px 10px;font-family:var(--font-mono);font-size:.72rem;color:var(--green)">W</span>
+          <span style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.25);padding:6px 10px;font-family:var(--font-mono);font-size:.72rem;color:var(--cyan)">E</span>
+          <span style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.25);padding:6px 10px;font-family:var(--font-mono);font-size:.72rem;color:var(--cyan)">R</span>
+          <span style="background:rgba(255,107,43,0.08);border:1px solid rgba(255,107,43,0.25);padding:6px 10px;font-family:var(--font-mono);font-size:.72rem;color:var(--orange)">T</span>
+          <span style="background:rgba(255,107,43,0.08);border:1px solid rgba(255,107,43,0.25);padding:6px 10px;font-family:var(--font-mono);font-size:.72rem;color:var(--orange)">Y</span>
+        </div>
+        <span style="font-family:var(--font-mono);font-size:.55rem;color:var(--orange);margin-top:10px;letter-spacing:2px">KEYCAP ART</span>
+        <span class="g-tag">KEYBOARD KEY ART</span>
+      </div>
+      <div class="g-over"><span class="g-lbl">KEYCAP ART</span></div>
+    </div>
+
+    <div class="g-cell reveal-s d5">
+      <div class="g-vis">
+        <div style="width:88px;height:88px;border-radius:50%;border:2px solid rgba(155,89,255,.35);background:radial-gradient(circle,rgba(155,89,255,.15),transparent);display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 0 30px rgba(155,89,255,.15)">💿</div>
+        <span style="font-family:var(--font-mono);font-size:.55rem;color:var(--purple);margin-top:10px;letter-spacing:2px">HDD RINGS</span>
+        <span class="g-tag">HARD DRIVE PLATTERS</span>
+      </div>
+      <div class="g-over"><span class="g-lbl">HDD RINGS</span></div>
+    </div>
+  </div>
+</section> -->
+
+<!-- ─── IMPACT ─── -->
+<section class="impact-section section-z" id="impact">
+  <div class="eyebrow reveal" style="justify-content:center">Why It Matters</div>
+  <h2 class="s-heading reveal d1" style="text-align:center">The <span class="hl">Impact</span></h2>
+  <p class="s-body reveal d2" style="margin:0 auto;text-align:center">TechWall is more than art — it's a statement about responsible technology and the circular economy.</p>
+
+  <div class="i-cards">
+    <div class="i-card reveal-s d1" style="--ic-c:var(--green);--ic-a:rgba(0,255,136,0.07)">
+      <span class="i-num">100+</span>
+      <div class="i-title">Kilograms Diverted</div>
+      <p class="i-desc">Every kilo of e-waste diverted from landfill prevents toxic chemicals like lead and mercury from entering soil and water.</p>
+    </div>
+    <div class="i-card reveal-s d2" style="--ic-c:var(--cyan);--ic-a:rgba(0,212,255,0.07)">
+      <span class="i-num" style="color:var(--cyan)">10K+</span>
+      <div class="i-title">Expected Visitors</div>
+      <p class="i-desc">The installation will educate thousands of students, professionals and community members about e-waste and the IT ecosystem.</p>
+    </div>
+    <div class="i-card reveal-s d3" style="--ic-c:var(--orange);--ic-a:rgba(255,107,43,0.07)">
+      <span class="i-num" style="color:var(--orange)">40+</span>
+      <div class="i-title">Technologies Celebrated</div>
+      <p class="i-desc">From assembly language to cloud platforms, TechWall documents the full spectrum of technologies powering our digital civilization.</p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ─── STUDENTS ─── -->
+<section class="students-section section-z" id="creators">
+  <div class="students-hdr">
+    <div>
+      <div class="eyebrow">The Builders</div>
+      <h2 class="s-heading">Meet The Students<br><span class="hl">Behind TechWall</span></h2>
+      <p class="s-body">Designed, built, and assembled by students of the USCS department — transforming discarded technology into lasting art.</p>
+    </div>
+    <div class="s-count">TOTAL CONTRIBUTORS: <span id="sCount">0</span></div>
+  </div>
+  <div class="students-grid" id="studentsGrid"></div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<!-- <section class="contact-section section-z" id="contact">
+  <div class="contact-inner">
+    <div class="eyebrow">Get Involved</div>
+    <h2 class="s-heading reveal d1">Donate, Sponsor<br><span class="hl">or Collaborate</span></h2>
+    <p class="s-body reveal d2" style="margin:0 auto">Have e-waste to donate? Want to sponsor a tech logo? Reach out!</p>
+
+    <form class="contact-form reveal d3" onsubmit="handleSubmit(event)">
+      <div class="f-row">
+        <div class="f-grp">
+          <label class="f-lbl">Full Name</label>
+          <input type="text" class="f-ctrl" placeholder="Jane Doe" required>
+        </div>
+        <div class="f-grp">
+          <label class="f-lbl">Email Address</label>
+          <input type="email" class="f-ctrl" placeholder="you@example.com" required>
+        </div>
+      </div>
+      <div class="f-grp">
+        <label class="f-lbl">How Would You Like To Help?</label>
+        <select class="f-ctrl">
+          <option value="">Select an option...</option>
+          <option>Donate E-Waste Components</option>
+          <option>Sponsor a Tech Logo</option>
+          <option>Volunteer for Construction</option>
+          <option>Schedule a Visit / School Trip</option>
+          <option>Media / Press Inquiry</option>
+          <option>Partnership / Collaboration</option>
+        </select>
+      </div>
+      <div class="f-grp">
+        <label class="f-lbl">Message</label>
+        <textarea class="f-ctrl" placeholder="Tell us about how you'd like to contribute..."></textarea>
+      </div>
+      <button type="submit" class="f-submit">SEND MESSAGE ◈</button>
+    </form>
+    <div id="formOk" class="f-ok">✓ MESSAGE TRANSMITTED — WE'LL BE IN TOUCH SOON</div>
+  </div>
+</section> -->
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="f-brand-name">TECH<span class="a">WALL</span></span>
+      <p>An e-waste art installation celebrating the IT field through the creative reuse of discarded technology. Every component has a second life.</p>
+    </div>
+    <div>
+      <div class="f-col-h">Navigate</div>
+      <ul class="f-lnks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#wall">The Wall</a></li>
+        <li><a href="#materials">Materials</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-col-h">Contribute</div>
+      <ul class="f-lnks">
+        <li><a href="#contact">Donate Components</a></li>
+        <li><a href="#contact">Sponsor a Logo</a></li>
+        <li><a href="#contact">Volunteer</a></li>
+        <li><a href="#contact">Partnership</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-col-h">Connect</div>
+      <ul class="f-lnks">
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">LinkedIn</a></li>
+        <li><a href="#">Twitter / X</a></li>
+        <li><a href="#">Press Kit</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-btm">
+    <span class="f-copy">© 2025 TECHWALL PROJECT — BUILT FROM WHAT OTHERS DISCARDED</span>
+    <span class="f-status"><span class="f-dot"></span>INSTALLATION IN PROGRESS</span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
