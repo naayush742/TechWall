@@ -76,13 +76,16 @@
                 <h2>Apache Kafka</h2>
                 
                 <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p>Originally developed at LinkedIn and open-sourced in 2011, <strong>Apache Kafka</strong> is a distributed event store and stream-processing platform. It was designed to handle real-time data feeds with high throughput and low latency.</p>
+                <p>Originally developed at LinkedIn and open-sourced in 2011, <strong>Apache Kafka</strong> is a distributed event store and stream-processing platform. It was designed to handle real-time data feeds with high throughput and low latency. Since joining the Apache Software Foundation, it has evolved from a simple message queue into a full-fledged event streaming platform used by over 80% of the Fortune 100.</p>
                 
+                <h3 style="margin-top: 30px; color: var(--accent);">Core Architecture</h3>
+                <p>Kafka operates on a distributed cluster of servers (brokers) that store data in <strong>Topics</strong>. Each topic is split into <strong>Partitions</strong> for parallelism and scalability. <strong>Producers</strong> send data to these topics, while <strong>Consumers</strong> read from them. This decoupled architecture allows for massive horizontal scaling and ensures high availability through data replication across multiple nodes.</p>
+
                 <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose & Ecosystem</h3>
-                <p>Kafka acts as a central nervous system for data, allowing applications to publish, subscribe to, store, and process streams of events as they occur. It is used by thousands of companies, including Uber, Netflix, and Goldman Sachs, for everything from log aggregation to real-time analytics.</p>
+                <p>Kafka acts as a central nervous system for data, allowing applications to publish, subscribe to, store, and process streams of events as they occur. The ecosystem includes <strong>Kafka Connect</strong> for integrating with external databases and <strong>Kafka Streams</strong> for building real-time stream processing applications without needing a separate cluster.</p>
 
                 <h3 style="margin-top: 30px; color: var(--accent);">Significance in Big Data</h3>
-                <p>Kafka's ability to handle trillions of events per day makes it the industry standard for event-driven architectures. Its fault-tolerant, durable, and highly scalable design ensures that data is never lost, even at massive scales, providing the foundation for modern real-time data processing pipelines.</p>
+                <p>Kafka's ability to handle trillions of events per day makes it the industry standard for event-driven architectures. Its fault-tolerant, durable, and highly scalable design ensures that data is never lost, even at massive scales, providing the foundation for modern real-time data processing pipelines, microservices communication, and IoT data ingestion.</p>
             </section>
 
             <hr style="margin-top: 50px;">
@@ -91,13 +94,16 @@
                 <h2>Apache Hadoop</h2>
                 
                 <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p>Inspired by Google's GFS and MapReduce papers, <strong>Apache Hadoop</strong> was created by Doug Cutting and Mike Cafarella in 2006 while at Yahoo. It is an open-source framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models.</p>
+                <p>Inspired by Google's GFS and MapReduce papers, <strong>Apache Hadoop</strong> was created by Doug Cutting and Mike Cafarella in 2006 while at Yahoo. It is an open-source framework that allows for the distributed processing of large data sets across clusters of computers using simple programming models. It was named after a toy elephant belonging to Doug Cutting's son.</p>
                 
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose & Architecture</h3>
-                <p>Hadoop's core components include HDFS (Hadoop Distributed File System) for scalable storage and MapReduce for parallel processing. It laid the foundation for the Big Data era, enabling organizations to store and analyze vast amounts of unstructured data that were previously unmanageable.</p>
+                <h3 style="margin-top: 30px; color: var(--accent);">Core Components: HDFS & YARN</h3>
+                <p>At its heart, Hadoop relies on <strong>HDFS (Hadoop Distributed File System)</strong>, which breaks files into large blocks and distributes them across nodes in a cluster, ensuring reliability through replication. <strong>YARN (Yet Another Resource Negotiator)</strong> manages cluster resources and schedules jobs, allowing multiple data processing engines (like MapReduce and Spark) to run on the same hardware.</p>
 
-                <h3 style="margin-top: 30px; color: var(--accent);">Global Impact</h3>
-                <p>Hadoop democratized the ability to process "Big Data," allowing companies to use commodity hardware to achieve performance that previously required multi-million dollar supercomputers. It spawned a vast ecosystem of tools (like Hive, Pig, and Spark) that continue to define the data engineering landscape today.</p>
+                <h3 style="margin-top: 30px; color: var(--accent);">The MapReduce Paradigm</h3>
+                <p><strong>MapReduce</strong> is the software framework for easily writing applications which process vast amounts of data in parallel. The 'Map' step filters and sorts data, while the 'Reduce' step performs summary operations (like counting or averaging). Although newer engines like Spark are faster for many tasks, MapReduce remains a robust tool for heavy, batch-oriented processing.</p>
+
+                <h3 style="margin-top: 30px; color: var(--accent);">Global Impact & Ecosystem</h3>
+                <p>Hadoop democratized the ability to process "Big Data," allowing companies to use commodity hardware to achieve performance that previously required multi-million dollar supercomputers. It spawned a vast ecosystem including <strong>Hive</strong> (SQL-on-Hadoop), <strong>HBase</strong> (NoSQL database), and <strong>Spark</strong> (in-memory processing), which together provide a comprehensive suite for modern data engineering.</p>
             </section>
 
             <br><br>
