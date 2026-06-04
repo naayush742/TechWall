@@ -201,6 +201,7 @@ function renderStudents() {
   const all = [director, guide, ...students];
   if (countEl) countEl.textContent = all.length;
 
+  let studentIndex = 1;
   all.forEach((s, i) => {
     const card = document.createElement('div');
     
@@ -211,17 +212,23 @@ function renderStudents() {
 
     card.style.cssText = `--sc-c:${s.c};--sc-a:${s.a}`;
     
-    let idLabel = `STU-${String(i).padStart(3,'0')}`;
-    if (s.isDirector) idLabel = 'DIRECTOR';
-    else if (s.isGuide) idLabel = 'FACULTY-GUIDE';
-
+    let idLabel = '';
+    let bigIcon = '';
     let tag = '';
-    if (s.isDirector) tag = '<span class="director-tag">DIRECTOR</span>';
-    else if (s.isGuide) tag = '<span class="guide-tag">GUIDE</span>';
 
-    let bigIcon = String(i).padStart(2,'0');
-    if (s.isDirector) bigIcon = '✧';
-    else if (s.isGuide) bigIcon = '★';
+    if (s.isDirector) {
+      idLabel = 'DIRECTOR';
+      bigIcon = '✧';
+      tag = '<span class="director-tag">DIRECTOR</span>';
+    } else if (s.isGuide) {
+      idLabel = 'FACULTY-GUIDE';
+      bigIcon = '★';
+      tag = '<span class="guide-tag">GUIDE</span>';
+    } else {
+      idLabel = `STU-${String(studentIndex).padStart(3,'0')}`;
+      bigIcon = String(studentIndex).padStart(2,'0');
+      studentIndex++;
+    }
 
     card.innerHTML = `
       ${tag}
