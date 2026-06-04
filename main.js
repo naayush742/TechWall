@@ -198,22 +198,39 @@ function renderStudents() {
   const sg = document.getElementById('studentsGrid');
   const countEl = document.getElementById('sCount');
   if (!sg) return;
-  const all = [guide, ...students];
+  const all = [director, guide, ...students];
   if (countEl) countEl.textContent = all.length;
 
   all.forEach((s, i) => {
     const card = document.createElement('div');
-    card.className = s.isGuide ? 's-card guide' : 's-card';
+    
+    let cardClass = 's-card';
+    if (s.isDirector) cardClass += ' director';
+    else if (s.isGuide) cardClass += ' guide';
+    card.className = cardClass;
+
     card.style.cssText = `--sc-c:${s.c};--sc-a:${s.a}`;
-    const id = s.isGuide ? 'FACULTY-GUIDE' : `STU-${String(i).padStart(3,'0')}`;
+    
+    let idLabel = `STU-${String(i).padStart(3,'0')}`;
+    if (s.isDirector) idLabel = 'DIRECTOR';
+    else if (s.isGuide) idLabel = 'FACULTY-GUIDE';
+
+    let tag = '';
+    if (s.isDirector) tag = '<span class="director-tag">DIRECTOR</span>';
+    else if (s.isGuide) tag = '<span class="guide-tag">GUIDE</span>';
+
+    let bigIcon = String(i).padStart(2,'0');
+    if (s.isDirector) bigIcon = '✧';
+    else if (s.isGuide) bigIcon = '★';
+
     card.innerHTML = `
-      ${s.isGuide ? '<span class="guide-tag">GUIDE</span>' : ''}
-      <span class="s-id">${id}</span>
+      ${tag}
+      <span class="s-id">${idLabel}</span>
       <div class="s-ava">${s.emoji}</div>
       <span class="s-name">${s.name}</span>
       <span class="s-role">${s.role}</span>
       <span class="s-skill">${s.skill}</span>
-      <span class="s-big">${s.isGuide ? '★' : String(i).padStart(2,'0')}</span>
+      <span class="s-big">${bigIcon}</span>
     `;
     sg.appendChild(card);
     // cursor

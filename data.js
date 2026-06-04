@@ -82,10 +82,14 @@ const students = [
   {name:'Utkarsh',        role:'Lead Designer',       skill:'BCA 2nd',    emoji:'🧠', c:'#00ff88', a:'rgba(0,255,136,0.07)'},
   {name:'Deepak',         role:'Project Coordinator', skill:'BCA 2nd',     emoji:'🎯', c:'#00d4ff', a:'rgba(0,212,255,0.07)'},
   {name:'Kunal',          role:'PCB Artisan',         skill:'BCA 2nd',    emoji:'⚙️', c:'#ff6b2b', a:'rgba(255,107,43,0.07)'},
-  {name:'Surjeet',        role:'Web Devloper',        skill:'Bsc.IT 2nd',  emoji:'🔩', c:'#00d4ff', a:'rgba(0,212,255,0.07)'},
-  {name:'Devanshi ',      role:'Web Developer',       skill:'MCA 2nd',  emoji:'📝', c:'#ff6b2b', a:'rgba(255,107,43,0.07)'},
   {name:'Ayush',          role:'Web Developer',       skill:'MCA 2nd',    emoji:'🐍', c:'#3776ab', a:'rgba(55,118,171,0.1)'},
 ];
+
+const director = {
+  name:'Prof. Dr. Sonal Sharma', role:'Director - USCS',
+  skill:'Leadership & Vision', emoji:'✨',
+  c:'#9b59ff', a:'rgba(155,89,255,0.08)', isDirector:true,
+};
 
 const guide = {
   name:'Ms. Divya Rawat', role:'Faculty Guide & Mentor',
