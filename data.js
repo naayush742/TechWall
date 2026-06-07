@@ -1,23 +1,23 @@
 
 
 const wallEmojis = [
-  {e:'🐍',c:'wc-cpu',l:'Python'},{e:'⚛️',c:'wc-ram',l:'React'},{e:'🐧',c:'wc-key',l:'Linux'},
-  {e:'🐳',c:'wc-hdd',l:'Docker'},{e:'☕',c:'wc-gpu',l:'Java'},{e:'🦀',c:'wc-cpu',l:'Rust'},
-  {e:'💻',c:'wc-ram',l:'C++'},{e:'🌐',c:'wc-key',l:'HTML'},{e:'📦',c:'wc-hdd',l:'Node'},
-  {e:'⚡',c:'wc-gpu',l:'Vite'},{e:'🔷',c:'wc-cpu',l:'Go'},{e:'🐘',c:'wc-ram',l:'PHP'},
-  {e:'💎',c:'wc-key',l:'Ruby'},{e:'🔮',c:'wc-hdd',l:'Vue'},{e:'🌙',c:'wc-gpu',l:'Lua'},
-  {e:'🦕',c:'wc-cpu',l:'Deno'},{e:'⚙️',c:'wc-ram',l:'Bash'},{e:'☁️',c:'wc-key',l:'AWS'},
-  {e:'🔐',c:'wc-hdd',l:'Git'},{e:'📊',c:'wc-gpu',l:'SQL'},{e:'🎯',c:'wc-cpu',l:'TS'},
-  {e:'🌿',c:'wc-ram',l:'Mongo'},{e:'🏃',c:'wc-key',l:'Swift'},{e:'🤖',c:'wc-hdd',l:'TF'},
-  {e:'📡',c:'wc-gpu',l:'API'},{e:'🔬',c:'wc-cpu',l:'Sci'},{e:'🎮',c:'wc-ram',l:'Unity'},
-  {e:'🔑',c:'wc-key',l:'Auth'},{e:'🌊',c:'wc-hdd',l:'K8s'},{e:'💡',c:'wc-gpu',l:'IDE'},
-  {e:'🔧',c:'wc-cpu',l:'Tools'},{e:'🧩',c:'wc-ram',l:'Redux'},{e:'📱',c:'wc-key',l:'Flutter'},
-  {e:'🟡',c:'wc-hdd',l:'JS'},{e:'🔵',c:'wc-gpu',l:'.NET'},{e:'🟣',c:'wc-cpu',l:'Scala'},
-  {e:'⬛',c:'wc-ram',l:'Vercel'},{e:'🟦',c:'wc-key',l:'CSS'},{e:'🟩',c:'wc-hdd',l:'CLI'},
-  {e:'🔶',c:'wc-gpu',l:'Svelte'},{e:'🔴',c:'wc-cpu',l:'Redis'},{e:'🎨',c:'wc-ram',l:'Figma'},
-  {e:'🐹',c:'wc-key',l:'Go'},{e:'🍃',c:'wc-hdd',l:'Mongo'},{e:'🟠',c:'wc-gpu',l:'Ubuntu'},
-  {e:'📡',c:'wc-gpu',l:'WiFi'},{e:'🦖',c:'wc-cpu',l:'Dino Game'},
-  {e:'⬜',c:'wc-cpu',l:'Next'},{e:'🌈',c:'wc-ram',l:'GCP'},{e:'🔥',c:'wc-key',l:'Firebase'},
+  {i:'<img src="icon/python.png" class="ti">',c:'wc-cpu',l:'Python'},{i:'⚛️',c:'wc-ram',l:'React'},{i:'🐧',c:'wc-key',l:'Linux'},
+  {i:'🐳',c:'wc-hdd',l:'Docker'},{i:'☕',c:'wc-gpu',l:'Java'},{i:'🦀',c:'wc-cpu',l:'Rust'},
+  {i:'<img src="icon/cpp.png" class="ti">',c:'wc-ram',l:'C++'},{i:'🌐',c:'wc-key',l:'HTML'},{i:'📦',c:'wc-hdd',l:'Node'},
+  {i:'⚡',c:'wc-gpu',l:'Vite'},{i:'🔷',c:'wc-cpu',l:'Go'},{i:'<img src="icon/php.png" class="ti">',c:'wc-ram',l:'PHP'},
+  {i:'💎',c:'wc-key',l:'Ruby'},{i:'🔮',c:'wc-hdd',l:'Vue'},{i:'🌙',c:'wc-gpu',l:'Lua'},
+  {i:'🦕',c:'wc-cpu',l:'Deno'},{i:'⚙️',c:'wc-ram',l:'Bash'},{i:'☁️',c:'wc-key',l:'AWS'},
+  {i:'🔐',c:'wc-hdd',l:'Git'},{i:'<img src="icon/mysql.png" class="ti">',c:'wc-gpu',l:'SQL'},{i:'🎯',c:'wc-cpu',l:'TS'},
+  {i:'🌿',c:'wc-ram',l:'Mongo'},{i:'🏃',c:'wc-key',l:'Swift'},{i:'🤖',c:'wc-hdd',l:'TF'},
+  {i:'📡',c:'wc-gpu',l:'API'},{i:'🔬',c:'wc-cpu',l:'Sci'},{i:'🎮',c:'wc-ram',l:'Unity'},
+  {i:'🔑',c:'wc-key',l:'Auth'},{i:'🌊',c:'wc-hdd',l:'K8s'},{i:'💡',c:'wc-gpu',l:'IDE'},
+  {i:'🔧',c:'wc-cpu',l:'Tools'},{i:'🧩',c:'wc-ram',l:'Redux'},{i:'📱',c:'wc-key',l:'Flutter'},
+  {i:'<img src="icon/js.png" class="ti">',c:'wc-hdd',l:'JS'},{i:'🔵',c:'wc-gpu',l:'.NET'},{i:'🟣',c:'wc-cpu',l:'Scala'},
+  {i:'⬛',c:'wc-ram',l:'Vercel'},{i:'🟦',c:'wc-key',l:'CSS'},{i:'🟩',c:'wc-hdd',l:'CLI'},
+  {i:'🔶',c:'wc-gpu',l:'Svelte'},{i:'🔴',c:'wc-cpu',l:'Redis'},{i:'🎨',c:'wc-ram',l:'Figma'},
+  {i:'🐹',c:'wc-key',l:'Go'},{i:'🍃',c:'wc-hdd',l:'Mongo'},{i:'🟠',c:'wc-gpu',l:'Ubuntu'},
+  {i:'📡',c:'wc-gpu',l:'WiFi'},{i:'🦖',c:'wc-cpu',l:'Dino Game'},
+  {i:'⬜',c:'wc-cpu',l:'Next'},{i:'🌈',c:'wc-ram',l:'GCP'},{i:'🔥',c:'wc-key',l:'Firebase'},
 ];
 
 const techs = [
@@ -29,7 +29,7 @@ const techs = [
 
   // Page 2: DBMS (dbms.html)
   {name:'Power BI',     icon:'📊', type:'db',        c:'#f2c811', a:'rgba(242,200,17,.12)', slug:'dbms#powerbi'},
-  {name:'MySQL',        icon:'🐬', type:'db',        c:'#4479a1', a:'rgba(68,121,161,.12)', slug:'dbms#mysql'},
+  {name:'MySQL',        icon:'<img src="icon/mysql.png" class="ti">', type:'db',        c:'#4479a1', a:'rgba(68,121,161,.12)', slug:'dbms#mysql'},
   {name:'MongoDB',      icon:'🍃', type:'db',        c:'#47a248', a:'rgba(71,162,72,.12)', slug:'dbms#mongodb'},
 
   // Page 3: Applications (apps.html)
@@ -53,10 +53,10 @@ const techs = [
 
   // Page 7: Web Development (webdev.html)
   {name:'Go Lang',      icon:'🐹', type:'lang',      c:'#00acd7', a:'rgba(0,172,215,.12)',  slug:'webdev#go'},
-  {name:'PHP',          icon:'🐘', type:'lang',      c:'#8892be', a:'rgba(136,146,190,.12)',slug:'webdev#php'},
+  {name:'PHP',          icon:'<img src="icon/php.png" class="ti">', type:'lang',      c:'#8892be', a:'rgba(136,146,190,.12)',slug:'webdev#php'},
   {name:'HTML',         icon:'🌐', type:'os',        c:'#e34f26', a:'rgba(227,79,38,.12)',  slug:'webdev#html'},
   {name:'CSS',          icon:'🟦', type:'os',        c:'#1572b6', a:'rgba(21,114,182,.12)', slug:'webdev#css'},
-  {name:'JS',           icon:'🟡', type:'lang',      c:'#f7df1e', a:'rgba(247,223,30,.1)',  slug:'webdev#js'},
+  {name:'JS',           icon:'<img src="icon/js.png" class="ti">', type:'lang',      c:'#f7df1e', a:'rgba(247,223,30,.1)',  slug:'webdev#js'},
   {name:'Streamlit',    icon:'🚀', type:'framework', c:'#ff4b4b', a:'rgba(255,75,75,.1)',  slug:'webdev#streamlit'},
 
   // Page 8: Programming Language (prog.html)
@@ -64,7 +64,7 @@ const techs = [
   {name:'Assembly',     icon:'📟', type:'lang',      c:'#6a8aaa', a:'rgba(106,138,170,.12)',slug:'prog#assembly'},
   {name:'Fortran',      icon:'📠', type:'lang',      c:'#734f96', a:'rgba(115,79,150,.12)', slug:'prog#fortran'},
   {name:'COBOL',        icon:'💼', type:'lang',      c:'#005a9c', a:'rgba(0,90,156,.12)',   slug:'prog#cobol'},
-  {name:'C',            icon:'💻', type:'lang',      c:'#a8b9cc', a:'rgba(168,185,204,.15)',slug:'prog#c'},
+  {name:'C',            icon:'<img src="icon/c.png" class="ti">', type:'lang',      c:'#a8b9cc', a:'rgba(168,185,204,.15)',slug:'prog#c'},
   {name:'C++',          icon:'<img src="icon/cpp.png" class="ti">', type:'lang',      c:'#00599c', a:'rgba(0,89,156,.15)',   slug:'prog#cpp'},
   {name:'C#',           icon:'🔷', type:'lang',      c:'#239120', a:'rgba(35,145,32,.12)',  slug:'prog#csharp'},
   {name:'Python',       icon:'<img src="icon/python.png" class="ti">', type:'lang',      c:'#3776ab', a:'rgba(55,118,171,.15)', slug:'prog#python'},

@@ -119,44 +119,61 @@ window.addEventListener('scroll', () => {
 
 /* ─── SCROLL REVEAL ─── */
 const revealEls = document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-s');
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); }
-  });
-}, { threshold: 0.12 });
-revealEls.forEach(el => revealObs.observe(el));
+if ('IntersectionObserver' in window) {
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { 
+        e.target.classList.add('in'); 
+        revealObs.unobserve(e.target); 
+      }
+    });
+  }, { threshold: 0.1 }); // Slightly lower threshold for better reliability
+  revealEls.forEach(el => revealObs.observe(el));
+} else {
+  // Fallback for older browsers
+  revealEls.forEach(el => el.classList.add('in'));
+}
 
 /* ─── PARALLAX HERO ORBS ─── */
 window.addEventListener('scroll', () => {
   const sy = window.scrollY;
   const orbs = document.querySelectorAll('.hero-orb');
-  orbs.forEach((o, i) => {
-    const speed = [0.3, 0.2, 0.4][i] || 0.3;
-    o.style.transform = `translateY(${sy * speed}px)`;
-  });
+  if (orbs.length > 0) {
+    orbs.forEach((o, i) => {
+      const speed = [0.3, 0.2, 0.4][i] || 0.3;
+      o.style.transform = `translateY(${sy * speed}px)`;
+    });
+  }
 }, { passive: true });
 
 /* ─── WALL PREVIEW RENDERER ─── */
 function renderWallPreview() {
   const wg = document.getElementById('wallGrid');
-  if (!wg) return;
-  wallEmojis.forEach(({ e, c, l }) => {
+  if (!wg || typeof wallEmojis === 'undefined') return;
+  
+  wg.innerHTML = ''; // Clear just in case
+  wallEmojis.forEach(({ i, c, l }) => {
     const d = document.createElement('div');
     d.className = `wall-cell ${c}`;
     d.title = l;
-    d.innerHTML = `<span>${e}</span><span class="wc-tip">${l}</span>`;
+    d.innerHTML = `<span>${i}</span><span class="wc-tip">${l}</span>`;
     wg.appendChild(d);
   });
+  
   // Random twinkle effect
   setInterval(() => {
     const cells = wg.querySelectorAll('.wall-cell');
+    if (cells.length === 0) return;
     const idx = Math.floor(Math.random() * cells.length);
-    cells[idx].style.background = 'rgba(0,255,136,0.12)';
-    cells[idx].style.borderColor = 'rgba(0,255,136,0.4)';
-    setTimeout(() => {
-      cells[idx].style.background = '';
-      cells[idx].style.borderColor = '';
-    }, 600);
+    const cell = cells[idx];
+    if (cell) {
+      cell.style.background = 'rgba(0,255,136,0.12)';
+      cell.style.borderColor = 'rgba(0,255,136,0.4)';
+      setTimeout(() => {
+        cell.style.background = '';
+        cell.style.borderColor = '';
+      }, 600);
+    }
   }, 300);
 }
 
@@ -334,9 +351,34 @@ if (heroTitle) {
   }, 5000);
 }
 
+/* ─── MOBILE MENU ─── */
+function toggleMenu() {
+  const btn = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  if (btn && menu) {
+    btn.classList.toggle('active');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+  }
+}
+
+const menuToggle = document.getElementById('menu-toggle');
+if (menuToggle) {
+  menuToggle.addEventListener('click', toggleMenu);
+}
+
 /* ─── INIT ─── */
 document.addEventListener('DOMContentLoaded', () => {
   renderWallPreview();
   renderGrid('all');
   renderStudents();
+  
+  // Close mobile menu on link click (already handled by inline onclick, but as safety)
+  const mmLinks = document.querySelectorAll('#mobile-menu a');
+  mmLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      const menu = document.getElementById('mobile-menu');
+      if (menu && menu.classList.contains('active')) toggleMenu();
+    });
+  });
 });

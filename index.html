@@ -25,11 +25,28 @@
     <a href="#about">About</a>
     <a href="#wall">The Wall</a>
     <a href="#materials">Materials</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#contact">Contact</a>
+    <a href="#impact">Impact</a>
+    <a href="#creators">Team</a>
   </div>
-  <a href="#contact" class="nav-cta">GET INVOLVED</a>
+  <a href="#about" class="nav-cta">GET INVOLVED</a>
+  <button id="menu-toggle" aria-label="Toggle Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU OVERLAY -->
+<div id="mobile-menu">
+  <div class="mm-content">
+    <a href="#about" onclick="toggleMenu()">About</a>
+    <a href="#wall" onclick="toggleMenu()">The Wall</a>
+    <a href="#materials" onclick="toggleMenu()">Materials</a>
+    <a href="#impact" onclick="toggleMenu()">Impact</a>
+    <a href="#creators" onclick="toggleMenu()">Team</a>
+    <a href="#about" class="mm-cta" onclick="toggleMenu()">GET INVOLVED</a>
+  </div>
+</div>
 
 <!-- ─── TICKER ─── -->
 <div class="ticker-wrap" style="margin-top:64px;">
@@ -111,7 +128,7 @@
       <span class="stat-bar"></span>
     </div>
     <div class="stat-item reveal d1">
-      <span class="stat-num" style="color:var(--cyan)">40</span>
+      <span class="stat-num" style="color:var(--cyan)">30+</span>
       <span class="stat-label">Tech Icons</span>
       <span class="stat-bar" style="background:linear-gradient(90deg,var(--cyan),var(--purple))"></span>
     </div>
@@ -126,7 +143,7 @@
       <span class="stat-bar" style="background:linear-gradient(90deg,var(--purple),var(--pink))"></span>
     </div>
     <div class="stat-item reveal d4">
-      <span class="stat-num" style="color:var(--gold)">9</span>
+      <span class="stat-num" style="color:var(--gold)">6</span>
       <span class="stat-label">Student Builders</span>
       <span class="stat-bar" style="background:linear-gradient(90deg,var(--gold),var(--orange))"></span>
     </div>
@@ -203,7 +220,7 @@
           <span class="fp-icon">⌨️</span>
           <div class="fp-t">
             <strong>Recognizable Tech Icons</strong>
-            <span>Python, Linux, React, Git and 100+ more crafted from real components</span>
+            <span>Python, Linux, React, Git and 26+ more crafted from real components</span>
           </div>
         </div>
         <div class="f-pill reveal d5" style="--fp-c:var(--orange)">
@@ -231,7 +248,7 @@
         </div>
         <div class="meta-body">
           <div class="meta-line"><span class="m-lbl">STATUS:</span> <span class="m-val">98% CALIBRATED</span></div>
-          <div class="meta-line"><span class="m-lbl">LOC:</span> <span class="m-val">USCS_LAB_04</span></div>
+          <div class="meta-line"><span class="m-lbl">LOC:</span> <span class="m-val">USCS_GROUND_FLOOR</span></div>
           <div class="meta-line"><span class="m-lbl">COMPONENTS:</span> <span class="m-val">2,400+ UNITS</span></div>
           <div class="meta-line"><span class="m-lbl">ENV:</span> <span class="m-val">ZERO_LANDFILL_GOAL</span></div>
         </div>
@@ -247,7 +264,7 @@
     <div class="reveal-l">
       <div class="eyebrow">The Collection</div>
       <h2 class="s-heading">Technologies<br><span class="hl">On The Wall</span></h2>
-      <p class="s-body">48 icons and counting — each one built from e-waste.</p>
+      <p class="s-body">30+ icons and counting — each one built from e-waste.</p>
     </div>
     <div class="filter-row reveal-r">
       <button class="fpill on"     onclick="filterTech('all',this)">ALL</button>
@@ -463,7 +480,7 @@
       <p class="i-desc">The installation will educate thousands of students, professionals and community members about e-waste and the IT ecosystem.</p>
     </div>
     <div class="i-card reveal-s d3" style="--ic-c:var(--orange);--ic-a:rgba(255,107,43,0.07)">
-      <span class="i-num" style="color:var(--orange)">40+</span>
+      <span class="i-num" style="color:var(--orange)">30+</span>
       <div class="i-title">Technologies Celebrated</div>
       <p class="i-desc">From assembly language to cloud platforms, TechWall documents the full spectrum of technologies powering our digital civilization.</p>
     </div>
@@ -530,24 +547,16 @@
   <div class="footer-top">
     <div class="footer-brand">
       <span class="f-brand-name">TECH<span class="a">WALL</span></span>
-      <p>An e-waste art installation celebrating the IT field through the creative reuse of discarded technology. Every component has a second life.</p>
+      <p>An e-waste art installation by <strong>USCS (Uttaranchal School of Computing Sciences)</strong>, celebrating the IT field through the creative reuse of discarded technology from <strong>Uttaranchal University</strong>.</p>
     </div>
     <div>
       <div class="f-col-h">Navigate</div>
       <ul class="f-lnks">
-        <li><a href="#about">About</a></li>
-        <li><a href="#wall">The Wall</a></li>
-        <li><a href="#materials">Materials</a></li>
-        <li><a href="#gallery">Gallery</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="f-col-h">Contribute</div>
-      <ul class="f-lnks">
-        <li><a href="#contact">Donate Components</a></li>
-        <li><a href="#contact">Sponsor a Logo</a></li>
-        <li><a href="#contact">Volunteer</a></li>
-        <li><a href="#contact">Partnership</a></li>
+        <li><a href="#about">About Project</a></li>
+        <li><a href="#wall">Interactive Wall</a></li>
+        <li><a href="#materials">Raw Materials</a></li>
+        <li><a href="#impact">Our Impact</a></li>
+        <li><a href="#creators">The Team</a></li>
       </ul>
     </div>
     <div>

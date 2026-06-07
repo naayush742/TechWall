@@ -21,15 +21,20 @@
 <div class="smart-nav">
   <!-- ─── NAVBAR ─── -->
   <nav id="navbar">
-    <a href="../index.html" class="nav-logo">TECH<span class="accent">WALL</span></a>
+    <a href="../index.html#home" class="nav-logo">TECH<span class="accent">WALL</span></a>
     <div class="nav-links">
       <a href="../index.html#about">About</a>
       <a href="../index.html#wall">The Wall</a>
       <a href="../index.html#materials">Materials</a>
-      <a href="../index.html#gallery">Gallery</a>
-      <a href="../index.html#contact">Contact</a>
+      <a href="../index.html#impact">Impact</a>
+      <a href="../index.html#creators">Team</a>
     </div>
-    <a href="../index.html#contact" class="nav-cta">GET INVOLVED</a>
+    <a href="../index.html#about" class="nav-cta">GET INVOLVED</a>
+    <button id="menu-toggle" aria-label="Toggle Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 
   <!-- QUICK NAV TICKER -->
@@ -57,6 +62,18 @@
       <a href="webdev.html" class="nav-ticker-item">Web Development</a><span class="sep">◈</span>
       <a href="wifi.html" class="nav-ticker-item active">WiFi & Networking</a><span class="sep">◈</span>
     </div>
+  </div>
+</div>
+
+<!-- MOBILE MENU OVERLAY -->
+<div id="mobile-menu">
+  <div class="mm-content">
+    <a href="../index.html#about" onclick="toggleMenu()">About</a>
+    <a href="../index.html#wall" onclick="toggleMenu()">The Wall</a>
+    <a href="../index.html#materials" onclick="toggleMenu()">Materials</a>
+    <a href="../index.html#impact" onclick="toggleMenu()">Impact</a>
+    <a href="../index.html#creators" onclick="toggleMenu()">Team</a>
+    <a href="../index.html#about" class="mm-cta" onclick="toggleMenu()">GET INVOLVED</a>
   </div>
 </div>
 
@@ -344,24 +361,16 @@
   <div class="footer-top">
     <div class="footer-brand">
       <span class="f-brand-name">TECH<span class="a">WALL</span></span>
-      <p>An e-waste art installation celebrating the IT field through the creative reuse of discarded technology. Every component has a second life.</p>
+      <p>An e-waste art installation by <strong>USCS (Uttaranchal School of Computing Sciences)</strong>, celebrating the IT field through the creative reuse of discarded technology from <strong>Uttaranchal University</strong>.</p>
     </div>
     <div>
       <div class="f-col-h">Navigate</div>
       <ul class="f-lnks">
-        <li><a href="../index.html#about">About</a></li>
-        <li><a href="../index.html#wall">The Wall</a></li>
-        <li><a href="../index.html#materials">Materials</a></li>
-        <li><a href="../index.html#gallery">Gallery</a></li>
-      </ul>
-    </div>
-    <div>
-      <div class="f-col-h">Contribute</div>
-      <ul class="f-lnks">
-        <li><a href="../index.html#contact">Donate Components</a></li>
-        <li><a href="../index.html#contact">Sponsor a Logo</a></li>
-        <li><a href="../index.html#contact">Volunteer</a></li>
-        <li><a href="../index.html#contact">Partnership</a></li>
+        <li><a href="../index.html#about">About Project</a></li>
+        <li><a href="../index.html#wall">Interactive Wall</a></li>
+        <li><a href="../index.html#materials">Raw Materials</a></li>
+        <li><a href="../index.html#impact">Our Impact</a></li>
+        <li><a href="../index.html#creators">The Team</a></li>
       </ul>
     </div>
     <div>
