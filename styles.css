@@ -28,7 +28,7 @@
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 120px; }
 
 body {
   background: linear-gradient(rgba(2, 5, 10, 0.88), rgba(2, 5, 10, 0.88)), url('img/bg.jpeg');
@@ -558,7 +558,9 @@ body::after {
 .tc:hover::before { transform:scaleX(1); }
 .tc:hover::after { opacity:1; }
 .tc:hover { border-color:var(--tc-c,var(--green)); transform:translateY(-7px) scale(1.04); box-shadow:0 20px 40px rgba(0,0,0,0.5); }
-.tc-icon{font-size:2rem;display:block;margin-bottom:8px;position:relative;z-index:1}
+.tc-icon{font-size:2rem;display:flex;align-items:center;justify-content:center;height:40px;margin-bottom:8px;position:relative;z-index:1}
+.ti { width: 32px; height: 32px; object-fit: contain; filter: drop-shadow(0 0 10px rgba(0,212,255,0.2)); transition: transform .3s; }
+.tc:hover .ti { transform: scale(1.1) rotate(-5deg); }
 .tc-name{font-family:var(--font-mono);font-size:.61rem;color:var(--text);letter-spacing:1px;display:block;position:relative;z-index:1}
 .tc-type{font-size:.54rem;color:var(--text2);font-family:var(--font-mono);letter-spacing:.5px;display:block;margin-top:3px;position:relative;z-index:1}
 
@@ -571,11 +573,13 @@ body::after {
     radial-gradient(ellipse 40% 50% at 100% 50%,rgba(0,212,255,0.03),transparent);
   pointer-events:none;
 }
-.mat-inner { max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1.2fr; gap:100px; align-items:start; }
-.mat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:40px; }
+.mat-inner { max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1.2fr; gap:100px; align-items:stretch; }
+.mat-inner > div { display: flex; flex-direction: column; }
+.mat-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:40px; flex: 1; }
 .mat-card {
   background:var(--card); border:1px solid var(--border);
   padding:24px 20px; position:relative; transition:all .3s; overflow:hidden;
+  display: flex; flex-direction: column;
 }
 .mat-card::before {
   content:attr(data-i);
@@ -588,8 +592,8 @@ body::after {
 .m-name { font-family:var(--font-mono); font-size:.68rem; letter-spacing:2px; text-transform:uppercase; color:var(--text); margin-bottom:6px; display:block; }
 .m-desc { font-size:.8rem; color:var(--text2); line-height:1.6; }
 
-.timeline { margin-top:40px; }
-.tl-item { display:flex; gap:20px; padding-bottom:32px; position:relative; }
+.timeline { margin-top:40px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.tl-item { display:flex; gap:20px; padding-bottom:20px; position:relative; }
 .tl-item::before {
   content:''; position:absolute; left:19px; top:40px; bottom:0;
   width:1px; background:linear-gradient(var(--border2),transparent);
@@ -807,6 +811,17 @@ textarea.f-ctrl { min-height:130px; resize:vertical; }
 @keyframes rotSpin { to{transform:rotate(360deg)} }
 .s-name { font-size:.92rem; color:var(--text); font-weight:500; display:block; margin-bottom:2px; position:relative;z-index:1; }
 .s-role { font-family:var(--font-mono); font-size:.55rem; color:var(--text2); letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:12px; position:relative;z-index:1; }
+.s-desc {
+  font-size: 0.72rem;
+  color: var(--text2);
+  line-height: 1.6;
+  margin-top: 18px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+  opacity: 0.8;
+  display: block;
+}
 .s-skill {
   display:inline-block; font-family:var(--font-mono); font-size:.56rem;
   color:var(--sc-c,var(--green)); border:1px solid var(--sc-c,var(--green));
@@ -841,6 +856,92 @@ textarea.f-ctrl { min-height:130px; resize:vertical; }
   background:var(--green); color:var(--bg);
   font-family:var(--font-mono); font-size:.48rem; letter-spacing:2px;
   padding:3px 30px; transform:rotate(45deg);
+}
+
+/* ─── SMART NAV (Subpages) ─── */
+.smart-nav {
+  position: fixed;
+  top: -64px; /* Hide navbar by default */
+  left: 0; right: 0;
+  z-index: 2000;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.smart-nav:hover {
+  transform: translateY(64px); /* Slide down to show navbar */
+}
+
+/* Ensure navbar inside smart-nav is correctly positioned */
+.smart-nav #navbar {
+  position: relative !important;
+  top: 0 !important;
+}
+
+/* Ticker becomes the visible "handle" at the top */
+.smart-nav .nav-ticker {
+  position: relative !important;
+  top: 0 !important;
+  margin-top: 0 !important;
+  background: rgba(10, 15, 20, 0.95);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+}
+
+/* Adjust subpage content padding to clear the new sticky headers */
+.page-hero { 
+  margin-top: 0; 
+  padding-top: 140px; /* Buffer for revealed navbar + ticker */
+  height: 70vh; 
+  display: flex;
+  align-items: flex-start; /* Align content to the top of the hero area but below the header */
+  justify-content: center;
+}
+.hero-content-wrap {
+  margin-top: 40px; /* Extra push for the eyebrow */
+}
+.section-z { padding-top: 40px; }
+
+/* ─── QUICK NAV TICKER ─── */
+.nav-ticker {
+  background: rgba(10, 15, 20, 0.8);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  position: sticky;
+  top: 64px;
+  z-index: 100;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+.nav-ticker-track {
+  display: flex;
+  gap: 40px;
+  animation: tickerAnim 60s linear infinite;
+  width: max-content;
+  white-space: nowrap;
+}
+.nav-ticker-item {
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+}
+.nav-ticker-item:hover {
+  color: var(--green);
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+.nav-ticker-item.active {
+  color: var(--green);
+  border-bottom: 1px solid var(--green);
+}
+.nav-ticker .sep { color: var(--border); opacity: 0.4; }
+
+@keyframes tickerAnim {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 /* ─── FOOTER ─── */

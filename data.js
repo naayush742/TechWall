@@ -65,9 +65,9 @@ const techs = [
   {name:'Fortran',      icon:'📠', type:'lang',      c:'#734f96', a:'rgba(115,79,150,.12)', slug:'prog#fortran'},
   {name:'COBOL',        icon:'💼', type:'lang',      c:'#005a9c', a:'rgba(0,90,156,.12)',   slug:'prog#cobol'},
   {name:'C',            icon:'💻', type:'lang',      c:'#a8b9cc', a:'rgba(168,185,204,.15)',slug:'prog#c'},
-  {name:'C++',          icon:'⚙️', type:'lang',      c:'#00599c', a:'rgba(0,89,156,.15)',   slug:'prog#cpp'},
+  {name:'C++',          icon:'<img src="icon/cpp.png" class="ti">', type:'lang',      c:'#00599c', a:'rgba(0,89,156,.15)',   slug:'prog#cpp'},
   {name:'C#',           icon:'🔷', type:'lang',      c:'#239120', a:'rgba(35,145,32,.12)',  slug:'prog#csharp'},
-  {name:'Python',       icon:'🐍', type:'lang',      c:'#3776ab', a:'rgba(55,118,171,.15)', slug:'prog#python'},
+  {name:'Python',       icon:'<img src="icon/python.png" class="ti">', type:'lang',      c:'#3776ab', a:'rgba(55,118,171,.15)', slug:'prog#python'},
 
   // Page 9: WiFi (wifi.html)
   {name:'WiFi',         icon:'📡', type:'os',        c:'#00ff88', a:'rgba(0,255,136,.12)', slug:'wifi#history'},
@@ -77,22 +77,25 @@ const techs = [
 ];
 
 const students = [
-  {name:'Mehak',          role:'Web Developer',       skill:'BCA 1st',     emoji:'💻', c:'#9b59ff', a:'rgba(155,89,255,0.07)'},
-  {name:'Anushka',        role:'Component Sorter',    skill:'BCA 2nd',       emoji:'🔧', c:'#ffb84d', a:'rgba(255,184,77,0.07)'}, 
-  {name:'Utkarsh',        role:'Lead Designer',       skill:'BCA 2nd',    emoji:'🧠', c:'#00ff88', a:'rgba(0,255,136,0.07)'},
-  {name:'Deepak',         role:'Project Coordinator', skill:'BCA 2nd',     emoji:'🎯', c:'#00d4ff', a:'rgba(0,212,255,0.07)'},
-  {name:'Kunal',          role:'PCB Artisan',         skill:'BCA 2nd',    emoji:'⚙️', c:'#ff6b2b', a:'rgba(255,107,43,0.07)'},
-  {name:'Ayush',          role:'Web Developer',       skill:'MCA 2nd',    emoji:'🐍', c:'#3776ab', a:'rgba(55,118,171,0.1)'},
+  {name:'Mehak',          role:'Hardware Assembler',  skill:'BCA 1st',     emoji:'🛠️', c:'#9b59ff', a:'rgba(155,89,255,0.07)', desc:'Focused on the precise physical mounting of components onto the wall panels.'},
+  {name:'Anushka',        role:'Component Sorter',    skill:'BCA 2nd',       emoji:'🔧', c:'#ffb84d', a:'rgba(255,184,77,0.07)', desc:'Managed university e-waste collection and meticulously sorted components by type.'}, 
+  {name:'Utkarsh',        role:'Lead Designer',       skill:'BCA 2nd',    emoji:'🧠', c:'#00ff88', a:'rgba(0,255,136,0.07)', desc:'Created digital blueprints and mapped hardware components to iconic tech logos.'},
+  {name:'Deepak',         role:'Project Coordinator', skill:'BCA 2nd',     emoji:'🎯', c:'#00d4ff', a:'rgba(0,212,255,0.07)', desc:'Synchronized team efforts and managed construction timelines across five months.'},
+  {name:'Kunal',          role:'PCB Artisan',         skill:'BCA 2nd',    emoji:'⚙️', c:'#ff6b2b', a:'rgba(255,107,43,0.07)', desc:'Specialized in intricate PCB arrangements to add texture and detail to the installation.'},
+  {name:'Ayush',          role:'Web Developer',       skill:'MCA 2nd',    emoji:'🐍', c:'#3776ab', a:'rgba(55,118,171,0.1)', desc:'Designed and developed this interactive platform to document the physical project.'},
 ];
 
 const director = {
   name:'Prof. Dr. Sonal Sharma', role:'Director - USCS',
   skill:'Leadership & Vision', emoji:'✨',
   c:'#9b59ff', a:'rgba(155,89,255,0.08)', isDirector:true,
+  desc:'Provided the visionary leadership and departmental support to make this installation possible.'
 };
 
 const guide = {
   name:'Ms. Divya Rawat', role:'Faculty Guide & Mentor',
   skill:'Assistant Professor', emoji:'🎓',
   c:'#ffb84d', a:'rgba(255,184,77,0.08)', isGuide:true,
+  desc:'Offered technical mentorship and academic guidance throughout the lifecycle of the project.'
 };
+

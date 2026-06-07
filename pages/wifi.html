@@ -18,114 +18,326 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── NAVBAR ─── -->
-<nav id="navbar">
-  <a href="../index.html" class="nav-logo">TECH<span class="accent">WALL</span></a>
-  <div class="nav-links">
-    <a href="../index.html#about">About</a>
-    <a href="../index.html#wall">The Wall</a>
-    <a href="../index.html#materials">Materials</a>
-    <a href="../index.html#gallery">Gallery</a>
-    <a href="../index.html#contact">Contact</a>
-  </div>
-  <a href="../index.html#contact" class="nav-cta">GET INVOLVED</a>
-</nav>
+<div class="smart-nav">
+  <!-- ─── NAVBAR ─── -->
+  <nav id="navbar">
+    <a href="../index.html" class="nav-logo">TECH<span class="accent">WALL</span></a>
+    <div class="nav-links">
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#wall">The Wall</a>
+      <a href="../index.html#materials">Materials</a>
+      <a href="../index.html#gallery">Gallery</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+    <a href="../index.html#contact" class="nav-cta">GET INVOLVED</a>
+  </nav>
 
-<!-- ─── TICKER ─── -->
-<div class="ticker-wrap" style="margin-top:64px;">
-  <div class="ticker-track">
-    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
-    <span>WIRELESS NETWORKING</span><span class="sep">◈</span>
-    <span>WIFI 6E</span><span class="sep">◈</span>
-    <span>IEEE 802.11</span><span class="sep">◈</span>
-    <span>SPECTRUM</span><span class="sep">◈</span>
-    <span>WPA3 SECURITY</span><span class="sep">◈</span>
-    <span>IOT CONNECTIVITY</span><span class="sep">◈</span>
-    <span>ROUTERS & ACCESS POINTS</span><span class="sep">◈</span>
-    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
-    <span>WIRELESS NETWORKING</span><span class="sep">◈</span>
-    <span>WIFI 6E</span><span class="sep">◈</span>
-    <span>IEEE 802.11</span><span class="sep">◈</span>
-    <span>SPECTRUM</span><span class="sep">◈</span>
-    <span>WPA3 SECURITY</span><span class="sep">◈</span>
-    <span>IOT CONNECTIVITY</span><span class="sep">◈</span>
-    <span>ROUTERS & ACCESS POINTS</span><span class="sep">◈</span>
+  <!-- QUICK NAV TICKER -->
+  <div class="nav-ticker">
+    <div class="nav-ticker-track">
+      <a href="ai.html" class="nav-ticker-item">Artificial Intelligence</a><span class="sep">◈</span>
+      <a href="apps.html" class="nav-ticker-item">Developer Tools</a><span class="sep">◈</span>
+      <a href="bigdata.html" class="nav-ticker-item">Big Data</a><span class="sep">◈</span>
+      <a href="cloud.html" class="nav-ticker-item">Cloud Computing</a><span class="sep">◈</span>
+      <a href="cyber.html" class="nav-ticker-item">Cybersecurity</a><span class="sep">◈</span>
+      <a href="dbms.html" class="nav-ticker-item">DBMS & Analytics</a><span class="sep">◈</span>
+      <a href="dino.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
+      <a href="prog.html" class="nav-ticker-item">Programming</a><span class="sep">◈</span>
+      <a href="webdev.html" class="nav-ticker-item">Web Development</a><span class="sep">◈</span>
+      <a href="wifi.html" class="nav-ticker-item active">WiFi & Networking</a><span class="sep">◈</span>
+      <!-- Repeat the same links once more for seamless looping -->
+      <a href="ai.html" class="nav-ticker-item">Artificial Intelligence</a><span class="sep">◈</span>
+      <a href="apps.html" class="nav-ticker-item">Developer Tools</a><span class="sep">◈</span>
+      <a href="bigdata.html" class="nav-ticker-item">Big Data</a><span class="sep">◈</span>
+      <a href="cloud.html" class="nav-ticker-item">Cloud Computing</a><span class="sep">◈</span>
+      <a href="cyber.html" class="nav-ticker-item">Cybersecurity</a><span class="sep">◈</span>
+      <a href="dbms.html" class="nav-ticker-item">DBMS & Analytics</a><span class="sep">◈</span>
+      <a href="dino.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
+      <a href="prog.html" class="nav-ticker-item">Programming</a><span class="sep">◈</span>
+      <a href="webdev.html" class="nav-ticker-item">Web Development</a><span class="sep">◈</span>
+      <a href="wifi.html" class="nav-ticker-item active">WiFi & Networking</a><span class="sep">◈</span>
+    </div>
   </div>
 </div>
 
-<main class="section-z" style="padding: 100px 0;">
+<!-- ─── PAGE HERO ─── -->
+<header class="page-hero">
+    <div class="hero-img-overlay" style="background-image: url('https://images.unsplash.com/photo-1563770660941-20978e870e26?auto=format&fit=crop&q=80&w=1600');"></div>
+    <div class="hero-content-wrap">
+        <span class="hero-eyebrow"><span class="pulse"></span>WIRELESS CONNECTIVITY</span>
+        <h1 class="hero-title"><span class="t1">NETWORKING &</span> <span class="t2">WIRELESS</span> <span class="t3">COMMUNICATION</span></h1>
+        <p class="hero-sub">How WiFi untethered us from cables, enabling the explosion of mobile computing and the IoT.</p>
+    </div>
+</header>
+
+<main class="section-z">
     <div class="subpage-container">
         <!-- SIDEBAR -->
         <aside class="sidebar reveal-l">
             <span class="sidebar-h">NAVIGATION</span>
             <ul class="sidebar-links">
-                <li><a href="#history">History of WiFi</a></li>
-                <li><a href="#standards">WiFi Standards</a></li>
-                <li><a href="#security">Wireless Security</a></li>
-                <li><a href="#future">Future of Wireless</a></li>
+                <li><a href="#history">The Journey</a></li>
+                <li><a href="#performance">Standards & Security</a></li>
+                <li><a href="#stats">Digital Frontier</a></li>
             </ul>
         </aside>
 
         <!-- MAIN CONTENT -->
         <div class="content-section reveal in" style="flex: 1; max-width: 1000px;">
-            <h1>WiFi: The Wireless Revolution</h1>
-    
-            <p>WiFi (Wireless Fidelity) has fundamentally changed how we interact with technology, untethering us from physical cables and enabling the explosion of mobile computing and the Internet of Things (IoT).</p>
+            
+            <div class="intro-card">
+                <p>WiFi has fundamentally changed how we interact with technology. This page explores the evolution of the 802.11 protocol and the future of Extremely High Throughput connectivity.</p>
+            </div>
 
-            <hr>
-
-            <section id="history" style="margin-top: 50px;">
-                <h2>History of WiFi</h2>
-                <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p>The journey of WiFi began in 1985 with the FCC's release of the ISM (Industrial, Scientific, and Medical) bands for unlicensed use. However, it wasn't until 1997 that the first version of the 802.11 protocol was released, offering speeds of up to 2 Mbps.</p>
-                <p>The term "Wi-Fi" was coined by the Wi-Fi Alliance in 1999 as a consumer-friendly name for the technical IEEE 802.11b Direct Sequence standard. Since then, it has evolved through multiple generations, each significantly increasing speed, range, and reliability.</p>
-            </section>
-
-            <hr style="margin-top: 50px;">
-
-            <section id="standards" style="margin-top: 50px;">
-                <h2>WiFi Standards (802.11)</h2>
-                <h3 style="margin-top: 30px; color: var(--accent);">Evolution of Performance</h3>
-                <p>WiFi standards are managed by the IEEE. Major milestones include <strong>802.11b</strong> (11 Mbps), <strong>802.11g</strong> (54 Mbps), <strong>802.11n</strong> (WiFi 4), <strong>802.11ac</strong> (WiFi 5), and the current <strong>802.11ax</strong> (WiFi 6/6E).</p>
+            <section id="history" style="margin-top: 80px;">
+                <div class="section-header">
+                    <h2>The Journey</h2>
+                    <div class="header-line"></div>
+                </div>
                 
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose</h3>
-                <p>WiFi 6E introduces support for the 6 GHz band, providing a massive increase in available spectrum and significantly reducing congestion in dense environments, enabling multi-gigabit speeds and ultra-low latency.</p>
+                <div class="visual-split">
+                    <div class="split-text">
+                        <h3 style="color: var(--accent);">Genesis of the Unlicenced Spectrum</h3>
+                        <p>The wireless revolution was born from a 1985 regulatory decision to release the ISM (Industrial, Scientific, and Medical) bands for unlicenced use. By 1999, the "Wi-Fi" brand was created to provide a consumer-friendly identity for the **IEEE 802.11b** protocol. What began as an experimental way to connect cash registers transformed into the invisible infrastructure of the modern world.</p>
+                        <p>From the modest 11 Mbps of the first generation to the multi-gigabit horizons of today, WiFi has evolved through a relentless pursuit of speed, range, and congestion management.</p>
+                    </div>
+                    <div class="split-img">
+                        <img src="https://images.unsplash.com/photo-1551703599-6b3e8379aa8c?auto=format&fit=crop&q=80&w=800" alt="Wireless Signal" class="rounded-img" referrerpolicy="no-referrer" loading="lazy">
+                    </div>
+                </div>
             </section>
 
-            <hr style="margin-top: 50px;">
-
-            <section id="security" style="margin-top: 50px;">
-                <h2>Wireless Security</h2>
-                <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p>Protecting data transmitted over the air is critical. WiFi security has evolved from the flawed WEP (Wired Equivalent Privacy) to WPA, WPA2, and now the state-of-the-art <strong>WPA3</strong>.</p>
+            <section id="performance" style="margin-top: 100px;">
+                <div class="section-header">
+                    <h2>Standards & Security</h2>
+                    <div class="header-line"></div>
+                </div>
                 
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose</h3>
-                <p>WPA3 introduces stronger encryption, more secure key exchange protocols, and protection against common attacks like offline dictionary attacks, ensuring that our wireless connections remain private and secure.</p>
+                <div class="visual-split reverse">
+                    <div class="split-text">
+                        <h3 style="color: var(--accent);">The Architecture of Invisible Waves</h3>
+                        <p>The mission of modern networking is to provide "invisible wiring" for the global economy. This is achieved through the architectural complexity of **WiFi 6E and WiFi 7**, which utilize the 6 GHz band and **Extremely High Throughput (EHT)** technologies to deliver fiber-like speeds without the physical cables.</p>
+                        <p>Parallel to speed, security has matured from the flawed WEP to the robust **WPA3** encryption. By untethering us from the physical desk, WiFi has fundamentally enabled the explosion of mobile computing, remote work, and the Internet of Things (IoT).</p>
+                    </div>
+                    <div class="split-img">
+                        <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=800" alt="Networking Hardware" class="rounded-img" referrerpolicy="no-referrer" loading="lazy">
+                    </div>
+                </div>
+
+                <div class="wifi-grid">
+                    <div class="wf-card">
+                        <span class="wf-icon">📡</span>
+                        <h4>Spectrum</h4>
+                        <p>WiFi 6E utilizes the 6 GHz band for interference-free speed.</p>
+                    </div>
+                    <div class="wf-card">
+                        <span class="wf-icon">🔐</span>
+                        <h4>WPA3</h4>
+                        <p>State-of-the-art protection against offline dictionary attacks.</p>
+                    </div>
+                    <div class="wf-card">
+                        <span class="wf-icon">🚀</span>
+                        <h4>WiFi 7</h4>
+                        <p>The next frontier aiming for Extremely High Throughput (EHT).</p>
+                    </div>
+                </div>
             </section>
 
-            <hr style="margin-top: 50px;">
-
-            <section id="future" style="margin-top: 50px;">
-                <h2>Future of Wireless</h2>
-                <h3 style="margin-top: 30px; color: var(--accent);">Significance</h3>
-                <p>The future of WiFi lies in <strong>WiFi 7</strong> (802.11be), which aims to provide "Extremely High Throughput" with speeds exceeding 30 Gbps. It will feature technologies like Multi-Link Operation (MLO) to further reduce latency and increase reliability for VR, AR, and 8K video streaming.</p>
-                <p>As we move towards a more connected world, WiFi will continue to be a foundational technology, powering smart cities, autonomous vehicles, and a vast ecosystem of connected devices.</p>
+            <section id="stats" style="margin-top: 100px;">
+                <h3 style="color: var(--accent);">Untethering the Digital Frontier</h3>
+                <div class="stat-banner">
+                    <div class="sb-item">
+                        <span class="sb-val">30Gbps</span>
+                        <span class="sb-lbl">TARGET SPEED OF WIFI 7</span>
+                    </div>
+                    <div class="sb-item">
+                        <span class="sb-val">6 GHz</span>
+                        <span class="sb-lbl">NEW UNLICENCED SPECTRUM</span>
+                    </div>
+                </div>
             </section>
 
             <br><br>
-            <hr>
-            <div style="text-align: center; margin-top: 40px;">
+            <div class="bottom-cta">
                 <a href="../index.html#wall" class="nav-cta">← BACK TO THE WALL</a>
             </div>
 
-            <br><br>
-            <p><em>Document Version: 1.0.0 (WiFi)</em></p>
-            <p><em>Programmer Notes: Wireless signals traveling through a wall of physical e-waste.</em></p>
-            
-            <br><br><br><br>
         </div>
     </div>
 </main>
+
+<style>
+    /* PAGE SPECIFIC STYLES */
+    .page-hero {
+        position: relative;
+        height: 60vh;
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+    }
+    .hero-img-overlay {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.25;
+        filter: saturate(0.5) brightness(0.7);
+        mask-image: linear-gradient(to bottom, black 60%, transparent);
+    }
+    .hero-content-wrap {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        padding: 0 20px;
+    }
+    .page-hero .hero-title {
+        font-size: clamp(3rem, 8vw, 6rem);
+        margin-bottom: 20px;
+    }
+    
+    .intro-card {
+        background: rgba(0, 212, 255, 0.03);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        padding: 30px;
+        border-radius: 4px;
+        margin-bottom: 40px;
+        position: relative;
+    }
+    .intro-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 4px; height: 100%;
+        background: var(--cyan);
+    }
+    
+    .section-header {
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .header-line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, var(--cyan), transparent);
+        opacity: 0.3;
+    }
+    
+    .visual-split {
+        display: flex;
+        gap: 40px;
+        align-items: center;
+        margin: 40px 0;
+    }
+    .visual-split.reverse {
+        flex-direction: row-reverse;
+    }
+    .split-text { flex: 1; }
+    .split-img { flex: 0.8; }
+    .rounded-img {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        transition: transform 0.5s;
+    }
+    .rounded-img:hover {
+        transform: scale(1.02);
+        border-color: var(--cyan);
+    }
+    
+    .wifi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 40px 0;
+    }
+    .wf-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        padding: 30px 20px;
+        text-align: center;
+        transition: all 0.3s;
+    }
+    .wf-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--cyan);
+        background: rgba(0, 212, 255, 0.02);
+    }
+    .wf-icon {
+        font-size: 2.2rem;
+        display: block;
+        margin-bottom: 15px;
+    }
+    .wf-card h4 {
+        font-family: var(--font-mono);
+        color: var(--text);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.9rem;
+    }
+    .wf-card p {
+        font-size: 0.82rem;
+        margin: 0;
+    }
+
+    .stat-banner {
+        display: flex;
+        gap: 20px;
+        margin: 60px 0;
+    }
+    .sb-item {
+        flex: 1;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        padding: 40px 20px;
+        text-align: center;
+        border-radius: 4px;
+        position: relative;
+        overflow: hidden;
+    }
+    .sb-item::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; width: 100%; height: 2px;
+        background: var(--cyan);
+    }
+    .sb-val {
+        display: block;
+        font-family: var(--font-disp);
+        font-size: 4rem;
+        color: var(--cyan);
+        line-height: 1;
+        margin-bottom: 10px;
+        text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    }
+    .sb-lbl {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        color: var(--text2);
+        letter-spacing: 3px;
+    }
+    
+    .bottom-cta {
+        text-align: center;
+        padding: 40px 0;
+        border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+        .visual-split, .visual-split.reverse {
+            flex-direction: column;
+        }
+        .stat-banner {
+            flex-direction: column;
+        }
+        .page-hero { height: 40vh; }
+    }
+</style>
 
 <!-- ─── FOOTER ─── -->
 <footer>
@@ -163,7 +375,7 @@
     </div>
   </div>
   <div class="footer-btm">
-    <span class="f-copy">© 2025 TECHWALL PROJECT — BUILT FROM WHAT OTHERS DISCARDED</span>
+    <span class="f-copy">© 2026 TECHWALL PROJECT — BUILT FROM WHAT OTHERS DISCARDED</span>
     <span class="f-status"><span class="f-dot"></span>INSTALLATION IN PROGRESS</span>
   </div>
 </footer>

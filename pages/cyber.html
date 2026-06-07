@@ -18,42 +18,59 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── NAVBAR ─── -->
-<nav id="navbar">
-  <a href="../index.html" class="nav-logo">TECH<span class="accent">WALL</span></a>
-  <div class="nav-links">
-    <a href="../index.html#about">About</a>
-    <a href="../index.html#wall">The Wall</a>
-    <a href="../index.html#materials">Materials</a>
-    <a href="../index.html#gallery">Gallery</a>
-    <a href="../index.html#contact">Contact</a>
-  </div>
-  <a href="../index.html#contact" class="nav-cta">GET INVOLVED</a>
-</nav>
+<div class="smart-nav">
+  <!-- ─── NAVBAR ─── -->
+  <nav id="navbar">
+    <a href="../index.html" class="nav-logo">TECH<span class="accent">WALL</span></a>
+    <div class="nav-links">
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#wall">The Wall</a>
+      <a href="../index.html#materials">Materials</a>
+      <a href="../index.html#gallery">Gallery</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+    <a href="../index.html#contact" class="nav-cta">GET INVOLVED</a>
+  </nav>
 
-<!-- ─── TICKER ─── -->
-<div class="ticker-wrap" style="margin-top:64px;">
-  <div class="ticker-track">
-    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
-    <span>CYBERSECURITY</span><span class="sep">◈</span>
-    <span>KALI LINUX</span><span class="sep">◈</span>
-    <span>ENCRYPTION</span><span class="sep">◈</span>
-    <span>BUG BOUNTY</span><span class="sep">◈</span>
-    <span>FIREWALL</span><span class="sep">◈</span>
-    <span>ETHICAL HACKING</span><span class="sep">◈</span>
-    <span>LINUX SECURITY</span><span class="sep">◈</span>
-    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
-    <span>CYBERSECURITY</span><span class="sep">◈</span>
-    <span>KALI LINUX</span><span class="sep">◈</span>
-    <span>ENCRYPTION</span><span class="sep">◈</span>
-    <span>BUG BOUNTY</span><span class="sep">◈</span>
-    <span>FIREWALL</span><span class="sep">◈</span>
-    <span>ETHICAL HACKING</span><span class="sep">◈</span>
-    <span>LINUX SECURITY</span><span class="sep">◈</span>
+  <!-- QUICK NAV TICKER -->
+  <div class="nav-ticker">
+    <div class="nav-ticker-track">
+      <a href="ai.html" class="nav-ticker-item">Artificial Intelligence</a><span class="sep">◈</span>
+      <a href="apps.html" class="nav-ticker-item">Developer Tools</a><span class="sep">◈</span>
+      <a href="bigdata.html" class="nav-ticker-item">Big Data</a><span class="sep">◈</span>
+      <a href="cloud.html" class="nav-ticker-item">Cloud Computing</a><span class="sep">◈</span>
+      <a href="cyber.html" class="nav-ticker-item active">Cybersecurity</a><span class="sep">◈</span>
+      <a href="dbms.html" class="nav-ticker-item">DBMS & Analytics</a><span class="sep">◈</span>
+      <a href="dino.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
+      <a href="prog.html" class="nav-ticker-item">Programming</a><span class="sep">◈</span>
+      <a href="webdev.html" class="nav-ticker-item">Web Development</a><span class="sep">◈</span>
+      <a href="wifi.html" class="nav-ticker-item">WiFi & Networking</a><span class="sep">◈</span>
+      <!-- Repeat the same links once more for seamless looping -->
+      <a href="ai.html" class="nav-ticker-item">Artificial Intelligence</a><span class="sep">◈</span>
+      <a href="apps.html" class="nav-ticker-item">Developer Tools</a><span class="sep">◈</span>
+      <a href="bigdata.html" class="nav-ticker-item">Big Data</a><span class="sep">◈</span>
+      <a href="cloud.html" class="nav-ticker-item">Cloud Computing</a><span class="sep">◈</span>
+      <a href="cyber.html" class="nav-ticker-item active">Cybersecurity</a><span class="sep">◈</span>
+      <a href="dbms.html" class="nav-ticker-item">DBMS & Analytics</a><span class="sep">◈</span>
+      <a href="dino.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
+      <a href="prog.html" class="nav-ticker-item">Programming</a><span class="sep">◈</span>
+      <a href="webdev.html" class="nav-ticker-item">Web Development</a><span class="sep">◈</span>
+      <a href="wifi.html" class="nav-ticker-item">WiFi & Networking</a><span class="sep">◈</span>
+    </div>
   </div>
 </div>
 
-<main class="section-z" style="padding: 100px 0;">
+<!-- ─── PAGE HERO ─── -->
+<header class="page-hero">
+    <div class="hero-img-overlay" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1600');"></div>
+    <div class="hero-content-wrap">
+        <span class="hero-eyebrow"><span class="pulse"></span>CYBER DEFENSE FRONT</span>
+        <h1 class="hero-title"><span class="t1">SECURE</span> <span class="t2">DIGITAL</span> <span class="t3">FRONTIERS</span></h1>
+        <p class="hero-sub">Exploring the tools, techniques, and defensive strategies used to protect our digital world.</p>
+    </div>
+</header>
+
+<main class="section-z">
     <div class="subpage-container">
         <!-- SIDEBAR -->
         <aside class="sidebar reveal-l">
@@ -69,99 +86,262 @@
 
         <!-- MAIN CONTENT -->
         <div class="content-section reveal in" style="flex: 1; max-width: 1000px;">
-            <h1>Cybersecurity and Ethical Hacking</h1>
-    
-            <p>This page explores the tools, techniques, and defensive strategies used to protect the digital frontier.</p>
+            
+            <div class="intro-card">
+                <p>This page explores the tools, techniques, and defensive strategies used to protect the digital frontier in an increasingly connected world.</p>
+            </div>
 
-            <hr>
-
-            <section id="kali" style="margin-top: 50px;">
-                <h2>Kali Linux</h2>
+            <section id="kali" style="margin-top: 80px;">
+                <div class="section-header">
+                    <h2>Kali Linux</h2>
+                    <div class="header-line"></div>
+                </div>
                 
-                <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p>Derived from BackTrack, <strong>Kali Linux</strong> was released in 2013 by Offensive Security. It is a Debian-based Linux distribution specifically designed for digital forensics and penetration testing.</p>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose</h3>
-                <p>Kali comes pre-installed with over 600 penetration-testing programs, including Nmap, Wireshark, and Metasploit. It is the industry standard for security professionals and ethical hackers worldwide.</p>
-
-                <h3 style="margin-top: 30px; color: var(--accent);">Significance</h3>
-                <p>By providing a unified, pre-configured environment for security auditing, Kali Linux has standardized the toolsets used by the global cybersecurity community, ensuring that researchers can focus on vulnerability analysis rather than software configuration.</p>
+                <div class="visual-split">
+                    <div class="split-text">
+                        <h3 style="color: var(--accent);">Genesis of the Offensive Suite</h3>
+                        <p>Released in 2013 as the successor to BackTrack, <strong>Kali Linux</strong> is the premier Debian-based distribution designed specifically for digital forensics and penetration testing. It was built with a single, aggressive purpose: to provide security professionals with a pre-configured "Swiss Army knife" of over 600 specialized tools.</p>
+                        <p>By standardizing the offensive toolkit, it shifted the focus of security researchers from environmental setup to deep vulnerability analysis, becoming the de facto OS for the global white-hat community.</p>
+                    </div>
+                    <div class="split-img">
+                        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=800" alt="Cybersecurity Lab" class="rounded-img" referrerpolicy="no-referrer" loading="lazy">
+                    </div>
+                </div>
             </section>
 
-            <hr style="margin-top: 50px;">
-
-            <section id="encryption" style="margin-top: 50px;">
-                <h2>Encryption</h2>
+            <section id="encryption" style="margin-top: 100px;">
+                <div class="section-header">
+                    <h2>Modern Encryption</h2>
+                    <div class="header-line"></div>
+                </div>
                 
-                <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p><strong>Encryption</strong> is the cornerstone of digital privacy. It has evolved from simple methods like the Caesar cipher to complex mathematical algorithms like AES (Advanced Encryption Standard) and RSA.</p>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose</h3>
-                <p>Modern encryption ensures that even if data is intercepted, it remains unreadable without the correct key. It secures everything from our personal messages to global financial transactions and state secrets.</p>
+                <div class="visual-split reverse">
+                    <div class="split-text">
+                        <h3 style="color: var(--accent);">Mathematical Fortresses of Privacy</h3>
+                        <p>Encryption is the invisible foundation of the modern internet. Its purpose is to ensure the **confidentiality, integrity, and authenticity** of data. From the 1970s' DES to today's quantum-resistant algorithms, encryption has evolved into a mathematical arms race between code-makers and code-breakers.</p>
+                        <p>Without these complex cryptographic layers, every financial transaction, private message, and government secret would be vulnerable to interception, effectively ending digital trust as we know it.</p>
+                    </div>
+                    <div class="split-img">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800" alt="Encryption Code" class="rounded-img" referrerpolicy="no-referrer" loading="lazy">
+                    </div>
+                </div>
 
-                <h3 style="margin-top: 30px; color: var(--accent);">Significance</h3>
-                <p>In the age of mass surveillance and data breaches, end-to-end encryption is the ultimate safeguard for human rights and individual privacy, making it one of the most important technological developments of the modern era.</p>
+                <h3 style="color: var(--accent); text-align: center;">Defensive Pillars</h3>
+                <div class="cyber-grid">
+                    <div class="cy-card">
+                        <span class="cy-icon">🛡️</span>
+                        <h4>Vulnerability Incentives</h4>
+                        <p>Bug bounties reward ethical hackers for reporting flaws before they are exploited.</p>
+                    </div>
+                    <div class="cy-card">
+                        <span class="cy-icon">🐧</span>
+                        <h4>Hardened Kernels</h4>
+                        <p>Linux security modules like SELinux provide mandatory access controls for servers.</p>
+                    </div>
+                    <div class="cy-card">
+                        <span class="cy-icon">🧱</span>
+                        <h4>Traffic Inspection</h4>
+                        <p>Next-gen firewalls act as gatekeepers, analyzing packets in real-time to block threats.</p>
+                    </div>
+                </div>
             </section>
 
-            <hr style="margin-top: 50px;">
-
-            <section id="linux" style="margin-top: 50px;">
-                <h2>Linux Security</h2>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p><strong>Linux</strong>, particularly distributions like Ubuntu and Red Hat, forms the secure backbone of the internet. Its permission-based architecture and open-source nature allow for rapid identification and patching of vulnerabilities.</p>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose</h3>
-                <p>From the SELinux and AppArmor security modules to the robust iptables/nftables firewall systems, Linux provides the essential tools for building hardened server environments.</p>
-
-                <h3 style="margin-top: 30px; color: var(--accent);">Significance</h3>
-                <p>Because the Linux kernel is reviewed by thousands of developers globally, it has become the most trusted environment for hosting the world's most sensitive data, from government databases to banking infrastructure.</p>
-            </section>
-
-            <hr style="margin-top: 50px;">
-
-            <section id="bugbounty" style="margin-top: 50px;">
-                <h2>Bug Bounty Programs</h2>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p><strong>Bug Bounty</strong> programs have democratized cybersecurity by incentivizing ethical hackers to find and report vulnerabilities. Platforms like HackerOne and Bugcrowd connect organizations with a global community of security researchers.</p>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose</h3>
-                <p>By rewarding responsible disclosure, these programs help companies like Google, Facebook, and even the DoD identify critical security flaws before malicious actors can exploit them.</p>
-
-                <h3 style="margin-top: 30px; color: var(--accent);">Significance</h3>
-                <p>Bug bounties have shifted the security paradigm from "security through obscurity" to a model of radical transparency, where the collective intelligence of the world is used to defend against cyber threats.</p>
-            </section>
-
-            <hr style="margin-top: 50px;">
-
-            <section id="firewall" style="margin-top: 50px;">
-                <h2>Firewalls</h2>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p>A <strong>Firewall</strong> is a network security system that monitors and controls incoming and outgoing network traffic based on predetermined security rules. They have evolved from simple packet filters to Next-Generation Firewalls (NGFW) that can perform deep packet inspection and intrusion prevention.</p>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose</h3>
-                <p>Firewalls establish a barrier between a trusted internal network and untrusted external networks (like the internet), acting as the first line of defense against unauthorized access.</p>
-
-                <h3 style="margin-top: 30px; color: var(--accent);">Significance</h3>
-                <p>As the "gatekeeper" of the network, firewalls remain the most fundamental piece of infrastructure for any organization, protecting against everything from simple unauthorized access to complex, multi-stage cyber attacks.</p>
+            <section id="stats" style="margin-top: 100px;">
+                <h3 style="color: var(--accent);">Scaling the Defense</h3>
+                <div class="stat-banner">
+                    <div class="sb-item">
+                        <span class="sb-val">AES-256</span>
+                        <span class="sb-lbl">INDUSTRY STANDARD ENCRYPTION</span>
+                    </div>
+                    <div class="sb-item">
+                        <span class="sb-val">600+</span>
+                        <span class="sb-lbl">KALI SECURITY TOOLS</span>
+                    </div>
+                </div>
             </section>
 
             <br><br>
-            <hr>
-            <div style="text-align: center; margin-top: 40px;">
+            <div class="bottom-cta">
                 <a href="../index.html#wall" class="nav-cta">← BACK TO THE WALL</a>
             </div>
 
-            <br><br>
-            <p><em>Document Version: 1.0.0 (Cyber)</em></p>
-            <p><em>Programmer Notes: Protecting the e-waste legacy through modern defense.</em></p>
-            
-            <br><br><br><br>
         </div>
     </div>
 </main>
+
+<style>
+    /* PAGE SPECIFIC STYLES */
+    .page-hero {
+        position: relative;
+        height: 60vh;
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+    }
+    .hero-img-overlay {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.3;
+        filter: saturate(0.5) brightness(0.7);
+        mask-image: linear-gradient(to bottom, black 60%, transparent);
+    }
+    .hero-content-wrap {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        padding: 0 20px;
+    }
+    .page-hero .hero-title {
+        font-size: clamp(3rem, 8vw, 6rem);
+        margin-bottom: 20px;
+    }
+    
+    .intro-card {
+        background: rgba(0, 255, 136, 0.03);
+        border: 1px solid var(--border2);
+        padding: 30px;
+        border-radius: 4px;
+        margin-bottom: 40px;
+        position: relative;
+    }
+    .intro-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 4px; height: 100%;
+        background: var(--green);
+    }
+    
+    .section-header {
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .header-line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, var(--green), transparent);
+        opacity: 0.3;
+    }
+    
+    .visual-split {
+        display: flex;
+        gap: 40px;
+        align-items: center;
+        margin: 40px 0;
+    }
+    .visual-split.reverse {
+        flex-direction: row-reverse;
+    }
+    .split-text { flex: 1; }
+    .split-img { flex: 0.8; }
+    .rounded-img {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        transition: transform 0.5s;
+    }
+    .rounded-img:hover {
+        transform: scale(1.02);
+        border-color: var(--green);
+    }
+    
+    .cyber-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 40px 0;
+    }
+    .cy-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        padding: 30px 20px;
+        text-align: center;
+        transition: all 0.3s;
+        border-top: 2px solid transparent;
+    }
+    .cy-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--green);
+        background: rgba(0, 255, 136, 0.02);
+    }
+    .cy-icon {
+        font-size: 2.2rem;
+        display: block;
+        margin-bottom: 15px;
+    }
+    .cy-card h4 {
+        font-family: var(--font-mono);
+        color: var(--text);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.9rem;
+    }
+    .cy-card p {
+        font-size: 0.82rem;
+        margin: 0;
+    }
+
+    .stat-banner {
+        display: flex;
+        gap: 20px;
+        margin: 60px 0;
+    }
+    .sb-item {
+        flex: 1;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        padding: 40px 20px;
+        text-align: center;
+        border-radius: 4px;
+        position: relative;
+        overflow: hidden;
+    }
+    .sb-item::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; width: 100%; height: 2px;
+        background: var(--green);
+    }
+    .sb-val {
+        display: block;
+        font-family: var(--font-disp);
+        font-size: 4rem;
+        color: var(--green);
+        line-height: 1;
+        margin-bottom: 10px;
+        text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    }
+    .sb-lbl {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        color: var(--text2);
+        letter-spacing: 3px;
+    }
+    
+    .bottom-cta {
+        text-align: center;
+        padding: 40px 0;
+        border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+        .visual-split, .visual-split.reverse {
+            flex-direction: column;
+        }
+        .stat-banner {
+            flex-direction: column;
+        }
+        .page-hero { height: 40vh; }
+    }
+</style>
 
 <!-- ─── FOOTER ─── -->
 <footer>
@@ -199,7 +379,7 @@
     </div>
   </div>
   <div class="footer-btm">
-    <span class="f-copy">© 2025 TECHWALL PROJECT — BUILT FROM WHAT OTHERS DISCARDED</span>
+    <span class="f-copy">© 2026 TECHWALL PROJECT — BUILT FROM WHAT OTHERS DISCARDED</span>
     <span class="f-status"><span class="f-dot"></span>INSTALLATION IN PROGRESS</span>
   </div>
 </footer>

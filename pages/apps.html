@@ -18,42 +18,59 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── NAVBAR ─── -->
-<nav id="navbar">
-  <a href="../index.html" class="nav-logo">TECH<span class="accent">WALL</span></a>
-  <div class="nav-links">
-    <a href="../index.html#about">About</a>
-    <a href="../index.html#wall">The Wall</a>
-    <a href="../index.html#materials">Materials</a>
-    <a href="../index.html#gallery">Gallery</a>
-    <a href="../index.html#contact">Contact</a>
-  </div>
-  <a href="../index.html#contact" class="nav-cta">GET INVOLVED</a>
-</nav>
+<div class="smart-nav">
+  <!-- ─── NAVBAR ─── -->
+  <nav id="navbar">
+    <a href="../index.html" class="nav-logo">TECH<span class="accent">WALL</span></a>
+    <div class="nav-links">
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#wall">The Wall</a>
+      <a href="../index.html#materials">Materials</a>
+      <a href="../index.html#gallery">Gallery</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+    <a href="../index.html#contact" class="nav-cta">GET INVOLVED</a>
+  </nav>
 
-<!-- ─── TICKER ─── -->
-<div class="ticker-wrap" style="margin-top:64px;">
-  <div class="ticker-track">
-    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
-    <span>DEVELOPER TOOLS</span><span class="sep">◈</span>
-    <span>VSCODE</span><span class="sep">◈</span>
-    <span>GITHUB</span><span class="sep">◈</span>
-    <span>OPEN SOURCE</span><span class="sep">◈</span>
-    <span>VERSION CONTROL</span><span class="sep">◈</span>
-    <span>COPILOT</span><span class="sep">◈</span>
-    <span>EXTENSIONS</span><span class="sep">◈</span>
-    <span>REDUCING E-WASTE</span><span class="sep">◈</span>
-    <span>DEVELOPER TOOLS</span><span class="sep">◈</span>
-    <span>VSCODE</span><span class="sep">◈</span>
-    <span>GITHUB</span><span class="sep">◈</span>
-    <span>OPEN SOURCE</span><span class="sep">◈</span>
-    <span>VERSION CONTROL</span><span class="sep">◈</span>
-    <span>COPILOT</span><span class="sep">◈</span>
-    <span>EXTENSIONS</span><span class="sep">◈</span>
+  <!-- QUICK NAV TICKER -->
+  <div class="nav-ticker">
+    <div class="nav-ticker-track">
+      <a href="ai.html" class="nav-ticker-item">Artificial Intelligence</a><span class="sep">◈</span>
+      <a href="apps.html" class="nav-ticker-item active">Developer Tools</a><span class="sep">◈</span>
+      <a href="bigdata.html" class="nav-ticker-item">Big Data</a><span class="sep">◈</span>
+      <a href="cloud.html" class="nav-ticker-item">Cloud Computing</a><span class="sep">◈</span>
+      <a href="cyber.html" class="nav-ticker-item">Cybersecurity</a><span class="sep">◈</span>
+      <a href="dbms.html" class="nav-ticker-item">DBMS & Analytics</a><span class="sep">◈</span>
+      <a href="dino.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
+      <a href="prog.html" class="nav-ticker-item">Programming</a><span class="sep">◈</span>
+      <a href="webdev.html" class="nav-ticker-item">Web Development</a><span class="sep">◈</span>
+      <a href="wifi.html" class="nav-ticker-item">WiFi & Networking</a><span class="sep">◈</span>
+      <!-- Repeat the same links once more for seamless looping -->
+      <a href="ai.html" class="nav-ticker-item">Artificial Intelligence</a><span class="sep">◈</span>
+      <a href="apps.html" class="nav-ticker-item active">Developer Tools</a><span class="sep">◈</span>
+      <a href="bigdata.html" class="nav-ticker-item">Big Data</a><span class="sep">◈</span>
+      <a href="cloud.html" class="nav-ticker-item">Cloud Computing</a><span class="sep">◈</span>
+      <a href="cyber.html" class="nav-ticker-item">Cybersecurity</a><span class="sep">◈</span>
+      <a href="dbms.html" class="nav-ticker-item">DBMS & Analytics</a><span class="sep">◈</span>
+      <a href="dino.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
+      <a href="prog.html" class="nav-ticker-item">Programming</a><span class="sep">◈</span>
+      <a href="webdev.html" class="nav-ticker-item">Web Development</a><span class="sep">◈</span>
+      <a href="wifi.html" class="nav-ticker-item">WiFi & Networking</a><span class="sep">◈</span>
+    </div>
   </div>
 </div>
 
-<main class="section-z" style="padding: 100px 0;">
+<!-- ─── PAGE HERO ─── -->
+<header class="page-hero">
+    <div class="hero-img-overlay" style="background-image: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=1600');"></div>
+    <div class="hero-content-wrap">
+        <span class="hero-eyebrow"><span class="pulse"></span>DEVELOPMENT ECOSYSTEM</span>
+        <h1 class="hero-title"><span class="t1">MODERN</span> <span class="t2">DEVELOPER</span> <span class="t3">TOOLS</span></h1>
+        <p class="hero-sub">The powerful tools that facilitate collaboration, automation, and the global language of code.</p>
+    </div>
+</header>
+
+<main class="section-z">
     <div class="subpage-container">
         <!-- SIDEBAR -->
         <aside class="sidebar reveal-l">
@@ -66,68 +83,333 @@
 
         <!-- MAIN CONTENT -->
         <div class="content-section reveal in" style="flex: 1; max-width: 1000px;">
-            <h1>Essential Developer Ecosystem</h1>
-    
-            <p>Modern software development is built upon a foundation of powerful, extensible tools that facilitate collaboration, automation, and rapid iteration. This page explores the history and impact of the world's most essential developer platforms.</p>
+            
+            <div class="intro-card">
+                <p>Modern software development is built upon a foundation of powerful, extensible tools. This page explores the history and impact of Visual Studio Code and GitHub—the de facto standards of the 21st century.</p>
+            </div>
 
-            <hr>
-
-            <section id="vscode" style="margin-top: 50px;">
-                <h2>Visual Studio Code (VS Code)</h2>
+            <section id="vscode" style="margin-top: 80px;">
+                <div class="section-header">
+                    <h2>Visual Studio Code</h2>
+                    <div class="header-line"></div>
+                </div>
                 
-                <h3 style="margin-top: 30px; color: var(--accent);">History & Evolution</h3>
-                <p>Announced at the 2015 Build conference, <strong>Visual Studio Code</strong> was Microsoft's first major foray into a cross-platform code editor. Developed by a team led by Erich Gamma (one of the creators of Eclipse and the Design Patterns "Gang of Four"), VS Code was built using the <strong>Electron framework</strong>, which allows web technologies like JavaScript and TypeScript to power desktop applications. Despite early skepticism about "web-based" editors, its performance and low resource consumption—achieved through the use of the Monaco Editor engine—quickly won over the developer community.</p>
-                <p>Since its launch, VS Code has evolved from a simple text editor into a massive ecosystem. Its open-source core, <strong>VS Code - OSS</strong>, serves as the foundation for many other specialized editors, while the official Microsoft release includes proprietary features that make it the de facto standard for everything from web development to data science.</p>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose</h3>
-                <p>The primary purpose of VS Code is to provide a "lean but mean" development environment. It aims to bridge the gap between simple text editors (like Notepad++) and heavy-duty Integrated Development Environments (IDEs like Visual Studio or IntelliJ). Key features include:</p>
-                <ul>
-                    <li><strong>IntelliSense:</strong> Providing smart completions based on variable types, function definitions, and imported modules.</li>
-                    <li><strong>Built-in Git:</strong> Seamless version control integration directly in the UI, allowing for staging, committing, and pushing without leaving the editor.</li>
-                    <li><strong>Extension Marketplace:</strong> A vast repository of community-built plugins that add support for nearly every programming language, debugger, and cloud service.</li>
-                    <li><strong>Remote Development:</strong> Allowing developers to use the local editor UI while the code and execution environment reside in a container, on a remote server, or in the WSL (Windows Subsystem for Linux).</li>
-                </ul>
+                <div class="visual-split">
+                    <div class="split-text">
+                        <h3 style="color: var(--accent);">Origins of the Monaco Engine</h3>
+                        <p>Announced in 2015, <strong>Visual Studio Code</strong> was Microsoft's first major cross-platform editor. Developed by a team led by Erich Gamma, it proved that web technologies—specifically the <strong>Electron framework</strong>—could power a high-performance desktop experience without the bloat of traditional IDEs.</p>
+                        <p>It utilized the high-speed Monaco Editor engine, originally built for browser-based tools, to win over developers who demanded both speed and extensibility.</p>
+                    </div>
+                    <div class="split-img">
+                        <img src="https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&q=80&w=800" alt="VS Code Interface" class="rounded-img" referrerpolicy="no-referrer" loading="lazy">
+                    </div>
+                </div>
 
-                <h3 style="margin-top: 30px; color: var(--accent);">Significance</h3>
-                <p>VS Code's significance lies in its democratization of professional-grade development tools. By being free, open-source, and highly customizable, it has lowered the barrier to entry for millions of new programmers. Its adoption of the <strong>Language Server Protocol (LSP)</strong> and <strong>Debug Adapter Protocol (DAP)</strong> has revolutionized how tools are built, allowing language maintainers to write a single service that works across many different editors, fundamentally changing the architecture of modern developer tooling.</p>
+                <h3 style="color: var(--accent);">The Modular Workspace</h3>
+                <p>The primary mission of VS Code is to provide a "lean but mean" environment that bridges the gap between text editors and heavy IDEs. It operates as a modular hub, allowing developers to plug in exactly what they need—from debuggers to cloud integrations—through a massive ecosystem of community-built extensions.</p>
+
+                <h3 style="margin-top: 50px; color: var(--accent); text-align: center;">Core Pillars</h3>
+                <div class="app-grid">
+                    <div class="app-card">
+                        <span class="app-card-icon">⌨️</span>
+                        <h4>IntelliSense</h4>
+                        <p>Smart completions based on types and definitions.</p>
+                    </div>
+                    <div class="app-card">
+                        <span class="app-card-icon">🌿</span>
+                        <h4>Built-in Git</h4>
+                        <p>Seamless version control integration in the UI.</p>
+                    </div>
+                    <div class="app-card">
+                        <span class="app-card-icon">🧩</span>
+                        <h4>Marketplace</h4>
+                        <p>A vast repository of community-built extensions.</p>
+                    </div>
+                    <div class="app-card">
+                        <span class="app-card-icon">☁️</span>
+                        <h4>Remote Dev</h4>
+                        <p>Working directly in containers or remote servers.</p>
+                    </div>
+                </div>
+
+                <div class="feature-highlight">
+                    <div class="highlight-icon">◈</div>
+                    <div class="highlight-content">
+                        <h3>The Language Server Revolution</h3>
+                        <p>VS Code's greatest contribution is the <strong>Language Server Protocol (LSP)</strong>. By standardizing how editors communicate with compilers, it allowed language maintainers to write a single service that works across every modern editor, fundamentally democratizing professional-grade tooling.</p>
+                    </div>
+                </div>
             </section>
 
-            <hr style="margin-top: 50px;">
-
-            <section id="github" style="margin-top: 50px;">
-                <h2>GitHub</h2>
+            <section id="github" style="margin-top: 100px;">
+                <div class="section-header">
+                    <h2>GitHub</h2>
+                    <div class="header-line"></div>
+                </div>
                 
-                <h3 style="margin-top: 30px; color: var(--accent);">A History of Collaboration</h3>
-                <p>Founded in 2008 by Tom Preston-Werner, Chris Wanstrath, P. J. Hyett, and Scott Chacon, <strong>GitHub</strong> was built on top of <strong>Git</strong>, the distributed version control system created by Linus Torvalds. Before GitHub, collaborating on open-source code was a fragmented process involving mailing lists and patches. GitHub introduced the "Pull Request"—a revolutionary workflow that allowed developers to propose changes to a codebase with a single click, enabling discussion and code review in a centralized, social environment.</p>
-                <p>In 2018, Microsoft acquired GitHub for $7.5 billion, marking a significant shift in the platform's trajectory. Since then, GitHub has expanded beyond simple hosting to become a comprehensive "Developer Cloud" platform.</p>
-                
-                <h3 style="margin-top: 30px; color: var(--accent);">Main Purpose & Platform Features</h3>
-                <p>GitHub serves as the central hub for the world's software. Its main purpose is to manage the lifecycle of code, from the first line written to its deployment in production. Key pillars of the platform include:</p>
-                <ul>
-                    <li><strong>Version Control:</strong> Hosting millions of repositories with industry-standard Git security and branching models.</li>
-                    <li><strong>GitHub Actions:</strong> A powerful CI/CD (Continuous Integration/Continuous Deployment) engine that automates testing, building, and shipping code directly within the platform.</li>
-                    <li><strong>GitHub Copilot:</strong> An AI-powered pair programmer that suggests code in real-time, significantly increasing developer productivity and changing how we learn new languages.</li>
-                    <li><strong>Security & Dependabot:</strong> Automatically scanning code for vulnerabilities and keeping third-party dependencies up to date.</li>
-                </ul>
+                <div class="visual-split reverse">
+                    <div class="split-text">
+                        <h3 style="color: var(--accent);">The Social Coding Paradigm</h3>
+                        <p>Founded in 2008, <strong>GitHub</strong> revolutionized open-source collaboration. It introduced the "Pull Request"—a workflow that enabled social coding and centralized discussion for the first time. Acquired by Microsoft in 2018, it has since shifted from a simple host to the world's most critical software infrastructure.</p>
+                        <p>Before GitHub, collaboration was fragmented; after GitHub, the world's code found a single, unified home where anyone could contribute to anything.</p>
+                    </div>
+                    <div class="split-img">
+                        <img src="https://images.unsplash.com/photo-1618401471353-b98aadebc25a?auto=format&fit=crop&q=80&w=800" alt="Collaboration and Code" class="rounded-img" referrerpolicy="no-referrer" loading="lazy">
+                    </div>
+                </div>
 
-                <h3 style="margin-top: 30px; color: var(--accent);">Global Significance</h3>
-                <p>GitHub is often called the "Social Network for Programmers," but its significance is much deeper. It is the repository of record for the world's most critical infrastructure, hosting everything from the Linux kernel to the software powering the Mars Perseverance Rover. Through the <strong>GitHub Archive Program</strong>, the world's open-source code is being preserved in the Arctic World Archive for 1,000 years, ensuring that future generations can access our digital heritage. By centralizing the global developer community, GitHub has made open-source the default way to build software, driving unprecedented innovation across every industry.</p>
+                <h3 style="color: var(--accent);">Developer Cloud Infrastructure</h3>
+                <p>GitHub's mission is to manage the entire lifecycle of software. Beyond hosting, it provides the "Developer Cloud"—a suite of tools like **GitHub Actions** for automation and **Copilot** for AI-assisted programming that accelerate the transition from idea to production.</p>
+                
+                <div class="info-banner">
+                    <div class="banner-item">
+                        <strong>Actions</strong>
+                        <span>Automating testing, building, and deployment directly within the platform.</span>
+                    </div>
+                    <div class="banner-item">
+                        <strong>Copilot</strong>
+                        <span>An AI pair programmer that suggests code in real-time to boost productivity.</span>
+                    </div>
+                    <div class="banner-item">
+                        <strong>Dependabot</strong>
+                        <span>Automatically scanning and updating third-party dependencies for security.</span>
+                    </div>
+                </div>
+
+                <div class="stat-banner">
+                    <div class="sb-item">
+                        <span class="sb-val">100M+</span>
+                        <span class="sb-lbl">DEVELOPERS</span>
+                    </div>
+                    <div class="sb-item">
+                        <span class="sb-val">330M+</span>
+                        <span class="sb-lbl">REPOSITORIES</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 50px; color: var(--accent);">Preserving Our Digital DNA</h3>
+                <p>As the repository of record for the world's most critical infrastructure, GitHub's significance is global. Through the <strong>Archive Program</strong>, it preserves the software powering everything from Mars rovers to the Linux kernel in the Arctic World Archive, ensuring our digital legacy survives for 1,000 years.</p>
             </section>
 
             <br><br>
-            <hr>
-            <div style="text-align: center; margin-top: 40px;">
+            <div class="bottom-cta">
                 <a href="../index.html#wall" class="nav-cta">← BACK TO THE WALL</a>
             </div>
 
-            <br><br>
-            <p><em>Document Version: 1.0.0 (Apps)</em></p>
-            <p><em>Programmer Notes: The digital workbench of the 21st century.</em></p>
-            
-            <br><br><br><br>
         </div>
     </div>
 </main>
+
+<style>
+    /* PAGE SPECIFIC STYLES */
+    .page-hero {
+        position: relative;
+        height: 60vh;
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+    }
+    .hero-img-overlay {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.25;
+        filter: saturate(0.4) brightness(0.7);
+        mask-image: linear-gradient(to bottom, black 60%, transparent);
+    }
+    .hero-content-wrap {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+        padding: 0 20px;
+    }
+    .page-hero .hero-title {
+        font-size: clamp(3rem, 8vw, 6rem);
+        margin-bottom: 20px;
+    }
+    
+    .intro-card {
+        background: rgba(0, 212, 255, 0.03);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        padding: 30px;
+        border-radius: 4px;
+        margin-bottom: 40px;
+        position: relative;
+    }
+    .intro-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; width: 4px; height: 100%;
+        background: var(--cyan);
+    }
+    
+    .section-header {
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    .header-line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, var(--cyan), transparent);
+        opacity: 0.3;
+    }
+    
+    .visual-split {
+        display: flex;
+        gap: 40px;
+        align-items: center;
+        margin: 40px 0;
+    }
+    .visual-split.reverse {
+        flex-direction: row-reverse;
+    }
+    .split-text { flex: 1; }
+    .split-img { flex: 0.8; }
+    .rounded-img {
+        width: 100%;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        transition: transform 0.5s;
+    }
+    .rounded-img:hover {
+        transform: scale(1.02);
+        border-color: var(--cyan);
+    }
+    
+    .app-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 40px 0;
+    }
+    .app-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        padding: 30px 20px;
+        text-align: center;
+        transition: all 0.3s;
+        border-bottom: 2px solid transparent;
+    }
+    .app-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--cyan);
+        border-bottom-color: var(--cyan);
+        background: rgba(0, 212, 255, 0.02);
+    }
+    .app-card-icon {
+        font-size: 2.2rem;
+        display: block;
+        margin-bottom: 15px;
+        filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.2));
+    }
+    .app-card h4 {
+        font-family: var(--font-mono);
+        color: var(--text);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.9rem;
+    }
+    .app-card p {
+        font-size: 0.82rem;
+        margin: 0;
+        line-height: 1.5;
+    }
+    
+    .feature-highlight {
+        display: flex;
+        gap: 25px;
+        background: rgba(155, 89, 255, 0.05);
+        border: 1px solid rgba(155, 89, 255, 0.2);
+        padding: 30px;
+        margin: 60px 0;
+        align-items: center;
+    }
+    .highlight-icon {
+        font-size: 2rem;
+        color: var(--purple);
+    }
+    .highlight-content h3 { margin-top: 0; font-size: 1.1rem; }
+    .highlight-content p { margin: 0; font-size: 0.9rem; }
+    
+    .info-banner {
+        display: flex;
+        gap: 20px;
+        margin: 40px 0;
+    }
+    .banner-item {
+        flex: 1;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 20px;
+        border-radius: 4px;
+        transition: border-color 0.3s;
+    }
+    .banner-item:hover { border-color: var(--gold); }
+    .banner-item strong {
+        display: block;
+        color: var(--gold);
+        font-family: var(--font-mono);
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+    .banner-item span {
+        font-size: 0.8rem;
+        color: var(--text2);
+    }
+
+    .stat-banner {
+        display: flex;
+        gap: 20px;
+        margin: 60px 0;
+    }
+    .sb-item {
+        flex: 1;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        padding: 40px 20px;
+        text-align: center;
+        clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
+    }
+    .sb-val {
+        display: block;
+        font-family: var(--font-disp);
+        font-size: 4rem;
+        color: var(--cyan);
+        line-height: 1;
+        margin-bottom: 10px;
+        text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+    }
+    .sb-lbl {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        color: var(--text2);
+        letter-spacing: 3px;
+    }
+    
+    .bottom-cta {
+        text-align: center;
+        padding: 40px 0;
+        border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 768px) {
+        .visual-split, .visual-split.reverse {
+            flex-direction: column;
+        }
+        .info-banner, .stat-banner {
+            flex-direction: column;
+        }
+        .page-hero { height: 40vh; }
+    }
+</style>
 
 <!-- ─── FOOTER ─── -->
 <footer>
@@ -165,7 +447,7 @@
     </div>
   </div>
   <div class="footer-btm">
-    <span class="f-copy">© 2025 TECHWALL PROJECT — BUILT FROM WHAT OTHERS DISCARDED</span>
+    <span class="f-copy">© 2026 TECHWALL PROJECT — BUILT FROM WHAT OTHERS DISCARDED</span>
     <span class="f-status"><span class="f-dot"></span>INSTALLATION IN PROGRESS</span>
   </div>
 </footer>

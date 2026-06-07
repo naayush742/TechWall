@@ -237,6 +237,7 @@ function renderStudents() {
       <span class="s-name">${s.name}</span>
       <span class="s-role">${s.role}</span>
       <span class="s-skill">${s.skill}</span>
+      <p class="s-desc">${s.desc}</p>
       <span class="s-big">${bigIcon}</span>
     `;
     sg.appendChild(card);
