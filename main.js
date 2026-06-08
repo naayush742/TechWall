@@ -1,5 +1,5 @@
 /* =========================================================
-   TechWall — main.js  |  Premium Interactions & Animations
+   USCS E-WALL — main.js  |  Premium Interactions & Animations
    ========================================================= */
 
 /* ─── CUSTOM CURSOR ─── */
