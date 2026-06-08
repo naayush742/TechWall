@@ -77,12 +77,12 @@ const techs = [
 ];
 
 const students = [
-  {name:'Mehak',          role:'Hardware Assembler',  skill:'BCA 1st',     emoji:'🛠️', c:'#9b59ff', a:'rgba(155,89,255,0.07)', desc:'Focused on the precise physical mounting of components onto the wall panels.'},
-  {name:'Anushka',        role:'Component Sorter',    skill:'BCA 2nd',       emoji:'🔧', c:'#ffb84d', a:'rgba(255,184,77,0.07)', desc:'Managed university e-waste collection and meticulously sorted components by type.'}, 
-  {name:'Utkarsh',        role:'Lead Designer',       skill:'BCA 2nd',    emoji:'🧠', c:'#00ff88', a:'rgba(0,255,136,0.07)', desc:'Created digital blueprints and mapped hardware components to iconic tech logos.'},
-  {name:'Deepak',         role:'Project Coordinator', skill:'BCA 2nd',     emoji:'🎯', c:'#00d4ff', a:'rgba(0,212,255,0.07)', desc:'Synchronized team efforts and managed construction timelines across five months.'},
-  {name:'Kunal',          role:'PCB Artisan',         skill:'BCA 2nd',    emoji:'⚙️', c:'#ff6b2b', a:'rgba(255,107,43,0.07)', desc:'Specialized in intricate PCB arrangements to add texture and detail to the installation.'},
-  {name:'Ayush',          role:'Web Developer',       skill:'MCA 2nd',    emoji:'🐍', c:'#3776ab', a:'rgba(55,118,171,0.1)', desc:'Designed and developed this interactive platform to document the physical project.'},
+  {name:'Utkarsh Gupta',        role:'Lead Designer',       skill:'BCA 2nd',    emoji:'🧠', c:'#00ff88', a:'rgba(0,255,136,0.07)', desc:'Created digital blueprints and mapped hardware components to iconic tech logos.'},
+  {name:'Deepak Rawat',         role:'Project Coordinator', skill:'BCA 2nd',     emoji:'🎯', c:'#00d4ff', a:'rgba(0,212,255,0.07)', desc:'Synchronized team efforts and managed construction timelines across six months.'},
+  {name:'Kunal Prajapati',          role:'PCB Artisan',         skill:'BCA 2nd',    emoji:'⚙️', c:'#ff6b2b', a:'rgba(255,107,43,0.07)', desc:'Specialized in intricate PCB arrangements to add texture and detail to the installation.'},
+{name:'Anushka Rawat ',        role:'Component Sorter',    skill:'BCA 2nd',       emoji:'🔧', c:'#ffb84d', a:'rgba(255,184,77,0.07)', desc:'Managed university e-waste collection and meticulously sorted components by type.'}, 
+  {name:'Mehak Thapa',          role:'Hardware Assembler',  skill:'BCA 1st',     emoji:'🛠️', c:'#9b59ff', a:'rgba(155,89,255,0.07)', desc:'Focused on the precise physical mounting of components onto the wall panels.'}, 
+  {name:'Ayush Negi',          role:'Web Developer',       skill:'MCA 2nd',    emoji:'🐍', c:'#3776ab', a:'rgba(55,118,171,0.1)', desc:'Designed and developed this interactive platform to document the physical project.'},
 ];
 
 const director = {
@@ -93,8 +93,8 @@ const director = {
 };
 
 const guide = {
-  name:'Ms. Divya Rawat', role:'Faculty Guide & Mentor',
-  skill:'Assistant Professor', emoji:'🎓',
+  name:'Ms. Divya Rawat', role:'Assistant Professor USCS',
+  skill:'Faculty Guide & Mentor', emoji:'🎓',
   c:'#ffb84d', a:'rgba(255,184,77,0.08)', isGuide:true,
   desc:'Offered technical mentorship and academic guidance throughout the lifecycle of the project.'
 };
