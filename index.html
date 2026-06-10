@@ -585,6 +585,25 @@
   <button class="aura-trigger" title="Personalize Aura">⚡</button>
 </div>
 
+<!-- ─── CLI TERMINAL OVERLAY ─── -->
+<div id="terminal-overlay">
+  <div class="term-header">
+    <span>USCS_OS v1.0.4 — TERMINAL_ACCESS</span>
+    <span id="term-time"></span>
+  </div>
+  <div id="term-output">
+    <span class="term-line">System initialized. Type 'help' to see available commands.</span>
+  </div>
+  <div class="term-input-wrap">
+    <span class="term-prompt">visitor@uscs:~$</span>
+    <input type="text" id="term-input" placeholder="Type a command..." autocomplete="off">
+  </div>
+  <span class="term-hint">Press 'ESC' to close terminal</span>
+</div>
+
+<!-- CLI TRIGGER -->
+<button class="cli-trigger" id="cli-open" title="Open System Terminal">_></button>
+
 <script src="data.js"></script>
 <script src="main.js"></script>
 </body>

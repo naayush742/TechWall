@@ -487,12 +487,137 @@ function applyAura(colorKey) {
   }
 }
 
+/* ─── CLI TERMINAL LOGIC ─── */
+const termOverlay = document.getElementById('terminal-overlay');
+const termInput = document.getElementById('term-input');
+const termOutput = document.getElementById('term-output');
+const termOpenBtn = document.getElementById('cli-open');
+const termTime = document.getElementById('term-time');
+
+function updateTermTime() {
+  if (termTime) termTime.textContent = new Date().toLocaleTimeString();
+}
+
+function openTerminal() {
+  termOverlay.classList.add('active');
+  termInput.focus();
+  updateTermTime();
+}
+
+function closeTerminal() {
+  termOverlay.classList.remove('active');
+}
+
+function addTermLine(text, type = 'res') {
+  const line = document.createElement('span');
+  line.className = `term-line ${type}`;
+  line.innerHTML = text;
+  termOutput.appendChild(line);
+  termOutput.scrollTop = termOutput.scrollHeight;
+}
+
+const commands = {
+  help: () => {
+    addTermLine('AVAILABLE COMMANDS:', 'res');
+    addTermLine(' - help: Show this list', 'res');
+    addTermLine(' - clear: Clear the screen', 'res');
+    addTermLine(' - who [name]: Information about team members', 'res');
+    addTermLine(' - go [page]: Navigate to a section (e.g., go cloud, go webdev)', 'res');
+    addTermLine(' - list: List all technologies on the wall', 'res');
+    addTermLine(' - aura [color]: Change the site aura (cyan, green, pink, etc.)', 'res');
+    addTermLine(' - exit: Close the terminal', 'res');
+  },
+  clear: () => {
+    termOutput.innerHTML = '';
+  },
+  exit: () => closeTerminal(),
+  list: () => {
+    addTermLine('TECH STACK ON THE WALL:', 'res');
+    const techNames = techs.map(t => t.name).join(', ');
+    addTermLine(techNames, 'res');
+  },
+  who: (args) => {
+    if (!args[0]) {
+      addTermLine('THE TEAM:', 'res');
+      const team = [director, guide, ...students].map(s => s.name).join(', ');
+      addTermLine(team, 'res');
+      return;
+    }
+    const query = args.join(' ').toLowerCase();
+    const person = [director, guide, ...students].find(s => s.name.toLowerCase().includes(query));
+    if (person) {
+      addTermLine(`NAME: ${person.name.toUpperCase()}`, 'res');
+      addTermLine(`ROLE: ${person.role}`, 'res');
+      addTermLine(`SKILL: ${person.skill}`, 'res');
+      addTermLine(`BIO: ${person.desc}`, 'res');
+    } else {
+      addTermLine(`User "${query}" not found in system records.`, 'error');
+    }
+  },
+  go: (args) => {
+    if (!args[0]) {
+      addTermLine('Usage: go [section]. Available: about, wall, impact, team, cloud, ai, webdev, apps...', 'error');
+      return;
+    }
+    const target = args[0].toLowerCase();
+    const subpages = ['ai', 'apps', 'bigdata', 'cloud', 'cyber', 'dbms', 'dino', 'prog', 'webdev', 'wifi'];
+    
+    if (['about', 'wall', 'impact', 'team'].includes(target)) {
+      const map = { team: 'creators' };
+      window.location.hash = map[target] || target;
+      addTermLine(`Navigating to section: ${target}...`, 'res');
+      setTimeout(closeTerminal, 800);
+    } else if (subpages.includes(target)) {
+      addTermLine(`Loading secure subpage: ${target}.html...`, 'res');
+      setTimeout(() => window.location.href = `pages/${target}.html`, 800);
+    } else {
+      addTermLine(`Section "${target}" not found.`, 'error');
+    }
+  },
+  aura: (args) => {
+    const color = args[0]?.toLowerCase();
+    if (auraColors[color]) {
+      applyAura(color);
+      addTermLine(`Aura sequence initiated. Color set to: ${color}`, 'res');
+    } else {
+      addTermLine(`Aura "${color}" not recognized. Valid: cyan, green, pink, orange, purple`, 'error');
+    }
+  }
+};
+
+if (termInput) {
+  termInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      const rawInput = termInput.value.trim();
+      if (!rawInput) return;
+      
+      addTermLine(rawInput, 'cmd');
+      termInput.value = '';
+      
+      const [cmd, ...args] = rawInput.split(' ');
+      if (commands[cmd.toLowerCase()]) {
+        commands[cmd.toLowerCase()](args);
+      } else {
+        addTermLine(`Command not found: ${cmd}. Type 'help' for options.`, 'error');
+      }
+    }
+    if (e.key === 'Escape') closeTerminal();
+  });
+}
+
+if (termOpenBtn) termOpenBtn.addEventListener('click', openTerminal);
+window.addEventListener('keydown', e => {
+  if (e.key === '`') openTerminal(); // Tilde shortcut
+  if (e.key === 'Escape') closeTerminal();
+});
+
 /* ─── INIT ─── */
 document.addEventListener('DOMContentLoaded', () => {
   renderWallPreview();
   renderGrid('all');
   renderStudents();
   initAura();
+  updateTermTime();
   
   // Close mobile menu on link click (already handled by inline onclick, but as safety)
   const mmLinks = document.querySelectorAll('#mobile-menu a');
