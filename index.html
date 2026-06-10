@@ -654,6 +654,47 @@
 <!-- CLI TRIGGER -->
 <button class="cli-trigger" id="cli-open" title="Open System Terminal">_></button>
 
+<!-- ─── WASTE GAME OVERLAY ─── -->
+<div id="game-overlay">
+  <div class="game-hdr">
+    <div class="gh-left">
+      <span class="g-title">WASTE_SORTER_v1.0</span>
+      <div class="g-stats">
+        <span>SCORE: <span id="g-score">000</span></span>
+        <span>TIME: <span id="g-timer">30s</span></span>
+      </div>
+    </div>
+    <button class="g-close" id="game-close">✕</button>
+  </div>
+
+  <div id="game-canvas">
+    <!-- Falling parts will spawn here -->
+    <div class="g-start-screen" id="game-start">
+      <h2>CLEAN THE CAMPUS</h2>
+      <p>Drag the falling e-waste into the correct bins before they hit the ground.</p>
+      <button class="btn-primary" id="game-start-btn">INITIALIZE MISSION</button>
+    </div>
+  </div>
+
+  <div class="game-bins">
+    <div class="g-bin" data-type="recycle">
+      <span class="bin-icon">♻️</span>
+      <span class="bin-lbl">RECYCLABLE</span>
+    </div>
+    <div class="g-bin" data-type="toxic">
+      <span class="bin-icon">⚠️</span>
+      <span class="bin-lbl">TOXIC WASTE</span>
+    </div>
+    <div class="g-bin" data-type="art">
+      <span class="bin-icon">🎨</span>
+      <span class="bin-lbl">ART MATERIAL</span>
+    </div>
+  </div>
+</div>
+
+<!-- GAME TRIGGER -->
+<button class="cli-trigger" id="game-open" title="Sort the Waste Mini-Game" style="bottom: 90px;">♻️</button>
+
 <script src="data.js"></script>
 <script src="main.js"></script>
 </body>

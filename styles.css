@@ -1433,6 +1433,118 @@ footer { background:var(--bg); border-top:1px solid var(--border); padding:70px 
   .cli-trigger { bottom: 100px; right: 30px; left: auto; } /* Adjust for mobile so it doesn't overlap scroll hint or footer */
 }
 
+/* ─── WASTE GAME UI ─── */
+#game-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 5, 10, 0.98);
+  backdrop-filter: blur(20px);
+  z-index: 11000;
+  display: none;
+  flex-direction: column;
+  padding: 30px;
+}
+#game-overlay.active { display: flex; }
+
+.game-hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.gh-left { display: flex; flex-direction: column; gap: 5px; }
+.g-title { font-family: var(--font-mono); font-size: 0.75rem; color: var(--green); letter-spacing: 2px; }
+.g-stats { display: flex; gap: 30px; font-family: var(--font-mono); font-size: 1.2rem; color: var(--text); }
+#g-timer { color: var(--orange); }
+.g-close { background: transparent; border: none; color: var(--text2); font-size: 1.5rem; cursor: pointer; }
+
+#game-canvas {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: rgba(0,0,0,0.3);
+  margin: 20px 0;
+  border: 1px dashed var(--border);
+}
+.g-start-screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; background: rgba(2,5,10,0.9); z-index: 10;
+}
+.g-start-screen h2 { font-family: var(--font-disp); font-size: 4rem; color: var(--text); margin-bottom: 10px; }
+.g-start-screen p { color: var(--text2); max-width: 400px; margin-bottom: 30px; }
+
+.game-bins {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  height: 180px;
+}
+.g-bin {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s;
+  position: relative;
+}
+.g-bin::after {
+  content: ''; position: absolute; inset: 0;
+  background: currentColor; opacity: 0; transition: opacity 0.3s;
+}
+.g-bin.drag-over { border-color: #fff; transform: scale(1.05); }
+.g-bin.drag-over::after { opacity: 0.1; }
+
+.bin-icon { font-size: 3rem; }
+.bin-lbl { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 2px; color: var(--text2); }
+
+.g-bin[data-type="recycle"] { color: var(--green); }
+.g-bin[data-type="toxic"] { color: var(--pink); }
+.g-bin[data-type="art"] { color: var(--cyan); }
+
+.falling-part {
+  position: absolute;
+  width: 60px; height: 60px;
+  background: var(--card);
+  border: 1px solid var(--border2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  z-index: 5;
+  user-select: none;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+.falling-part:active { cursor: grabbing; }
+.fp-ico { font-size: 1.8rem; }
+.fp-name { font-family: var(--font-mono); font-size: 0.45rem; color: var(--text2); margin-top: 4px; text-transform: uppercase; }
+
+/* Leaderboard Styling */
+.g-results {
+  position: absolute; inset: 0;
+  background: rgba(2,5,10,0.95);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 20;
+}
+.g-results h2 { font-family: var(--font-disp); font-size: 3.5rem; color: var(--green); }
+.final-score { font-family: var(--font-mono); font-size: 2rem; margin: 20px 0; }
+.g-leaderboard {
+  width: 100%; max-width: 400px;
+  background: var(--surface); border: 1px solid var(--border);
+  margin-bottom: 30px; padding: 20px;
+}
+.lb-row {
+  display: flex; justify-content: space-between;
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-family: var(--font-mono); font-size: 0.8rem;
+}
+.lb-row.me { color: var(--green); }
+
 /* Apply Dynamic Aura to elements */
 .accent, .hero-title .t2, .hero-eyebrow, .nav-cta, .btn-primary, .stat-num, .s-heading .hl, .f-submit, .tc:hover, .s-card:hover {
   /* Some of these have hardcoded colors, we will override them in JS or add more specific rules */

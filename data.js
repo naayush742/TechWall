@@ -115,3 +115,16 @@ const guide = {
   c:'#ffb84d', a:'rgba(255,184,77,0.08)', isGuide:true,
   desc:'Offered technical mentorship and academic guidance throughout the lifecycle of the project.'
 };
+
+const wasteParts = [
+  { name: 'CPU Chip', icon: '🖥', type: 'art', desc: 'Silicon gold mine' },
+  { name: 'Keyboard Key', icon: '⌨️', type: 'art', desc: 'Perfect for mosaics' },
+  { name: 'Lithium Battery', icon: '🔋', type: 'toxic', desc: 'Highly reactive' },
+  { name: 'Broken Screen', icon: '📱', type: 'toxic', desc: 'Lead & Mercury' },
+  { name: 'Copper Wire', icon: '🔌', type: 'recycle', desc: '100% recyclable' },
+  { name: 'Aluminum Casing', icon: '📦', type: 'recycle', desc: 'High scrap value' },
+  { name: 'RAM Stick', icon: '💾', type: 'art', desc: 'Technical aesthetic' },
+  { name: 'CR Monitor', icon: '📺', type: 'toxic', desc: 'Phosphor & Lead' },
+  { name: 'Plastic Shell', icon: '🐚', type: 'recycle', desc: 'Standard polymer' },
+  { name: 'Screws & Bolts', icon: '🔩', type: 'art', desc: 'Industrial detail' }
+];

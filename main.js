@@ -686,6 +686,187 @@ function animateValue(id, target) {
   requestAnimationFrame(step);
 }
 
+/* ─── WASTE GAME LOGIC ─── */
+let gameScore = 0;
+let gameTime = 30;
+let gameInterval;
+let spawnInterval;
+let isGameActive = false;
+
+function initWasteGame() {
+  const gameOverlay = document.getElementById('game-overlay');
+  const openBtn = document.getElementById('game-open');
+  const closeBtn = document.getElementById('game-close');
+  const startBtn = document.getElementById('game-start-btn');
+  const canvas = document.getElementById('game-canvas');
+  const bins = document.querySelectorAll('.g-bin');
+
+  if (!gameOverlay || !openBtn) return;
+
+  openBtn.addEventListener('click', () => {
+    gameOverlay.classList.add('active');
+    resetGame();
+  });
+
+  closeBtn.addEventListener('click', () => {
+    gameOverlay.classList.remove('active');
+    stopGame();
+  });
+
+  startBtn.addEventListener('click', startGame);
+
+  // Drag and Drop Logic
+  bins.forEach(bin => {
+    bin.addEventListener('dragover', e => {
+      e.preventDefault();
+      bin.classList.add('drag-over');
+    });
+    bin.addEventListener('dragleave', () => bin.classList.remove('drag-over'));
+    bin.addEventListener('drop', e => {
+      e.preventDefault();
+      bin.classList.remove('drag-over');
+      const partType = e.dataTransfer.getData('type');
+      const binType = bin.getAttribute('data-type');
+      const partId = e.dataTransfer.getData('id');
+
+      if (partType === binType) {
+        updateScore(10);
+        bin.style.transform = 'scale(1.1)';
+        setTimeout(() => bin.style.transform = '', 200);
+      } else {
+        updateScore(-5);
+        bin.style.borderColor = 'var(--pink)';
+        setTimeout(() => bin.style.borderColor = '', 300);
+      }
+
+      const partEl = document.getElementById(partId);
+      if (partEl) partEl.remove();
+    });
+  });
+}
+
+function startGame() {
+  isGameActive = true;
+  document.getElementById('game-start').style.display = 'none';
+  gameScore = 0;
+  gameTime = 30;
+  updateScore(0);
+  
+  gameInterval = setInterval(() => {
+    gameTime--;
+    document.getElementById('g-timer').textContent = `${gameTime}s`;
+    if (gameTime <= 0) endGame();
+  }, 1000);
+
+  spawnInterval = setInterval(spawnPart, 1200);
+}
+
+function stopGame() {
+  isGameActive = false;
+  clearInterval(gameInterval);
+  clearInterval(spawnInterval);
+  const canvas = document.getElementById('game-canvas');
+  const parts = canvas.querySelectorAll('.falling-part');
+  parts.forEach(p => p.remove());
+}
+
+function resetGame() {
+  stopGame();
+  document.getElementById('game-start').style.display = 'flex';
+  const results = document.querySelector('.g-results');
+  if (results) results.remove();
+  document.getElementById('g-timer').textContent = '30s';
+  document.getElementById('g-score').textContent = '000';
+}
+
+function spawnPart() {
+  if (!isGameActive) return;
+  const canvas = document.getElementById('game-canvas');
+  const partData = wasteParts[Math.floor(Math.random() * wasteParts.length)];
+  const part = document.createElement('div');
+  const id = 'p-' + Math.random().toString(36).substr(2, 9);
+  
+  part.id = id;
+  part.className = 'falling-part';
+  part.draggable = true;
+  part.innerHTML = `<span class="fp-ico">${partData.icon}</span><span class="fp-name">${partData.name}</span>`;
+  
+  const startX = Math.random() * (canvas.offsetWidth - 80) + 10;
+  part.style.left = `${startX}px`;
+  part.style.top = '-80px';
+  
+  part.addEventListener('dragstart', e => {
+    e.dataTransfer.setData('type', partData.type);
+    e.dataTransfer.setData('id', id);
+    part.style.opacity = '0.5';
+  });
+  
+  part.addEventListener('dragend', () => {
+    part.style.opacity = '1';
+  });
+
+  canvas.appendChild(part);
+
+  // Animate fall
+  let posY = -80;
+  const speed = 1.5 + Math.random() * 2;
+  
+  function fall() {
+    if (!isGameActive || !part.parentElement) return;
+    posY += speed;
+    part.style.top = `${posY}px`;
+    
+    if (posY > canvas.offsetHeight) {
+      part.remove();
+      updateScore(-2); // Penalty for missing
+    } else {
+      requestAnimationFrame(fall);
+    }
+  }
+  requestAnimationFrame(fall);
+}
+
+function updateScore(delta) {
+  gameScore += delta;
+  if (gameScore < 0) gameScore = 0;
+  const scoreEl = document.getElementById('g-score');
+  scoreEl.textContent = gameScore.toString().padStart(3, '0');
+}
+
+function endGame() {
+  stopGame();
+  const canvas = document.getElementById('game-canvas');
+  const results = document.createElement('div');
+  results.className = 'g-results';
+  
+  // Dummy leaderboard
+  const lbData = [
+    { n: 'Utkarsh (Pro)', s: 280 },
+    { n: 'Deepak (Coord)', s: 245 },
+    { n: 'Ayush (Web)', s: 210 },
+    { n: 'YOU', s: gameScore, me: true },
+    { n: 'Kunal (PCB)', s: 180 }
+  ].sort((a, b) => b.s - a.s);
+
+  let lbHTML = lbData.map((r, i) => `
+    <div class="lb-row ${r.me ? 'me' : ''}">
+      <span>#${i + 1} ${r.n}</span>
+      <span>${r.s} PTS</span>
+    </div>
+  `).join('');
+
+  results.innerHTML = `
+    <h2>MISSION COMPLETE</h2>
+    <div class="final-score">FINAL SCORE: ${gameScore}</div>
+    <div class="g-leaderboard">
+      <div style="font-family:var(--font-mono); font-size:0.6rem; color:var(--green); margin-bottom:15px; letter-spacing:2px;">GLOBAL_RANKINGS.LOG</div>
+      ${lbHTML}
+    </div>
+    <button class="btn-primary" onclick="resetGame()">RETRY MISSION</button>
+  `;
+  canvas.appendChild(results);
+}
+
 /* ─── INIT ─── */
 document.addEventListener('DOMContentLoaded', () => {
   renderWallPreview();
@@ -694,6 +875,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAura();
   updateTermTime();
   initImpactCalc();
+  initWasteGame();
   
   // Close mobile menu on link click (already handled by inline onclick, but as safety)
   const mmLinks = document.querySelectorAll('#mobile-menu a');
