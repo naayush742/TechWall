@@ -22,6 +22,11 @@
   --border:    rgba(0,212,255,0.1);
   --border2:   rgba(0,255,136,0.15);
   --card:      rgba(6,13,22,0.95);
+  
+  /* DYNAMIC AURA VARIABLES */
+  --aura-color: var(--cyan);
+  --aura-glow:  rgba(0, 212, 255, 0.3);
+
   --font-disp: 'Bebas Neue', sans-serif;
   --font-body: 'DM Sans', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
@@ -1227,6 +1232,72 @@ footer { background:var(--bg); border-top:1px solid var(--border); padding:70px 
 .f-status { display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:.58rem; color:var(--green); letter-spacing:2px; }
 .f-dot { width:6px;height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:blinkDot 1.5s ease-in-out infinite; }
 @keyframes blinkDot { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+/* ─── AURA CONTROL UI ─── */
+.aura-ctrl {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9995;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+.aura-panel {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  padding: 12px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  gap: 10px;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.aura-ctrl:hover .aura-panel {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+.aura-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+.aura-btn:hover { transform: scale(1.2); border-color: #fff; }
+.aura-btn.active { border-color: #fff; box-shadow: 0 0 15px currentColor; }
+
+.aura-btn[data-aura="cyan"]   { background: #00d4ff; color: #00d4ff; }
+.aura-btn[data-aura="green"]  { background: #00ff88; color: #00ff88; }
+.aura-btn[data-aura="pink"]   { background: #ff4d9b; color: #ff4d9b; }
+.aura-btn[data-aura="orange"] { background: #ff6b2b; color: #ff6b2b; }
+.aura-btn[data-aura="purple"] { background: #9b59ff; color: #9b59ff; }
+
+.aura-trigger {
+  width: 48px; height: 48px;
+  background: var(--aura-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 0 20px var(--aura-glow);
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s;
+}
+.aura-trigger:hover { transform: rotate(45deg) scale(1.1); }
+
+/* Apply Dynamic Aura to elements */
+.accent, .hero-title .t2, .hero-eyebrow, .nav-cta, .btn-primary, .stat-num, .s-heading .hl, .f-submit, .tc:hover, .s-card:hover {
+  /* Some of these have hardcoded colors, we will override them in JS or add more specific rules */
+}
 
 /* ─── ABOUT — BUILD PERIOD & SOURCE ─── */
 

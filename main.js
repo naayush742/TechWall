@@ -430,11 +430,69 @@ if (menuToggle) {
   menuToggle.addEventListener('click', toggleMenu);
 }
 
+/* ─── AURA THEME LOGIC ─── */
+const auraColors = {
+  cyan:   { hex: '#00d4ff', glow: 'rgba(0, 212, 255, 0.3)' },
+  green:  { hex: '#00ff88', glow: 'rgba(0, 255, 136, 0.3)' },
+  pink:   { hex: '#ff4d9b', glow: 'rgba(255, 77, 155, 0.3)' },
+  orange: { hex: '#ff6b2b', glow: 'rgba(255, 107, 43, 0.3)' },
+  purple: { hex: '#9b59ff', glow: 'rgba(155, 89, 255, 0.3)' }
+};
+
+function initAura() {
+  const btns = document.querySelectorAll('.aura-btn');
+  const trigger = document.querySelector('.aura-trigger');
+  
+  // Load saved aura
+  const savedAura = localStorage.getItem('uscs-aura') || 'cyan';
+  applyAura(savedAura);
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const color = btn.getAttribute('data-aura');
+      applyAura(color);
+      
+      // Update active state
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      localStorage.setItem('uscs-aura', color);
+    });
+    
+    // Set initial active state
+    if (btn.getAttribute('data-aura') === savedAura) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+}
+
+function applyAura(colorKey) {
+  const aura = auraColors[colorKey];
+  const root = document.documentElement;
+  
+  root.style.setProperty('--aura-color', aura.hex);
+  root.style.setProperty('--aura-glow', aura.glow);
+  
+  // Also update standard accent colors to match
+  root.style.setProperty('--cyan', aura.hex);
+  root.style.setProperty('--green', colorKey === 'green' ? '#00ff88' : aura.hex);
+  
+  // Trigger a small flash or feedback on the trigger button
+  const trigger = document.querySelector('.aura-trigger');
+  if (trigger) {
+    trigger.style.transform = 'scale(1.2) rotate(360deg)';
+    setTimeout(() => trigger.style.transform = '', 500);
+  }
+}
+
 /* ─── INIT ─── */
 document.addEventListener('DOMContentLoaded', () => {
   renderWallPreview();
   renderGrid('all');
   renderStudents();
+  initAura();
   
   // Close mobile menu on link click (already handled by inline onclick, but as safety)
   const mmLinks = document.querySelectorAll('#mobile-menu a');
