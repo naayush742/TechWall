@@ -128,51 +128,89 @@ body::after {
   width: 28px;
   height: 2px;
   background: var(--green);
-  transition: 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-#menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-#menu-toggle.active span:nth-child(2) { opacity: 0; }
-#menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+#menu-toggle span:nth-child(2) { width: 18px; align-self: flex-end; }
+#menu-toggle:hover span:nth-child(2) { width: 28px; }
+
+#menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 28px; }
+#menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+#menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 28px; }
 
 #mobile-menu {
   position: fixed;
   inset: 0;
-  background: var(--bg);
+  background: rgba(2, 5, 10, 0.98);
+  backdrop-filter: blur(20px);
   z-index: 2000;
   display: flex;
   align-items: center;
   justify-content: center;
   transform: translateX(100%);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 #mobile-menu.active { transform: translateX(0); }
 .mm-content {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 25px;
   text-align: center;
+  width: 100%;
 }
 .mm-content a {
   font-family: var(--font-disp);
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 8vw, 3.5rem);
   color: var(--text);
   text-decoration: none;
-  letter-spacing: 4px;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  opacity: 0;
+  transform: translateY(20px);
 }
-.mm-content a:hover { color: var(--green); }
+#mobile-menu.active .mm-content a {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Staggered animation for links */
+#mobile-menu.active .mm-content a:nth-child(1) { transition-delay: 0.1s; }
+#mobile-menu.active .mm-content a:nth-child(2) { transition-delay: 0.2s; }
+#mobile-menu.active .mm-content a:nth-child(3) { transition-delay: 0.3s; }
+#mobile-menu.active .mm-content a:nth-child(4) { transition-delay: 0.4s; }
+#mobile-menu.active .mm-content a:nth-child(5) { transition-delay: 0.5s; }
+#mobile-menu.active .mm-content a:nth-child(6) { transition-delay: 0.6s; }
+
+.mm-content a:hover { color: var(--green); transform: scale(1.05); letter-spacing: 10px; }
 .mm-cta {
   font-family: var(--font-mono) !important;
-  font-size: 0.8rem !important;
-  background: var(--green);
+  font-size: 0.75rem !important;
+  background: var(--green) !important;
   color: var(--bg) !important;
-  padding: 12px 24px;
-  clip-path: polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);
+  padding: 16px 32px !important;
+  margin-top: 20px;
+  clip-path: polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);
+  align-self: center;
 }
 
 @media(max-width: 900px) {
-  #navbar { padding: 0 20px; }
-  .nav-links, .nav-cta { display: none; }
+  #navbar { 
+    padding: 0 20px; 
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    height: 60px;
+  }
+  .nav-links, .nav-cta { display: none !important; } /* Ensure links are hidden */
   #menu-toggle { display: flex; }
+  
+  /* Fix smart-nav for mobile: always show it, but hide the ticker */
+  .smart-nav {
+    top: 0 !important;
+    transform: none !important;
+  }
+  .nav-ticker { display: none; } /* Hide subpage ticker handle on mobile */
+  
+  /* Adjust subpage content padding since ticker is gone */
+  .page-hero { padding-top: 100px; }
 }
 #navbar.scrolled {
   background: rgba(2,5,10,0.88);
@@ -186,6 +224,21 @@ body::after {
   letter-spacing: 4px;
   color: var(--text);
   text-decoration: none;
+  white-space: nowrap; /* Prevent logo from wrapping */
+}
+
+@media(max-width: 480px) {
+  .nav-logo {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+  }
+}
+
+@media(max-width: 360px) {
+  .nav-logo {
+    font-size: 1rem;
+    letter-spacing: 1px;
+  }
 }
 .nav-logo .accent { color: var(--green); }
 .nav-links { display: flex; gap: 32px; align-items: center; }
@@ -592,7 +645,7 @@ body::after {
   z-index:0; pointer-events:none;
 }
 .wall-grid {
-  display:grid; grid-template-columns:repeat(8,1fr); grid-template-rows:repeat(6,1fr);
+  display:grid; grid-template-columns:repeat(6,1fr); grid-template-rows:repeat(6,1fr);
   gap:3px; width:100%; height:100%;
   background:var(--bg); padding:14px; position:relative; z-index:1;
 }
@@ -616,7 +669,56 @@ body::after {
   font-family:var(--font-mono); font-size:0.32rem; color:var(--text2);
   text-align:center; opacity:0; transition:opacity .2s; padding-bottom:1px;
 }
-.wall-cell:hover .wc-tip { opacity:1; }
+.wall-cell:hover .wc-tip { opacity:0; } /* Hide small tip when popover is likely active */
+
+/* ─── WALL POPOVER ─── */
+.wall-popover {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  width: 220px;
+  background: rgba(6, 13, 22, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border2);
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 20px rgba(0,255,136,0.1);
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  transition: opacity 0.25s, transform 0.25s;
+}
+.wall-popover.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.wp-name {
+  font-family: var(--font-disp);
+  font-size: 1.1rem;
+  color: var(--green);
+  display: block;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+.wp-desc {
+  font-size: 0.75rem;
+  color: var(--text2);
+  line-height: 1.5;
+  font-weight: 300;
+}
+.wall-popover::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: var(--border2) transparent transparent transparent;
+}
+.wall-popover.pop-below::after {
+  top: auto;
+  bottom: 100%;
+  border-color: transparent transparent var(--border2) transparent;
+}
 
 .feature-pills { margin-top:10px; display:flex; flex-direction:column; gap:14px; }
 .f-pill {
@@ -1140,6 +1242,28 @@ footer { background:var(--bg); border-top:1px solid var(--border); padding:70px 
   border-radius: 2px;
   position: relative;
   overflow: hidden;
+}
+
+@media(max-width: 480px) {
+  .about-period {
+    flex-direction: column;
+    gap: 20px;
+    padding: 24px 15px;
+    text-align: center;
+  }
+  .period-arrow {
+    width: 100%;
+    transform: rotate(0deg); /* Keep it horizontal but maybe shorter */
+  }
+  .period-tag {
+    font-size: 0.45rem;
+  }
+}
+
+@media(max-width: 360px) {
+  .period-date {
+    font-size: 0.9rem;
+  }
 }
 .about-period::before {
   content: '';

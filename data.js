@@ -1,23 +1,40 @@
 
 
 const wallEmojis = [
-  {i:'<img src="icon/python.png" class="ti ti-md">',c:'wc-cpu',l:'Python'},{i:'⚛️',c:'wc-ram',l:'React'},{i:'<img src="icon/linux.png" class="ti ti-md">',c:'wc-key',l:'Linux'},
-  {i:'<img src="icon/docker.png" class="ti ti-md">',c:'wc-hdd',l:'Docker'},{i:'☕',c:'wc-gpu',l:'Java'},{i:'🦀',c:'wc-cpu',l:'Rust'},
-  {i:'<img src="icon/cpp.png" class="ti ti-md">',c:'wc-ram',l:'C++'},{i:'<img src="icon/html.png" class="ti ti-md">',c:'wc-key',l:'HTML'},{i:'📦',c:'wc-hdd',l:'Node'},
-  {i:'⚡',c:'wc-gpu',l:'Vite'},{i:'<img src="icon/go.png" class="ti ti-md">',c:'wc-cpu',l:'Go'},{i:'<img src="icon/php.png" class="ti ti-md">',c:'wc-ram',l:'PHP'},
-  {i:'💎',c:'wc-key',l:'Ruby'},{i:'🔮',c:'wc-hdd',l:'Vue'},{i:'🌙',c:'wc-gpu',l:'Lua'},
-  {i:'🦕',c:'wc-cpu',l:'Deno'},{i:'⚙️',c:'wc-ram',l:'Bash'},{i:'<img src="icon/aws.png" class="ti ti-md">',c:'wc-key',l:'AWS'},
-  {i:'🔐',c:'wc-hdd',l:'Git'},{i:'<img src="icon/mysql.png" class="ti ti-md">',c:'wc-gpu',l:'SQL'},{i:'🎯',c:'wc-cpu',l:'TS'},
-  {i:'<img src="icon/mongo db.png" class="ti ti-lg">',c:'wc-ram',l:'Mongo'},{i:'🏃',c:'wc-key',l:'Swift'},{i:'🤖',c:'wc-hdd',l:'TF'},
-  {i:'📡',c:'wc-gpu',l:'API'},{i:'🔬',c:'wc-cpu',l:'Sci'},{i:'🎮',c:'wc-ram',l:'Unity'},
-  {i:'🔑',c:'wc-key',l:'Auth'},{i:'🌊',c:'wc-hdd',l:'K8s'},{i:'💡',c:'wc-gpu',l:'IDE'},
-  {i:'🔧',c:'wc-cpu',l:'Tools'},{i:'🧩',c:'wc-ram',l:'Redux'},{i:'📱',c:'wc-key',l:'Flutter'},
-  {i:'<img src="icon/js.png" class="ti ti-md">',c:'wc-hdd',l:'JS'},{i:'🔵',c:'wc-gpu',l:'.NET'},{i:'🟣',c:'wc-cpu',l:'Scala'},
-  {i:'⬛',c:'wc-ram',l:'Vercel'},{i:'<img src="icon/css.png" class="ti ti-md">',c:'wc-key',l:'CSS'},{i:'🟩',c:'wc-hdd',l:'CLI'},
-  {i:'🔶',c:'wc-gpu',l:'Svelte'},{i:'🔴',c:'wc-cpu',l:'Redis'},{i:'🎨',c:'wc-ram',l:'Figma'},
-  {i:'<img src="icon/go.png" class="ti ti-md">',c:'wc-key',l:'Go'},{i:'<img src="icon/mongo db.png" class="ti ti-lg">',c:'wc-hdd',l:'Mongo'},{i:'🟠',c:'wc-gpu',l:'Ubuntu'},
-  {i:'<img src="icon/wifi.png" class="ti ti-md">',c:'wc-gpu',l:'WiFi'},{i:'<img src="icon/dinosaur-game-logo-png.png" class="ti ti-lg">',c:'wc-cpu',l:'Dino Game'},
-  {i:'⬜',c:'wc-cpu',l:'Next'},{i:'🌈',c:'wc-ram',l:'GCP'},{i:'🔥',c:'wc-key',l:'Firebase'},
+  {i:'<img src="icon/Microsoft_OneDrive_Icon.png" class="ti ti-md">',c:'wc-hdd',l:'One Drive', d:'Microsoft\'s cloud storage service for file syncing and sharing.'},
+  {i:'<img src="icon/docker.png" class="ti ti-md">',c:'wc-cpu',l:'Docker', d:'Platform for developing, shipping, and running applications in containers.'},
+  {i:'<img src="icon/Google_Drive_Logo.png" class="ti ti-md">',c:'wc-hdd',l:'Google Drive', d:'Cloud-based file storage and synchronization service by Google.'},
+  {i:'<img src="icon/aws.png" class="ti ti-md">',c:'wc-hdd',l:'AWS', d:'Comprehensive and widely used cloud platform from Amazon.'},
+  {i:'<img src="icon/power bi.png" class="ti ti-md">',c:'wc-ram',l:'Power BI', d:'Business analytics service by Microsoft for data visualization.'},
+  {i:'<img src="icon/mysql.png" class="ti ti-md">',c:'wc-ram',l:'MySQL', d:'The world\'s most popular open-source relational database.'},
+  {i:'<img src="icon/mongo db.png" class="ti ti-md">',c:'wc-ram',l:'MongoDB', d:'A source-available cross-platform document-oriented database.'},
+  {i:'<img src="icon/vs code.png" class="ti ti-md">',c:'wc-cpu',l:'VS Code', d:'A powerful, lightweight source code editor by Microsoft.'},
+  {i:'<img src="icon/github.png" class="ti ti-md">',c:'wc-cpu',l:'GitHub', d:'World\'s largest platform for hosting and collaborating on code.'},
+  {i:'<img src="icon/kali linux.png" class="ti ti-md">',c:'wc-cpu',l:'Kali Linux', d:'Advanced penetration testing and security auditing Linux distro.'},
+  {i:'<img src="icon/encryption.png" class="ti ti-md">',c:'wc-cpu',l:'Encryption', d:'The process of encoding information to keep it secure.'},
+  {i:'<img src="icon/linux.png" class="ti ti-md">',c:'wc-cpu',l:'Linux', d:'The open-source kernel powering servers, mobile, and desktop.'},
+  {i:'<img src="icon/bugbounty.png" class="ti ti-md">',c:'wc-cpu',l:'Bug Bounty', d:'Rewards offered by companies for finding software vulnerabilities.'},
+  {i:'<img src="icon/firewall.png" class="ti ti-md">',c:'wc-cpu',l:'Firewall', d:'Network security system that monitors and controls traffic.'},
+  {i:'<img src="icon/gemini.png" class="ti ti-md">',c:'wc-hdd',l:'Gemini', d:'Google\'s most capable AI model for various creative tasks.'},
+  {i:'<img src="icon/google.png" class="ti ti-md">',c:'wc-hdd',l:'Google', d:'The world\'s leading search engine and technology pioneer.'},
+  {i:'<img src="icon/kafka.png" class="ti ti-md">',c:'wc-gpu',l:'Kafka', d:'Distributed event streaming platform for high-performance pipelines.'},
+  {i:'<img src="icon/hadoop.png" class="ti ti-md">',c:'wc-gpu',l:'Hadoop', d:'Framework for distributed storage and processing of big data.'},
+  {i:'<img src="icon/go.png" class="ti ti-md">',c:'wc-key',l:'Go Lang', d:'Statistically typed, compiled language designed at Google.'},
+  {i:'<img src="icon/php.png" class="ti ti-md">',c:'wc-key',l:'PHP', d:'Popular general-purpose scripting language for web development.'},
+  {i:'<img src="icon/html.png" class="ti ti-md">',c:'wc-cpu',l:'HTML', d:'Standard markup language for creating web pages.'},
+  {i:'<img src="icon/css.png" class="ti ti-md">',c:'wc-cpu',l:'CSS', d:'Style sheet language used for describing the presentation of web pages.'},
+  {i:'<img src="icon/js.png" class="ti ti-md">',c:'wc-key',l:'JS', d:'The programming language of the web for interactive experiences.'},
+  {i:'<img src="icon/streamlit.png" class="ti ti-md">',c:'wc-gpu',l:'Streamlit', d:'Open-source Python library to create and share custom web apps.'},
+  {i:'<img src="icon/binary.png" class="ti ti-md">',c:'wc-gpu',l:'Binary', d:'Base-2 numeral system used internally by almost all computers.'},
+  {i:'<img src="icon/assembly.png" class="ti ti-md">',c:'wc-key',l:'Assembly', d:'Low-level programming language closely related to machine code.'},
+  {i:'<img src="icon/fortran.png" class="ti ti-md">',c:'wc-key',l:'Fortran', d:'A general-purpose, compiled imperative programming language.'},
+  {i:'<img src="icon/cobol.png" class="ti ti-md">',c:'wc-key',l:'COBOL', d:'Common Business-Oriented Language for business applications.'},
+  {i:'<img src="icon/c.png" class="ti ti-md">',c:'wc-key',l:'C', d:'A powerful general-purpose programming language since 1972.'},
+  {i:'<img src="icon/cpp.png" class="ti ti-md">',c:'wc-key',l:'C++', d:'High-performance language extending C with object-oriented features.'},
+  {i:'<img src="icon/c sharp.png" class="ti ti-md">',c:'wc-key',l:'C#', d:'Modern, object-oriented language developed by Microsoft.'},
+  {i:'<img src="icon/python.png" class="ti ti-md">',c:'wc-key',l:'Python', d:'Versatile, easy-to-read language popular in AI and automation.'},
+  {i:'<img src="icon/wifi.png" class="ti ti-md">',c:'wc-cpu',l:'WiFi', d:'Wireless networking technology for local area network access.'},
+  {i:'<img src="icon/dinosaur-game-logo-png.png" class="ti ti-md">',c:'wc-cpu',l:'Dino Game', d:'The iconic \'No Internet\' Easter egg game in Google Chrome.'},
 ];
 
 const techs = [
@@ -77,24 +94,24 @@ const techs = [
 ];
 
 const students = [
-  {name:'Utkarsh Gupta',        role:'Lead Designer',       skill:'BCA 2nd',    emoji:'🧠', c:'#00ff88', a:'rgba(0,255,136,0.07)', desc:'Created digital blueprints and mapped hardware components to iconic tech logos.'},
-  {name:'Deepak Rawat',         role:'Project Coordinator', skill:'BCA 2nd',     emoji:'<img src="img/deepak rawat.jpeg" class="s-img">', c:'#00d4ff', a:'rgba(0,212,255,0.07)', desc:'Synchronized team efforts and managed construction timelines across six months.'},
-  {name:'Kunal Prajapati',          role:'PCB Artisan',         skill:'BCA 2nd',    emoji:'⚙️', c:'#ff6b2b', a:'rgba(255,107,43,0.07)', desc:'Specialized in intricate PCB arrangements to add texture and detail to the installation.'},
-{name:'Anushka Rawat ',        role:'Component Sorter',    skill:'BCA 2nd',       emoji:'<img src="img/anushka rawat.jpeg" class="s-img">', c:'#ffb84d', a:'rgba(255,184,77,0.07)', desc:'Managed university e-waste collection and meticulously sorted components by type.'}, 
-  {name:'Mehak Thapa',          role:'Hardware Assembler',  skill:'BCA 1st',     emoji:'🛠️', c:'#9b59ff', a:'rgba(155,89,255,0.07)', desc:'Focused on the precise physical mounting of components onto the wall panels.'}, 
-  {name:'Ayush Negi',          role:'Web Developer',       skill:'MCA 2nd',    emoji:'🐍', c:'#3776ab', a:'rgba(55,118,171,0.1)', desc:'Designed and developed this interactive platform to document the physical project.'},
+  {name:'Utkarsh Gupta',        role:'Lead Designer',       skill:'BCA student, USCS',    emoji:'🧠', c:'#00ff88', a:'rgba(0,255,136,0.07)', desc:'Created digital blueprints and mapped hardware components to iconic tech logos.'},
+  {name:'Deepak Rawat',         role:'Project Coordinator', skill:'BCA student, USCS',     emoji:'<img src="img/deepak rawat.jpeg" class="s-img">', c:'#00d4ff', a:'rgba(0,212,255,0.07)', desc:'Synchronized team efforts and managed construction timelines across six months.'},
+  {name:'Kunal Prajapati',          role:'PCB Artisan',         skill:'BCA student, USCS',    emoji:'⚙️', c:'#ff6b2b', a:'rgba(255,107,43,0.07)', desc:'Specialized in intricate PCB arrangements to add texture and detail to the installation.'},
+{name:'Anushka Rawat ',        role:'Component Sorter',    skill:'BCA student, USCS',       emoji:'<img src="img/anushka rawat.jpeg" class="s-img">', c:'#ffb84d', a:'rgba(255,184,77,0.07)', desc:'Managed university e-waste collection and meticulously sorted components by type.'}, 
+  {name:'Mehak Thapa',          role:'Hardware Assembler',  skill:'BCA student, USCS',     emoji:'🛠️', c:'#9b59ff', a:'rgba(155,89,255,0.07)', desc:'Focused on the precise physical mounting of components onto the wall panels.'}, 
+  {name:'Ayush Negi',          role:'Web Developer',       skill:'MCA student, USCS',    emoji:'🐍', c:'#3776ab', a:'rgba(55,118,171,0.1)', desc:'Designed and developed this interactive platform to document the physical project.'},
 ];
 
 const director = {
   name:'Prof. Dr. Sonal Sharma', role:'Director - USCS',
-  skill:'Leadership & Vision', emoji:'✨',
+  skill:'Leadership & Vision', emoji:'<img src="img/Prof Dr Sonal Sharma.jpeg" class="s-img">',
   c:'#9b59ff', a:'rgba(155,89,255,0.08)', isDirector:true,
   desc:'Provided the visionary leadership and departmental support to make this installation possible.'
 };
 
 const guide = {
   name:'Ms. Divya Rawat', role:'Assistant Professor USCS',
-  skill:'Faculty Guide & Mentor', emoji:'🎓',
+  skill:'Faculty Guide & Mentor', emoji:'<img src="img/ms Divya Rawat.jpeg" class="s-img">',
   c:'#ffb84d', a:'rgba(255,184,77,0.08)', isGuide:true,
   desc:'Offered technical mentorship and academic guidance throughout the lifecycle of the project.'
 };

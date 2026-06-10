@@ -151,13 +151,74 @@ function renderWallPreview() {
   const wg = document.getElementById('wallGrid');
   if (!wg || typeof wallEmojis === 'undefined') return;
   
+  // Create popover element if it doesn't exist
+  let pop = document.querySelector('.wall-popover');
+  if (!pop) {
+    pop = document.createElement('div');
+    pop.className = 'wall-popover';
+    pop.innerHTML = '<span class="wp-name"></span><p class="wp-desc"></p>';
+    document.body.appendChild(pop);
+  }
+
   wg.innerHTML = ''; // Clear just in case
-  wallEmojis.forEach(({ i, c, l }) => {
-    const d = document.createElement('div');
-    d.className = `wall-cell ${c}`;
-    d.title = l;
-    d.innerHTML = `<span>${i}</span><span class="wc-tip">${l}</span>`;
-    wg.appendChild(d);
+  wallEmojis.forEach(({ i, c, l, d }) => {
+    const dCell = document.createElement('div');
+    dCell.className = `wall-cell ${c}`;
+    dCell.innerHTML = `<span>${i}</span><span class="wc-tip">${l}</span>`;
+    
+    // Hover interactions
+    dCell.addEventListener('mouseenter', (e) => {
+      pop.querySelector('.wp-name').textContent = l;
+      pop.querySelector('.wp-desc').textContent = d || 'A foundational technology in modern computing.';
+      pop.classList.add('active');
+      positionPopover(e, dCell);
+    });
+
+    dCell.addEventListener('mousemove', (e) => {
+      positionPopover(e, dCell);
+    });
+
+    dCell.addEventListener('mouseleave', () => {
+      pop.classList.remove('active');
+    });
+
+    // Click interaction
+    dCell.addEventListener('click', (e) => {
+      e.stopPropagation();
+      pop.classList.toggle('active');
+      positionPopover(e, dCell);
+    });
+
+    wg.appendChild(dCell);
+  });
+
+  function positionPopover(e, cell) {
+    const rect = cell.getBoundingClientRect();
+    const popRect = pop.getBoundingClientRect();
+    
+    // Position above the cell
+    let top = rect.top - popRect.height - 15;
+    let left = rect.left + (rect.width / 2) - (popRect.width / 2);
+
+    pop.classList.remove('pop-below');
+
+    // Keep within viewport
+    if (top < 10) {
+      top = rect.bottom + 15;
+      pop.classList.add('pop-below');
+    }
+    if (left < 10) left = 10;
+    if (left + popRect.width > window.innerWidth - 10) {
+      left = window.innerWidth - popRect.width - 10;
+    }
+
+    pop.style.top = `${top}px`;
+    pop.style.left = `${left}px`;
+  }
+
+  // Hide popover on global click
+  document.addEventListener('click', () => {
+    pop.classList.remove('active');
   });
   
   // Random twinkle effect
@@ -247,13 +308,15 @@ function renderStudents() {
       studentIndex++;
     }
 
+    const isStudent = !s.isDirector && !s.isGuide;
+
     card.innerHTML = `
       ${tag}
       <span class="s-id">${idLabel}</span>
       <div class="s-ava">${s.emoji}</div>
       <span class="s-name">${s.name}</span>
-      <span class="s-role">${s.role}</span>
-      <span class="s-skill">${s.skill}</span>
+      <span class="s-role">${isStudent ? s.skill : s.role}</span>
+      <span class="s-skill">${isStudent ? s.role : s.skill}</span>
       <p class="s-desc">${s.desc}</p>
       <span class="s-big">${bigIcon}</span>
     `;
