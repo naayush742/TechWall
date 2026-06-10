@@ -285,88 +285,36 @@
       <h2 class="s-heading reveal d1">The Components<br><span class="hl">Behind The Art</span></h2>
       <p class="s-body reveal d2">Collected from donation drives, IT recycling centers, and tech departments — these are the building blocks of USCS E-WALL.</p>
 
-      <div class="mat-flex-layout">
-        <div class="mat-grid">
-          <div class="mat-card reveal d1" data-i="01">
-            <span class="m-icon">🖥</span>
-            <span class="m-name">CPU CHIPS</span>
-            <span class="m-desc">Intel & AMD processors of all generations form dense mosaic tiles</span>
-          </div>
-          <div class="mat-card reveal d2" data-i="02">
-            <span class="m-icon">⌨️</span>
-            <span class="m-name">KEYBOARD KEYS</span>
-            <span class="m-desc">Individual keycaps sorted by color create pixel-art lettering</span>
-          </div>
-          <div class="mat-card reveal d3" data-i="03">
-            <span class="m-icon">💾</span>
-            <span class="m-name">HDD PLATTERS</span>
-            <span class="m-desc">Reflective hard drive discs used as accent pieces and backgrounds</span>
-          </div>
-          <div class="mat-card reveal d4" data-i="04">
-            <span class="m-icon">🐭</span>
-            <span class="m-name">MOUSE PARTS</span>
-            <span class="m-desc">Scroll wheels, sensors and buttons for fine detail work</span>
-          </div>
-          <div class="mat-card reveal d5" data-i="05">
-            <span class="m-icon">🔌</span>
-            <span class="m-name">CIRCUIT BOARDS</span>
-            <span class="m-desc">PCB segments with etched copper traces form intricate patterns</span>
-          </div>
-          <div class="mat-card reveal d6" data-i="06">
-            <span class="m-icon">🔋</span>
-            <span class="m-name">RAM STICKS</span>
-            <span class="m-desc">Memory modules act as structural bars and framing elements</span>
-          </div>
+      <div class="mat-grid">
+        <div class="mat-card reveal d1" data-i="01">
+          <span class="m-icon">🖥</span>
+          <span class="m-name">CPU CHIPS</span>
+          <span class="m-desc">Intel & AMD processors of all generations form dense mosaic tiles</span>
         </div>
-
-        <!-- IMPACT CALCULATOR -->
-        <div class="impact-calc reveal d3">
-          <div class="calc-header">
-            <span class="calc-title">PERSONAL IMPACT CALCULATOR</span>
-            <span class="calc-tag">ESTIMATE RECOVERABLE ASSETS</span>
-          </div>
-          
-          <div class="calc-inputs">
-            <div class="calc-row">
-              <label>Select Device</label>
-              <select id="calc-device">
-                <option value="laptop">Laptop / Notebook</option>
-                <option value="desktop">Desktop PC Tower</option>
-                <option value="phone">Smartphone / Tablet</option>
-                <option value="monitor">LCD / LED Monitor</option>
-                <option value="keyboard">Keyboard / Mouse</option>
-              </select>
-            </div>
-            <div class="calc-row">
-              <label>Quantity</label>
-              <div class="qty-ctrl">
-                <button onclick="updateQty(-1)">-</button>
-                <input type="number" id="calc-qty" value="1" min="1" max="99">
-                <button onclick="updateQty(1)">+</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="calc-results">
-            <div class="res-item">
-              <span class="res-val" id="res-gold">0.00</span>
-              <span class="res-lbl">GOLD (g)</span>
-            </div>
-            <div class="res-item">
-              <span class="res-val" id="res-copper">0.00</span>
-              <span class="res-lbl">COPPER (kg)</span>
-            </div>
-            <div class="res-item">
-              <span class="res-val" id="res-plastic">0.00</span>
-              <span class="res-lbl">PLASTIC (kg)</span>
-            </div>
-            <div class="res-item highlight">
-              <span class="res-val" id="res-co2">0</span>
-              <span class="res-lbl">CO2 SAVED (kg)</span>
-            </div>
-          </div>
-          
-          <p class="calc-note">*Estimates based on average global IT recycling recovery standards.</p>
+        <div class="mat-card reveal d2" data-i="02">
+          <span class="m-icon">⌨️</span>
+          <span class="m-name">KEYBOARD KEYS</span>
+          <span class="m-desc">Individual keycaps sorted by color create pixel-art lettering</span>
+        </div>
+        <div class="mat-card reveal d3" data-i="03">
+          <span class="m-icon">💾</span>
+          <span class="m-name">HDD PLATTERS</span>
+          <span class="m-desc">Reflective hard drive discs used as accent pieces and backgrounds</span>
+        </div>
+        <div class="mat-card reveal d4" data-i="04">
+          <span class="m-icon">🐭</span>
+          <span class="m-name">MOUSE PARTS</span>
+          <span class="m-desc">Scroll wheels, sensors and buttons for fine detail work</span>
+        </div>
+        <div class="mat-card reveal d5" data-i="05">
+          <span class="m-icon">🔌</span>
+          <span class="m-name">CIRCUIT BOARDS</span>
+          <span class="m-desc">PCB segments with etched copper traces form intricate patterns</span>
+        </div>
+        <div class="mat-card reveal d6" data-i="06">
+          <span class="m-icon">🔋</span>
+          <span class="m-name">RAM STICKS</span>
+          <span class="m-desc">Memory modules act as structural bars and framing elements</span>
         </div>
       </div>
     </div>
@@ -534,6 +482,56 @@
       <div class="i-title">Technologies Celebrated</div>
       <p class="i-desc">From assembly language to cloud platforms, USCS E-WALL documents the full spectrum of technologies powering our digital civilization.</p>
     </div>
+  </div>
+
+  <!-- IMPACT CALCULATOR -->
+  <div class="impact-calc reveal d3" style="max-width: 800px; margin: 50px auto 0;">
+    <div class="calc-header">
+      <span class="calc-title">PERSONAL IMPACT CALCULATOR</span>
+      <span class="calc-tag">ESTIMATE RECOVERABLE ASSETS</span>
+    </div>
+    
+    <div class="calc-inputs">
+      <div class="calc-row">
+        <label>Select Device</label>
+        <select id="calc-device">
+          <option value="laptop">Laptop / Notebook</option>
+          <option value="desktop">Desktop PC Tower</option>
+          <option value="phone">Smartphone / Tablet</option>
+          <option value="monitor">LCD / LED Monitor</option>
+          <option value="keyboard">Keyboard / Mouse</option>
+        </select>
+      </div>
+      <div class="calc-row">
+        <label>Quantity</label>
+        <div class="qty-ctrl">
+          <button onclick="updateQty(-1)">-</button>
+          <input type="number" id="calc-qty" value="1" min="1" max="99">
+          <button onclick="updateQty(1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="calc-results">
+      <div class="res-item">
+        <span class="res-val" id="res-gold">0.00</span>
+        <span class="res-lbl">GOLD (g)</span>
+      </div>
+      <div class="res-item">
+        <span class="res-val" id="res-copper">0.00</span>
+        <span class="res-lbl">COPPER (kg)</span>
+      </div>
+      <div class="res-item">
+        <span class="res-val" id="res-plastic">0.00</span>
+        <span class="res-lbl">PLASTIC (kg)</span>
+      </div>
+      <div class="res-item highlight">
+        <span class="res-val" id="res-co2">0</span>
+        <span class="res-lbl">CO2 SAVED (kg)</span>
+      </div>
+    </div>
+    
+    <p class="calc-note">*Estimates based on average global IT recycling recovery standards.</p>
   </div>
 </section>
 
