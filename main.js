@@ -795,14 +795,78 @@ function spawnPart() {
   part.style.left = `${startX}px`;
   part.style.top = '-80px';
   
+  // ─── DESKTOP DRAG ───
   part.addEventListener('dragstart', e => {
     e.dataTransfer.setData('type', partData.type);
     e.dataTransfer.setData('id', id);
     part.style.opacity = '0.5';
   });
-  
-  part.addEventListener('dragend', () => {
-    part.style.opacity = '1';
+  part.addEventListener('dragend', () => part.style.opacity = '1');
+
+  // ─── MOBILE TOUCH (Manual Drag) ───
+  let isDragging = false;
+  part.addEventListener('touchstart', e => {
+    isDragging = true;
+    part.style.zIndex = 1000;
+    part.style.opacity = '0.8';
+  }, { passive: true });
+
+  part.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    const canvasRect = canvas.getBoundingClientRect();
+    
+    // Position part under finger (centered)
+    const x = touch.clientX - canvasRect.left - (part.offsetWidth / 2);
+    const y = touch.clientY - canvasRect.top - (part.offsetHeight / 2);
+    
+    part.style.left = `${x}px`;
+    part.style.top = `${y}px`;
+
+    // Visual feedback for bins
+    const bins = document.querySelectorAll('.g-bin');
+    bins.forEach(bin => {
+      const binRect = bin.getBoundingClientRect();
+      if (touch.clientX > binRect.left && touch.clientX < binRect.right &&
+          touch.clientY > binRect.top && touch.clientY < binRect.bottom) {
+        bin.classList.add('drag-over');
+      } else {
+        bin.classList.remove('drag-over');
+      }
+    });
+  }, { passive: false });
+
+  part.addEventListener('touchend', e => {
+    isDragging = false;
+    const touch = e.changedTouches[0];
+    const bins = document.querySelectorAll('.g-bin');
+    let dropped = false;
+
+    bins.forEach(bin => {
+      bin.classList.remove('drag-over');
+      const binRect = bin.getBoundingClientRect();
+      if (touch.clientX > binRect.left && touch.clientX < binRect.right &&
+          touch.clientY > binRect.top && touch.clientY < binRect.bottom) {
+        
+        const binType = bin.getAttribute('data-type');
+        if (partData.type === binType) {
+          updateScore(10);
+          bin.style.transform = 'scale(1.1)';
+          setTimeout(() => bin.style.transform = '', 200);
+        } else {
+          updateScore(-5);
+          bin.style.borderColor = 'var(--pink)';
+          setTimeout(() => bin.style.borderColor = '', 300);
+        }
+        part.remove();
+        dropped = true;
+      }
+    });
+
+    if (!dropped) {
+      part.style.opacity = '1';
+      // Let it continue falling from current position
+    }
   });
 
   canvas.appendChild(part);
@@ -813,6 +877,13 @@ function spawnPart() {
   
   function fall() {
     if (!isGameActive || !part.parentElement) return;
+    if (isDragging) {
+      // While dragging, we update posY to stay in sync with manual movement
+      posY = parseFloat(part.style.top);
+      requestAnimationFrame(fall);
+      return;
+    }
+    
     posY += speed;
     part.style.top = `${posY}px`;
     

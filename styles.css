@@ -1519,6 +1519,17 @@ footer { background:var(--bg); border-top:1px solid var(--border); padding:70px 
   z-index: 5;
   user-select: none;
   box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+  touch-action: none; /* Prevent scrolling while dragging */
+}
+
+@media(max-width: 600px) {
+  #game-overlay { padding: 15px; }
+  .game-bins { height: 120px; gap: 10px; }
+  .bin-icon { font-size: 1.8rem; }
+  .bin-lbl { font-size: 0.5rem; letter-spacing: 1px; }
+  .falling-part { width: 50px; height: 50px; }
+  .fp-ico { font-size: 1.4rem; }
+  .g-start-screen h2 { font-size: 2.5rem; }
 }
 .falling-part:active { cursor: grabbing; }
 .fp-ico { font-size: 1.8rem; }
