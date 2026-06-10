@@ -1430,7 +1430,8 @@ footer { background:var(--bg); border-top:1px solid var(--border); padding:70px 
   transform: scale(1.1);
 }
 @media(max-width: 768px) {
-  .cli-trigger { bottom: 100px; right: 30px; left: auto; } /* Adjust for mobile so it doesn't overlap scroll hint or footer */
+  .cli-trigger { bottom: 30px; right: 20px; left: auto; } /* Primary position for mobile */
+  #game-open.cli-trigger { bottom: 85px; } /* Stack game button above terminal button */
 }
 
 /* ─── WASTE GAME UI ─── */
