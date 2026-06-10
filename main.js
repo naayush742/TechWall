@@ -611,6 +611,81 @@ window.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeTerminal();
 });
 
+/* ─── IMPACT CALCULATOR LOGIC ─── */
+const deviceImpactData = {
+  laptop:   { gold: 0.2,   copper: 0.5,   plastic: 1.0, co2: 25 },
+  desktop:  { gold: 0.5,   copper: 1.5,   plastic: 3.0, co2: 50 },
+  phone:    { gold: 0.03,  copper: 0.015, plastic: 0.1, co2: 5 },
+  monitor:  { gold: 0.1,   copper: 0.4,   plastic: 2.0, co2: 20 },
+  keyboard: { gold: 0.005, copper: 0.05,  plastic: 0.8, co2: 2 }
+};
+
+function initImpactCalc() {
+  const deviceSelect = document.getElementById('calc-device');
+  const qtyInput = document.getElementById('calc-qty');
+  
+  if (!deviceSelect || !qtyInput) return;
+
+  const updateResults = () => {
+    const device = deviceSelect.value;
+    const qty = parseInt(qtyInput.value) || 0;
+    const data = deviceImpactData[device];
+
+    if (!data) return;
+
+    // Calculate
+    const gold = (data.gold * qty).toFixed(2);
+    const copper = (data.copper * qty).toFixed(2);
+    const plastic = (data.plastic * qty).toFixed(2);
+    const co2 = Math.round(data.co2 * qty);
+
+    // Update UI with small animation
+    animateValue('res-gold', gold);
+    animateValue('res-copper', copper);
+    animateValue('res-plastic', plastic);
+    animateValue('res-co2', co2);
+  };
+
+  deviceSelect.addEventListener('change', updateResults);
+  qtyInput.addEventListener('input', updateResults);
+  
+  // Initial run
+  updateResults();
+}
+
+function updateQty(delta) {
+  const input = document.getElementById('calc-qty');
+  if (!input) return;
+  let val = (parseInt(input.value) || 0) + delta;
+  if (val < 1) val = 1;
+  if (val > 99) val = 99;
+  input.value = val;
+  // Trigger input event manually
+  input.dispatchEvent(new Event('input'));
+}
+
+function animateValue(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  
+  const start = parseFloat(el.textContent) || 0;
+  const end = parseFloat(target);
+  const duration = 600;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+    const current = start + (end - start) * eased;
+    
+    el.textContent = id === 'res-co2' ? Math.round(current) : current.toFixed(2);
+    
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 /* ─── INIT ─── */
 document.addEventListener('DOMContentLoaded', () => {
   renderWallPreview();
@@ -618,6 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderStudents();
   initAura();
   updateTermTime();
+  initImpactCalc();
   
   // Close mobile menu on link click (already handled by inline onclick, but as safety)
   const mmLinks = document.querySelectorAll('#mobile-menu a');
