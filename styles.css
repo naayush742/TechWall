@@ -17,8 +17,8 @@
   --gold:      #ffb84d;
   --purple:    #9b59ff;
   --pink:      #ff4d9b;
-  --text:      #d0dff0;
-  --text2:     #6a8aaa;
+  --text:      #ffffff;
+  --text2:     #a0b8d0;
   --border:    rgba(0,212,255,0.1);
   --border2:   rgba(0,255,136,0.15);
   --card:      rgba(6,13,22,0.95);
@@ -427,7 +427,7 @@ body::after {
 
 .hero-sub {
   font-size: 1.05rem;
-  color: var(--text2);
+  color: var(--text);
   max-width: 540px;
   margin: 0 auto 42px;
   line-height: 1.9;
@@ -1748,7 +1748,7 @@ footer { background:var(--bg); border-top:1px solid var(--border); padding:70px 
 }
 .content-section p {
   font-size: 1rem;
-  color: var(--text2);
+  color: var(--text);
   line-height: 1.8;
   margin-bottom: 20px;
   font-weight: 300;
@@ -1759,7 +1759,7 @@ footer { background:var(--bg); border-top:1px solid var(--border); padding:70px 
 }
 .content-section ul, .content-section ol {
   margin: 20px 0 30px 25px;
-  color: var(--text2);
+  color: var(--text);
 }
 .content-section li {
   margin-bottom: 12px;
