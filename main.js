@@ -2,136 +2,155 @@
    USCS E-WALL — main.js  |  Premium Interactions & Animations
    ========================================================= */
 
+// Detect if we are in the 'pages' directory
+const IS_SUBPAGE = window.location.pathname.includes('/pages/');
+const ASSETS_PATH = IS_SUBPAGE ? '../' : '';
+
 /* ─── CUSTOM CURSOR ─── */
 const cursor = document.getElementById('cursor');
 const cursorRing = document.getElementById('cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-});
+if (cursor && cursorRing) {
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
 
-(function ringFollow() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  cursorRing.style.left = rx + 'px';
-  cursorRing.style.top = ry + 'px';
-  requestAnimationFrame(ringFollow);
-})();
+  (function ringFollow() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    cursorRing.style.left = rx + 'px';
+    cursorRing.style.top = ry + 'px';
+    requestAnimationFrame(ringFollow);
+  })();
+}
 
-document.querySelectorAll('a,button,.tc,.s-card,.f-pill,.g-cell,.wall-cell').forEach(el => {
-  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-big'));
-  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-big'));
-});
+function initCursorHover() {
+  document.querySelectorAll('a,button,.tc,.s-card,.f-pill,.g-cell,.wall-cell').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-big'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-big'));
+  });
+}
+initCursorHover();
 
 /* ─── PARTICLES CANVAS ─── */
 const canvas = document.getElementById('particles-canvas');
-const ctx = canvas.getContext('2d');
+if (canvas) {
+  const ctx = canvas.getContext('2d');
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-
-const particles = [];
-const PARTICLE_COUNT = 70;
-
-class Particle {
-  constructor() { this.reset(); }
-  reset() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.size = Math.random() * 1.5 + 0.3;
-    this.speedX = (Math.random() - 0.5) * 0.3;
-    this.speedY = (Math.random() - 0.5) * 0.3;
-    this.opacity = Math.random() * 0.5 + 0.1;
-    this.color = Math.random() > 0.6 ? '#00ff88' : Math.random() > 0.5 ? '#00d4ff' : '#9b59ff';
-    this.pulse = Math.random() * Math.PI * 2;
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
-  update() {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.pulse += 0.02;
-    this.currentOpacity = this.opacity * (0.7 + 0.3 * Math.sin(this.pulse));
-    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
-  }
-  draw() {
-    ctx.save();
-    ctx.globalAlpha = this.currentOpacity;
-    ctx.fillStyle = this.color;
-    ctx.shadowBlur = 6;
-    ctx.shadowColor = this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  }
-}
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
 
-for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+  const particles = [];
+  const PARTICLE_COUNT = 70;
 
-// Draw connections
-function drawConnections() {
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 120) {
-        ctx.save();
-        ctx.globalAlpha = (1 - dist / 120) * 0.08;
-        ctx.strokeStyle = '#00ff88';
-        ctx.lineWidth = 0.5;
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.stroke();
-        ctx.restore();
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 1.5 + 0.3;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = (Math.random() - 0.5) * 0.3;
+      this.opacity = Math.random() * 0.5 + 0.1;
+      const p1 = window.TECH_THEME_COLOR || '#00ff88';
+      const p2 = window.TECH_THEME_COLOR || '#00d4ff';
+      const p3 = window.TECH_THEME_COLOR || '#9b59ff';
+      this.color = Math.random() > 0.6 ? p1 : Math.random() > 0.5 ? p2 : p3;
+      this.pulse = Math.random() * Math.PI * 2;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.pulse += 0.02;
+      this.currentOpacity = this.opacity * (0.7 + 0.3 * Math.sin(this.pulse));
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.currentOpacity;
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = 6;
+      ctx.shadowColor = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+  // Draw connections
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.save();
+          ctx.globalAlpha = (1 - dist / 120) * 0.08;
+          ctx.strokeStyle = window.TECH_THEME_COLOR || '#00ff88';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+          ctx.restore();
+        }
       }
     }
   }
-}
 
-function animParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawConnections();
-  particles.forEach(p => { p.update(); p.draw(); });
-  requestAnimationFrame(animParticles);
+  function animParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawConnections();
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animParticles);
+  }
+  animParticles();
 }
-animParticles();
 
 /* ─── SCROLL PROGRESS ─── */
 const progressBar = document.getElementById('scroll-progress');
-window.addEventListener('scroll', () => {
-  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
-  progressBar.style.width = pct + '%';
-}, { passive: true });
+if (progressBar) {
+  window.addEventListener('scroll', () => {
+    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+    progressBar.style.width = pct + '%';
+  }, { passive: true });
+}
 
 /* ─── NAVBAR SCROLL ─── */
 const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 60);
-}, { passive: true });
+if (navbar) {
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+}
 
 /* ─── SCROLL REVEAL ─── */
 const revealEls = document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.reveal-s');
-if ('IntersectionObserver' in window) {
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { 
-        e.target.classList.add('in'); 
-        revealObs.unobserve(e.target); 
-      }
-    });
-  }, { threshold: 0.1 }); // Slightly lower threshold for better reliability
-  revealEls.forEach(el => revealObs.observe(el));
-} else {
-  // Fallback for older browsers
-  revealEls.forEach(el => el.classList.add('in'));
+if (revealEls.length > 0) {
+  if ('IntersectionObserver' in window) {
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { 
+          e.target.classList.add('in'); 
+          revealObs.unobserve(e.target); 
+        }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => revealObs.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('in'));
+  }
 }
 
 /* ─── PARALLAX HERO ORBS ─── */
@@ -151,22 +170,26 @@ function renderWallPreview() {
   const wg = document.getElementById('wallGrid');
   if (!wg || typeof wallEmojis === 'undefined') return;
   
-  // Create popover element if it doesn't exist
   let pop = document.querySelector('.wall-popover');
   if (!pop) {
     pop = document.createElement('div');
     pop.className = 'wall-popover';
-    pop.innerHTML = '<span class="wp-name"></span><p class="wp-desc"></p>';
+    pop.innerHTML = '<span class="wp-name"></span><p class="wp-desc"></p><span style="display:block;margin-top:8px;font-size:0.6rem;color:var(--green);font-family:var(--font-mono);letter-spacing:1px;">CLICK TO EXPLORE ◈</span>';
     document.body.appendChild(pop);
   }
 
-  wg.innerHTML = ''; // Clear just in case
-  wallEmojis.forEach(({ i, c, l, d }) => {
+  wg.innerHTML = '';
+  wallEmojis.forEach((item) => {
+    const { i, c, l, d, s } = item;
     const dCell = document.createElement('div');
     dCell.className = `wall-cell ${c}`;
-    dCell.innerHTML = `<span>${i}</span><span class="wc-tip">${l}</span>`;
     
-    // Hover interactions
+    // Fix icon paths if on subpage
+    let iconHtml = i;
+    if (IS_SUBPAGE) iconHtml = i.replace('src="icon/', 'src="../icon/');
+    
+    dCell.innerHTML = `<span>${iconHtml}</span><span class="wc-tip">${l}</span>`;
+    
     dCell.addEventListener('mouseenter', (e) => {
       pop.querySelector('.wp-name').textContent = l;
       pop.querySelector('.wp-desc').textContent = d || 'A foundational technology in modern computing.';
@@ -182,11 +205,14 @@ function renderWallPreview() {
       pop.classList.remove('active');
     });
 
-    // Click interaction
     dCell.addEventListener('click', (e) => {
-      e.stopPropagation();
-      pop.classList.toggle('active');
-      positionPopover(e, dCell);
+      if (s) {
+        window.location.href = (IS_SUBPAGE ? '' : 'pages/') + s + '.html';
+      } else {
+        e.stopPropagation();
+        pop.classList.toggle('active');
+        positionPopover(e, dCell);
+      }
     });
 
     wg.appendChild(dCell);
@@ -195,14 +221,9 @@ function renderWallPreview() {
   function positionPopover(e, cell) {
     const rect = cell.getBoundingClientRect();
     const popRect = pop.getBoundingClientRect();
-    
-    // Position above the cell
     let top = rect.top - popRect.height - 15;
     let left = rect.left + (rect.width / 2) - (popRect.width / 2);
-
     pop.classList.remove('pop-below');
-
-    // Keep within viewport
     if (top < 10) {
       top = rect.bottom + 15;
       pop.classList.add('pop-below');
@@ -211,17 +232,14 @@ function renderWallPreview() {
     if (left + popRect.width > window.innerWidth - 10) {
       left = window.innerWidth - popRect.width - 10;
     }
-
     pop.style.top = `${top}px`;
     pop.style.left = `${left}px`;
   }
 
-  // Hide popover on global click
   document.addEventListener('click', () => {
     pop.classList.remove('active');
   });
   
-  // Random twinkle effect
   setInterval(() => {
     const cells = wg.querySelectorAll('.wall-cell');
     if (cells.length === 0) return;
@@ -247,22 +265,27 @@ function renderGrid(filter) {
   const items = filter === 'all' ? techs : techs.filter(t => t.type === filter);
   items.forEach((t, i) => {
     const card = document.createElement('a');
-    const [page, anchor] = t.slug.split('#');
-    card.href = `pages/${page}.html${anchor ? '#' + anchor : ''}`;
+    
+    // Slug handling
+    let pagePath = t.slug;
+    if (!pagePath.includes('.html')) pagePath += '.html';
+    
+    card.href = (IS_SUBPAGE ? '' : 'pages/') + pagePath;
     card.className = 'tc';
     card.style.cssText = `--tc-c:${t.c};--tc-a:${t.a};animation-delay:${i * 0.035}s; text-decoration: none; display: block;`;
+    
+    // Fix icon paths if on subpage
+    let iconHtml = t.icon;
+    if (IS_SUBPAGE) iconHtml = t.icon.replace('src="icon/', 'src="../icon/');
+
     card.innerHTML = `
-      <span class="tc-icon">${t.icon}</span>
+      <span class="tc-icon">${iconHtml}</span>
       <span class="tc-name">${t.name}</span>
       <span class="tc-type">${t.type}</span>
     `;
     techGridEl.appendChild(card);
   });
-  // Re-attach cursor hover
-  document.querySelectorAll('.tc').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-big'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-big'));
-  });
+  initCursorHover();
 }
 
 function filterTech(type, btn) {
@@ -275,19 +298,19 @@ function filterTech(type, btn) {
 function renderStudents() {
   const sg = document.getElementById('studentsGrid');
   const countEl = document.getElementById('sCount');
-  if (!sg) return;
-  const all = [director, guide, ...students];
+  const all = typeof director !== 'undefined' && typeof guide !== 'undefined' && typeof students !== 'undefined' ? [director, guide, ...students] : [];
+  
   if (countEl) countEl.textContent = all.length;
+
+  if (!sg) return;
 
   let studentIndex = 1;
   all.forEach((s, i) => {
     const card = document.createElement('div');
-    
     let cardClass = 's-card';
     if (s.isDirector) cardClass += ' director';
     else if (s.isGuide) cardClass += ' guide';
     card.className = cardClass;
-
     card.style.cssText = `--sc-c:${s.c};--sc-a:${s.a}`;
     
     let idLabel = '';
@@ -310,10 +333,14 @@ function renderStudents() {
 
     const isStudent = !s.isDirector && !s.isGuide;
 
+    // Fix image path if on subpage
+    let emojiHtml = s.emoji;
+    if (IS_SUBPAGE) emojiHtml = s.emoji.replace('src="img/', 'src="../img/');
+
     card.innerHTML = `
       ${tag}
       <span class="s-id">${idLabel}</span>
-      <div class="s-ava">${s.emoji}</div>
+      <div class="s-ava">${emojiHtml}</div>
       <span class="s-name">${s.name}</span>
       <span class="s-role">${isStudent ? s.skill : s.role}</span>
       <span class="s-skill">${isStudent ? s.role : s.skill}</span>
@@ -321,10 +348,8 @@ function renderStudents() {
       <span class="s-big">${bigIcon}</span>
     `;
     sg.appendChild(card);
-    // cursor
-    card.addEventListener('mouseenter', () => document.body.classList.add('cursor-big'));
-    card.addEventListener('mouseleave', () => document.body.classList.remove('cursor-big'));
   });
+  initCursorHover();
 }
 
 /* ─── STAT COUNTER ANIMATION ─── */
@@ -340,7 +365,7 @@ function animateStats() {
     function step(now) {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4); // ease out quart
+      const eased = 1 - Math.pow(1 - progress, 4); 
       const value = eased * num;
       el.textContent = (Number.isInteger(num) ? Math.floor(value) : value.toFixed(1)) + suffix;
       if (progress < 1) requestAnimationFrame(step);
@@ -353,9 +378,7 @@ function animateStats() {
 const statsSection = document.querySelector('.stats-wrap');
 if (statsSection) {
   new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      animateStats();
-    }
+    if (entries[0].isIntersecting) animateStats();
   }, { threshold: 0.5 }).observe(statsSection);
 }
 
@@ -371,9 +394,13 @@ function handleSubmit(e) {
 /* ─── SMOOTH SCROLL ─── */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    e.preventDefault();
-    const el = document.querySelector(a.getAttribute('href'));
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    const href = a.getAttribute('href');
+    if (href === '#') return;
+    const el = document.querySelector(href);
+    if (el) {
+      e.preventDefault();
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
   });
 });
 
@@ -440,10 +467,9 @@ const auraColors = {
 };
 
 function initAura() {
+  if (IS_SUBPAGE) return; // Subpages use their own tech-specific theme
   const btns = document.querySelectorAll('.aura-btn');
   const trigger = document.querySelector('.aura-trigger');
-  
-  // Load saved aura
   const savedAura = localStorage.getItem('uscs-aura') || 'cyan';
   applyAura(savedAura);
 
@@ -451,35 +477,21 @@ function initAura() {
     btn.addEventListener('click', () => {
       const color = btn.getAttribute('data-aura');
       applyAura(color);
-      
-      // Update active state
       btns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      
       localStorage.setItem('uscs-aura', color);
     });
-    
-    // Set initial active state
-    if (btn.getAttribute('data-aura') === savedAura) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
+    if (btn.getAttribute('data-aura') === savedAura) btn.classList.add('active');
   });
 }
 
 function applyAura(colorKey) {
   const aura = auraColors[colorKey];
   const root = document.documentElement;
-  
   root.style.setProperty('--aura-color', aura.hex);
   root.style.setProperty('--aura-glow', aura.glow);
-  
-  // Also update standard accent colors to match
   root.style.setProperty('--cyan', aura.hex);
   root.style.setProperty('--green', colorKey === 'green' ? '#00ff88' : aura.hex);
-  
-  // Trigger a small flash or feedback on the trigger button
   const trigger = document.querySelector('.aura-trigger');
   if (trigger) {
     trigger.style.transform = 'scale(1.2) rotate(360deg)';
@@ -499,16 +511,19 @@ function updateTermTime() {
 }
 
 function openTerminal() {
-  termOverlay.classList.add('active');
-  termInput.focus();
-  updateTermTime();
+  if (termOverlay) {
+    termOverlay.classList.add('active');
+    if (termInput) termInput.focus();
+    updateTermTime();
+  }
 }
 
 function closeTerminal() {
-  termOverlay.classList.remove('active');
+  if (termOverlay) termOverlay.classList.remove('active');
 }
 
 function addTermLine(text, type = 'res') {
+  if (!termOutput) return;
   const line = document.createElement('span');
   line.className = `term-line ${type}`;
   line.innerHTML = text;
@@ -527,9 +542,7 @@ const commands = {
     addTermLine(' - aura [color]: Change the site aura (cyan, green, pink, etc.)', 'res');
     addTermLine(' - exit: Close the terminal', 'res');
   },
-  clear: () => {
-    termOutput.innerHTML = '';
-  },
+  clear: () => { if (termOutput) termOutput.innerHTML = ''; },
   exit: () => closeTerminal(),
   list: () => {
     addTermLine('TECH STACK ON THE WALL:', 'res');
@@ -564,12 +577,13 @@ const commands = {
     
     if (['about', 'wall', 'impact', 'team'].includes(target)) {
       const map = { team: 'creators' };
-      window.location.hash = map[target] || target;
+      const hash = map[target] || target;
+      window.location.href = (IS_SUBPAGE ? '../index.html#' : '#') + hash;
       addTermLine(`Navigating to section: ${target}...`, 'res');
       setTimeout(closeTerminal, 800);
     } else if (subpages.includes(target)) {
       addTermLine(`Loading secure subpage: ${target}.html...`, 'res');
-      setTimeout(() => window.location.href = `pages/${target}.html`, 800);
+      setTimeout(() => window.location.href = (IS_SUBPAGE ? '' : 'pages/') + `${target}.html`, 800);
     } else {
       addTermLine(`Section "${target}" not found.`, 'error');
     }
@@ -590,16 +604,11 @@ if (termInput) {
     if (e.key === 'Enter') {
       const rawInput = termInput.value.trim();
       if (!rawInput) return;
-      
       addTermLine(rawInput, 'cmd');
       termInput.value = '';
-      
       const [cmd, ...args] = rawInput.split(' ');
-      if (commands[cmd.toLowerCase()]) {
-        commands[cmd.toLowerCase()](args);
-      } else {
-        addTermLine(`Command not found: ${cmd}. Type 'help' for options.`, 'error');
-      }
+      if (commands[cmd.toLowerCase()]) commands[cmd.toLowerCase()](args);
+      else addTermLine(`Command not found: ${cmd}. Type 'help' for options.`, 'error');
     }
     if (e.key === 'Escape') closeTerminal();
   });
@@ -607,49 +616,37 @@ if (termInput) {
 
 if (termOpenBtn) termOpenBtn.addEventListener('click', openTerminal);
 window.addEventListener('keydown', e => {
-  if (e.key === '`') openTerminal(); // Tilde shortcut
+  if (e.key === '`') openTerminal(); 
   if (e.key === 'Escape') closeTerminal();
 });
 
 /* ─── IMPACT CALCULATOR LOGIC ─── */
 const deviceImpactData = {
-  laptop:   { gold: 0.2,   copper: 0.5,   plastic: 1.0, co2: 25 },
-  desktop:  { gold: 0.5,   copper: 1.5,   plastic: 3.0, co2: 50 },
-  phone:    { gold: 0.03,  copper: 0.015, plastic: 0.1, co2: 5 },
-  monitor:  { gold: 0.1,   copper: 0.4,   plastic: 2.0, co2: 20 },
-  keyboard: { gold: 0.005, copper: 0.05,  plastic: 0.8, co2: 2 }
+  laptop:   { gold: 0.2,   copper: 0.5,   plastic: 1.0, co2: 25, lead: 2.5, mercury: 0.5 },
+  desktop:  { gold: 0.5,   copper: 1.5,   plastic: 3.0, co2: 50, lead: 15.0, mercury: 1.2 },
+  phone:    { gold: 0.03,  copper: 0.015, plastic: 0.1, co2: 5,  lead: 0.8, mercury: 0.0 },
+  monitor:  { gold: 0.1,   copper: 0.4,   plastic: 2.0, co2: 20, lead: 20.0, mercury: 4.5 },
+  keyboard: { gold: 0.005, copper: 0.05,  plastic: 0.8, co2: 2,  lead: 0.1, mercury: 0.0 }
 };
 
 function initImpactCalc() {
   const deviceSelect = document.getElementById('calc-device');
   const qtyInput = document.getElementById('calc-qty');
-  
   if (!deviceSelect || !qtyInput) return;
-
   const updateResults = () => {
     const device = deviceSelect.value;
     const qty = parseInt(qtyInput.value) || 0;
     const data = deviceImpactData[device];
-
     if (!data) return;
-
-    // Calculate
-    const gold = (data.gold * qty).toFixed(2);
-    const copper = (data.copper * qty).toFixed(2);
-    const plastic = (data.plastic * qty).toFixed(2);
-    const co2 = Math.round(data.co2 * qty);
-
-    // Update UI with small animation
-    animateValue('res-gold', gold);
-    animateValue('res-copper', copper);
-    animateValue('res-plastic', plastic);
-    animateValue('res-co2', co2);
+    animateValue('res-gold', (data.gold * qty).toFixed(2));
+    animateValue('res-copper', (data.copper * qty).toFixed(2));
+    animateValue('res-plastic', (data.plastic * qty).toFixed(2));
+    animateValue('res-co2', Math.round(data.co2 * qty));
+    animateValue('res-lead', (data.lead * qty).toFixed(2));
+    animateValue('res-mercury', (data.mercury * qty).toFixed(2));
   };
-
   deviceSelect.addEventListener('change', updateResults);
   qtyInput.addEventListener('input', updateResults);
-  
-  // Initial run
   updateResults();
 }
 
@@ -660,27 +657,22 @@ function updateQty(delta) {
   if (val < 1) val = 1;
   if (val > 99) val = 99;
   input.value = val;
-  // Trigger input event manually
   input.dispatchEvent(new Event('input'));
 }
 
 function animateValue(id, target) {
   const el = document.getElementById(id);
   if (!el) return;
-  
   const start = parseFloat(el.textContent) || 0;
   const end = parseFloat(target);
   const duration = 600;
   const startTime = performance.now();
-
   function step(now) {
     const elapsed = now - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+    const eased = 1 - Math.pow(1 - progress, 3); 
     const current = start + (end - start) * eased;
-    
     el.textContent = id === 'res-co2' ? Math.round(current) : current.toFixed(2);
-    
     if (progress < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
@@ -700,27 +692,18 @@ function initWasteGame() {
   const startBtn = document.getElementById('game-start-btn');
   const canvas = document.getElementById('game-canvas');
   const bins = document.querySelectorAll('.g-bin');
-
   if (!gameOverlay || !openBtn) return;
-
   openBtn.addEventListener('click', () => {
     gameOverlay.classList.add('active');
     resetGame();
   });
-
   closeBtn.addEventListener('click', () => {
     gameOverlay.classList.remove('active');
     stopGame();
   });
-
-  startBtn.addEventListener('click', startGame);
-
-  // Drag and Drop Logic
+  if (startBtn) startBtn.addEventListener('click', startGame);
   bins.forEach(bin => {
-    bin.addEventListener('dragover', e => {
-      e.preventDefault();
-      bin.classList.add('drag-over');
-    });
+    bin.addEventListener('dragover', e => { e.preventDefault(); bin.classList.add('drag-over'); });
     bin.addEventListener('dragleave', () => bin.classList.remove('drag-over'));
     bin.addEventListener('drop', e => {
       e.preventDefault();
@@ -728,7 +711,6 @@ function initWasteGame() {
       const partType = e.dataTransfer.getData('type');
       const binType = bin.getAttribute('data-type');
       const partId = e.dataTransfer.getData('id');
-
       if (partType === binType) {
         updateScore(10);
         bin.style.transform = 'scale(1.1)';
@@ -738,7 +720,6 @@ function initWasteGame() {
         bin.style.borderColor = 'var(--pink)';
         setTimeout(() => bin.style.borderColor = '', 300);
       }
-
       const partEl = document.getElementById(partId);
       if (partEl) partEl.remove();
     });
@@ -747,17 +728,17 @@ function initWasteGame() {
 
 function startGame() {
   isGameActive = true;
-  document.getElementById('game-start').style.display = 'none';
+  const startScreen = document.getElementById('game-start');
+  if (startScreen) startScreen.style.display = 'none';
   gameScore = 0;
   gameTime = 30;
   updateScore(0);
-  
   gameInterval = setInterval(() => {
     gameTime--;
-    document.getElementById('g-timer').textContent = `${gameTime}s`;
+    const timerEl = document.getElementById('g-timer');
+    if (timerEl) timerEl.textContent = `${gameTime}s`;
     if (gameTime <= 0) endGame();
   }, 1000);
-
   spawnInterval = setInterval(spawnPart, 1200);
 }
 
@@ -766,133 +747,54 @@ function stopGame() {
   clearInterval(gameInterval);
   clearInterval(spawnInterval);
   const canvas = document.getElementById('game-canvas');
-  const parts = canvas.querySelectorAll('.falling-part');
-  parts.forEach(p => p.remove());
+  if (canvas) {
+    const parts = canvas.querySelectorAll('.falling-part');
+    parts.forEach(p => p.remove());
+  }
 }
 
 function resetGame() {
   stopGame();
-  document.getElementById('game-start').style.display = 'flex';
+  const startScreen = document.getElementById('game-start');
+  if (startScreen) startScreen.style.display = 'flex';
   const results = document.querySelector('.g-results');
   if (results) results.remove();
-  document.getElementById('g-timer').textContent = '30s';
-  document.getElementById('g-score').textContent = '000';
+  const timerEl = document.getElementById('g-timer');
+  if (timerEl) timerEl.textContent = '30s';
+  updateScore(0);
 }
 
 function spawnPart() {
   if (!isGameActive) return;
   const canvas = document.getElementById('game-canvas');
+  if (!canvas || typeof wasteParts === 'undefined') return;
   const partData = wasteParts[Math.floor(Math.random() * wasteParts.length)];
   const part = document.createElement('div');
   const id = 'p-' + Math.random().toString(36).substr(2, 9);
-  
   part.id = id;
   part.className = 'falling-part';
   part.draggable = true;
   part.innerHTML = `<span class="fp-ico">${partData.icon}</span><span class="fp-name">${partData.name}</span>`;
-  
   const startX = Math.random() * (canvas.offsetWidth - 80) + 10;
   part.style.left = `${startX}px`;
   part.style.top = '-80px';
-  
-  // ─── DESKTOP DRAG ───
   part.addEventListener('dragstart', e => {
     e.dataTransfer.setData('type', partData.type);
     e.dataTransfer.setData('id', id);
     part.style.opacity = '0.5';
   });
   part.addEventListener('dragend', () => part.style.opacity = '1');
-
-  // ─── MOBILE TOUCH (Manual Drag) ───
-  let isDragging = false;
-  part.addEventListener('touchstart', e => {
-    isDragging = true;
-    part.style.zIndex = 1000;
-    part.style.opacity = '0.8';
-  }, { passive: true });
-
-  part.addEventListener('touchmove', e => {
-    if (!isDragging) return;
-    const touch = e.touches[0];
-    const canvasRect = canvas.getBoundingClientRect();
-    
-    // Position part under finger (centered)
-    const x = touch.clientX - canvasRect.left - (part.offsetWidth / 2);
-    const y = touch.clientY - canvasRect.top - (part.offsetHeight / 2);
-    
-    part.style.left = `${x}px`;
-    part.style.top = `${y}px`;
-
-    // Visual feedback for bins
-    const bins = document.querySelectorAll('.g-bin');
-    bins.forEach(bin => {
-      const binRect = bin.getBoundingClientRect();
-      if (touch.clientX > binRect.left && touch.clientX < binRect.right &&
-          touch.clientY > binRect.top && touch.clientY < binRect.bottom) {
-        bin.classList.add('drag-over');
-      } else {
-        bin.classList.remove('drag-over');
-      }
-    });
-  }, { passive: false });
-
-  part.addEventListener('touchend', e => {
-    isDragging = false;
-    const touch = e.changedTouches[0];
-    const bins = document.querySelectorAll('.g-bin');
-    let dropped = false;
-
-    bins.forEach(bin => {
-      bin.classList.remove('drag-over');
-      const binRect = bin.getBoundingClientRect();
-      if (touch.clientX > binRect.left && touch.clientX < binRect.right &&
-          touch.clientY > binRect.top && touch.clientY < binRect.bottom) {
-        
-        const binType = bin.getAttribute('data-type');
-        if (partData.type === binType) {
-          updateScore(10);
-          bin.style.transform = 'scale(1.1)';
-          setTimeout(() => bin.style.transform = '', 200);
-        } else {
-          updateScore(-5);
-          bin.style.borderColor = 'var(--pink)';
-          setTimeout(() => bin.style.borderColor = '', 300);
-        }
-        part.remove();
-        dropped = true;
-      }
-    });
-
-    if (!dropped) {
-      part.style.opacity = '1';
-      // Let it continue falling from current position
-    }
-  });
-
   canvas.appendChild(part);
-
-  // Animate fall
   let posY = -80;
   const speed = 1.5 + Math.random() * 2;
-  
   function fall() {
     if (!isGameActive || !part.parentElement) return;
-    if (isDragging) {
-      // While dragging, we update posY to stay in sync with manual movement
-      posY = parseFloat(part.style.top);
-      requestAnimationFrame(fall);
-      return;
-    }
-    
     posY += speed;
     part.style.top = `${posY}px`;
-    
     if (posY > canvas.offsetHeight) {
       part.remove();
-      updateScore(-2); // Penalty for missing
-    } else {
-      requestAnimationFrame(fall);
-    }
+      updateScore(-2);
+    } else requestAnimationFrame(fall);
   }
   requestAnimationFrame(fall);
 }
@@ -901,16 +803,15 @@ function updateScore(delta) {
   gameScore += delta;
   if (gameScore < 0) gameScore = 0;
   const scoreEl = document.getElementById('g-score');
-  scoreEl.textContent = gameScore.toString().padStart(3, '0');
+  if (scoreEl) scoreEl.textContent = gameScore.toString().padStart(3, '0');
 }
 
 function endGame() {
   stopGame();
   const canvas = document.getElementById('game-canvas');
+  if (!canvas) return;
   const results = document.createElement('div');
   results.className = 'g-results';
-  
-  // Dummy leaderboard
   const lbData = [
     { n: 'Utkarsh (Pro)', s: 280 },
     { n: 'Deepak (Coord)', s: 245 },
@@ -918,14 +819,12 @@ function endGame() {
     { n: 'YOU', s: gameScore, me: true },
     { n: 'Kunal (PCB)', s: 180 }
   ].sort((a, b) => b.s - a.s);
-
   let lbHTML = lbData.map((r, i) => `
     <div class="lb-row ${r.me ? 'me' : ''}">
       <span>#${i + 1} ${r.n}</span>
       <span>${r.s} PTS</span>
     </div>
   `).join('');
-
   results.innerHTML = `
     <h2>MISSION COMPLETE</h2>
     <div class="final-score">FINAL SCORE: ${gameScore}</div>
@@ -947,8 +846,6 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTermTime();
   initImpactCalc();
   initWasteGame();
-  
-  // Close mobile menu on link click (already handled by inline onclick, but as safety)
   const mmLinks = document.querySelectorAll('#mobile-menu a');
   mmLinks.forEach(link => {
     link.addEventListener('click', () => {
