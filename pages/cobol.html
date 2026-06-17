@@ -6,7 +6,6 @@
   <title>COBOL — USCS E-WALL</title>
   <link rel="stylesheet" href="../styles.css">
 
-  <!-- TECH THEME OVERRIDE -->
   <script>window.TECH_THEME_COLOR = '#005a9c';</script>
   <style>
     :root {
@@ -24,9 +23,7 @@
     .btn-primary { background: #005a9c !important; }
     .btn-primary:hover { box-shadow: 0 0 30px rgba(0,90,156,.12) !important; }
     .hero-eyebrow .pulse { background: #005a9c !important; box-shadow: 0 0 10px #005a9c !important; }
-  </style>
 
-    <style>
       .content-section h2 {
         display: inline-block;
         padding-bottom: 8px;
@@ -65,6 +62,172 @@
       }
     </style>
   
+
+    <style>
+      .content-section p {
+        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
+        padding: 18px 24px;
+        border-radius: 4px;
+        border-left: 2px solid var(--green);
+        line-height: 1.8;
+      }
+      /* RICH UX CLASSES */
+      .info-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 24px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        margin-bottom: 25px;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border-color: var(--green);
+      }
+      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
+      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
+      
+      .hl-box {
+        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+        border-left: 4px solid var(--green);
+        padding: 24px 30px;
+        border-radius: 0 8px 8px 0;
+        margin: 25px 0;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      }
+
+      .app-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin: 25px 0;
+      }
+      .app-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 22px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .app-card:hover {
+        border-color: var(--green);
+        background: rgba(255,255,255,0.03);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      }
+      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
+      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
+      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+
+      .feature-list {
+        list-style: none !important;
+        padding: 0 !important;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 25px 0 !important;
+      }
+      .feature-list li {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 18px;
+        border-radius: 8px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        transition: transform 0.2s;
+      }
+      .feature-list li:hover {
+        transform: scale(1.02);
+        border-color: var(--green);
+      }
+      .feature-list li::before { display: none !important; }
+      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
+      .fl-text { display: flex; flex-direction: column; gap: 6px; }
+      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
+      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+
+      @media (max-width: 768px) {
+        .feature-list { grid-template-columns: 1fr; }
+        .info-card { flex-direction: column; }
+      }
+    
+      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
+      .app-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 160px;
+        display: block;
+        padding: 0;
+      }
+      .ac-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .ac-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .feature-list li {
+        position: relative;
+        overflow: hidden;
+        min-height: 120px;
+        display: block;
+        padding: 0;
+        text-align: center;
+      }
+      .fl-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .fl-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .fl-front .fl-icon { margin-bottom: 10px; }
+      .fl-front strong { margin-bottom: 0; }
+
+    </style>
 </head>
 <body>
 
@@ -220,7 +383,12 @@
 
     <section id="history">
       <h2>History</h2>
-      <p>COBOL (COmmon Business-Oriented Language) was developed in 1959 by a committee led by Grace Hopper (the 'Mother of COBOL') and sponsored by the US Department of Defense. The goal was a portable, English-like language for business data processing. COBOL was the first language designed by committee to achieve standardization. By the 1970s, more COBOL code had been written than in any other language. Today an estimated 800 billion lines of COBOL code remain in production.</p>
+      <div class="info-card">
+        <div class="ic-icon">🕰️</div>
+        <div class="ic-content">
+          <p>COBOL (COmmon Business-Oriented Language) was developed in 1959 by a committee led by Grace Hopper (the 'Mother of COBOL') and sponsored by the US Department of Defense. The goal was a portable, English-like language for business data processing. COBOL was the first language designed by committee to achieve standardization. By the 1970s, more COBOL code had been written than in any other language. Today an estimated 800 billion lines of COBOL code remain in production.</p>
+        </div>
+      </div>
     </section>
 
     <section id="images">
@@ -239,30 +407,130 @@
 
     <section id="why">
       <h2>Why We Use COBOL</h2>
-      <p>Despite its age, COBOL remains deeply embedded in banking, insurance, government, and financial systems because the cost of replacing it exceeds $30 billion annually and the risk of failure is too great. COBOL programs are extremely reliable, have processed trillions of transactions without failure, and the language excels at fixed-format record processing and decimal arithmetic.</p>
+      <div class="hl-box">
+        Despite its age, COBOL remains deeply embedded in banking, insurance, government, and financial systems because the cost of replacing it exceeds $30 billion annually and the risk of failure is too great. COBOL programs are extremely reliable, have processed trillions of transactions without failure, and the language excels at fixed-format record processing and decimal arithmetic.
+      </div>
     </section>
 
     <section id="applications">
       <h2>Applications &amp; Use Cases</h2>
-      <ul>
-      <li>Core banking systems (deposit, withdrawal, loan processing)</li>
-      <li>Insurance claims processing</li>
-      <li>US Social Security Administration and IRS systems</li>
-      <li>Stock exchange settlement systems (NYSE, Deutsche Börse)</li>
-      <li>Payroll and pension processing</li>
-      <li>Retail point-of-sale transaction handling</li>
-      </ul>
+      <div class="app-grid">
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">⚙️</span>
+            <span class="ac-title">Core banking systems...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Core banking systems (deposit, withdrawal, loan processing)</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🔌</span>
+            <span class="ac-title">Insurance claims processing</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Insurance claims processing</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🗄️</span>
+            <span class="ac-title">US Social Security...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">US Social Security Administration and IRS systems</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🐍</span>
+            <span class="ac-title">Stock exchange settlement...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Stock exchange settlement systems (NYSE, Deutsche Börse)</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🚀</span>
+            <span class="ac-title">Payroll and pension processing</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Payroll and pension processing</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🛠️</span>
+            <span class="ac-title">Retail point-of-sale transaction handling</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Retail point-of-sale transaction handling</span>
+          </div>
+        </div>
+        
+      </div>
     </section>
 
     <section id="facts">
       <h2>Key Facts &amp; Features</h2>
-      <ul>
-      <li>COBOL code is intentionally verbose and English-like for readability by business users</li>
-      <li>Division structure: IDENTIFICATION, ENVIRONMENT, DATA, PROCEDURE DIVISION</li>
-      <li>Decimal arithmetic is native — no floating-point errors for financial calculations</li>
-      <li>IBM mainframes (z/OS) run the majority of production COBOL</li>
-      <li>COBOL 2023 is the latest standard, adding UTF-8 and JSON support</li>
-      <li>Micro Focus (now OpenText) and IBM offer modern COBOL development environments</li>
+      <ul class="feature-list">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🧠</span>
+            <strong>COBOL code is</strong>
+          </div>
+          <div class="fl-back">
+            <span>COBOL code is intentionally verbose and English-like for readability by business users</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎯</span>
+            <strong>Division structure</strong>
+          </div>
+          <div class="fl-back">
+            <span>IDENTIFICATION, ENVIRONMENT, DATA, PROCEDURE DIVISION</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚡</span>
+            <strong>Decimal arithmetic is native</strong>
+          </div>
+          <div class="fl-back">
+            <span>no floating-point errors for financial calculations</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚠️</span>
+            <strong>IBM mainframes (z/OS)</strong>
+          </div>
+          <div class="fl-back">
+            <span>IBM mainframes (z/OS) run the majority of production COBOL</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📌</span>
+            <strong>COBOL 2023 is</strong>
+          </div>
+          <div class="fl-back">
+            <span>COBOL 2023 is the latest standard, adding UTF-8 and JSON support</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💡</span>
+            <strong>Micro Focus (now</strong>
+          </div>
+          <div class="fl-back">
+            <span>Micro Focus (now OpenText) and IBM offer modern COBOL development environments</span>
+          </div>
+        </li>
+        
       </ul>
     </section>
 
@@ -270,19 +538,75 @@
       <h2>Where to Learn</h2>
 
       <h3>Online Courses</h3>
-      <ul>
-      <li>IBM Z Learning (ibm.com/training) — free COBOL on IBM Z courses</li>
-      <li>IBM Open Mainframe Project – COBOL Programming Course (GitHub, free)</li>
-      <li>Udemy – Complete COBOL Programming Tutorial</li>
-      <li>COBOL.io — free online COBOL playground</li>
-      </ul>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎓</span>
+            <strong>IBM Z Learning (ibm.com/training)</strong>
+          </div>
+          <div class="fl-back">
+            <span>free COBOL on IBM Z courses</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💻</span>
+            <strong>IBM Open Mainframe Project</strong>
+          </div>
+          <div class="fl-back">
+            <span>COBOL Programming Course (GitHub, free)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📘</span>
+            <strong>Udemy</strong>
+          </div>
+          <div class="fl-back">
+            <span>Complete COBOL Programming Tutorial</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📙</span>
+            <strong>COBOL.io</strong>
+          </div>
+          <div class="fl-back">
+            <span>free online COBOL playground</span>
+          </div>
+        </li>
+              </ul>
 
       <h3>Books &amp; References</h3>
-      <ul>
-      <li>'COBOL for the 21st Century' – Stern, Stern & Ley</li>
-      <li>'Murach's Mainframe COBOL' – Mike Murach</li>
-      <li>'IBM Open Mainframe Project COBOL Programming Course' (free on GitHub)</li>
-      </ul>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎓</span>
+            <strong>'COBOL for the 21st Century'</strong>
+          </div>
+          <div class="fl-back">
+            <span>Stern, Stern & Ley</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💻</span>
+            <strong>'Murach's Mainframe COBOL'</strong>
+          </div>
+          <div class="fl-back">
+            <span>Mike Murach</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📘</span>
+            <strong>'IBM Open Mainframe Project</strong>
+          </div>
+          <div class="fl-back">
+            <span>'IBM Open Mainframe Project COBOL Programming Course' (free on GitHub)</span>
+          </div>
+        </li>
+              </ul>
     </section>
   </main>
 </div>
@@ -312,34 +636,24 @@
 </footer>
 
 
+<!-- ─── CLI TERMINAL OVERLAY ─── -->
+<div id="terminal-overlay">
+  <div class="term-header">
+    <span>USCS_OS v1.0.4 — TERMINAL_ACCESS</span>
+    <span id="term-time"></span>
+  </div>
+  <div id="term-output">
+    <span class="term-line">System initialized. Type 'help' to see available commands.</span>
+  </div>
+  <div class="term-input-wrap">
+    <span class="term-prompt">visitor@uscs:~$</span>
+    <input type="text" id="term-input" placeholder="Type a command..." autocomplete="off">
+  </div>
+  <span class="term-hint">Press 'ESC' to close terminal</span>
+</div>
+
 <button class="cli-trigger" id="cli-open">_></button>
 
-<!-- ─── WASTE GAME OVERLAY ─── -->
-<div id="game-overlay">
-  <div class="game-hdr">
-    <div class="gh-left">
-      <span class="g-title">WASTE_SORTER_v1.0</span>
-      <div class="g-stats">
-        <span>SCORE: <span id="g-score">000</span></span>
-        <span>TIME: <span id="g-timer">30s</span></span>
-      </div>
-    </div>
-    <button class="g-close" id="game-close">✕</button>
-  </div>
-  <div id="game-canvas">
-    <div class="g-start-screen" id="game-start">
-      <h2>CLEAN THE CAMPUS</h2>
-      <p>Drag the falling e-waste into the correct bins before they hit the ground.</p>
-      <button class="btn-primary" id="game-start-btn">INITIALIZE MISSION</button>
-    </div>
-  </div>
-  <div class="game-bins">
-    <div class="g-bin" data-type="recycle"><span class="bin-icon">♻️</span><span class="bin-lbl">RECYCLABLE</span></div>
-    <div class="g-bin" data-type="toxic"><span class="bin-icon">⚠️</span><span class="bin-lbl">TOXIC WASTE</span></div>
-    <div class="g-bin" data-type="art"><span class="bin-icon">🎨</span><span class="bin-lbl">ART MATERIAL</span></div>
-  </div>
-</div>
-<button class="cli-trigger" id="game-open" style="bottom: 90px;">♻️</button>
 
 <script src="../data.js"></script>
 <script src="../main.js"></script>

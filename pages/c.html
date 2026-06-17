@@ -6,42 +6,38 @@
   <title>C — USCS E-WALL</title>
   <link rel="stylesheet" href="../styles.css">
 
-  <!-- TECH THEME OVERRIDE -->
-  <script>window.TECH_THEME_COLOR = '#a8b9cc';</script>
+  <script>window.TECH_THEME_COLOR = '#1c66b8';</script>
   <style>
     :root {
-      --green: #a8b9cc !important;
-      --cyan: #a8b9cc !important;
-      --aura-color: #a8b9cc !important;
-      --aura-glow: rgba(168,185,204,.15) !important;
+      --green: #1c66b8 !important;
+      --cyan: #1c66b8 !important;
+      --aura-color: #1c66b8 !important;
+      --aura-glow: rgba(28,102,184,.15) !important;
     }
-    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #a8b9cc !important; }
-    .content-section hr { background: linear-gradient(90deg, #a8b9cc, transparent) !important; }
-    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #a8b9cc !important; }
-    #scroll-progress { background: #a8b9cc !important; box-shadow: 0 0 10px #a8b9cc !important; }
-    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(168,185,204,.15) !important; }
-    .nav-ticker-item.active { border-bottom: 1px solid #a8b9cc !important; }
-    .btn-primary { background: #a8b9cc !important; }
-    .btn-primary:hover { box-shadow: 0 0 30px rgba(168,185,204,.15) !important; }
-    .hero-eyebrow .pulse { background: #a8b9cc !important; box-shadow: 0 0 10px #a8b9cc !important; }
-  </style>
+    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #1c66b8 !important; }
+    .content-section hr { background: linear-gradient(90deg, #1c66b8, transparent) !important; }
+    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #1c66b8 !important; }
+    #scroll-progress { background: #1c66b8 !important; box-shadow: 0 0 10px #1c66b8 !important; }
+    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(28,102,184,.15) !important; }
+    .nav-ticker-item.active { border-bottom: 1px solid #1c66b8 !important; }
+    .btn-primary { background: #1c66b8 !important; }
+    .btn-primary:hover { box-shadow: 0 0 30px rgba(28,102,184,.15) !important; }
+    .hero-eyebrow .pulse { background: #1c66b8 !important; box-shadow: 0 0 10px #1c66b8 !important; }
 
-    <style>
       .content-section h2 {
-        display: inline-block;
         padding-bottom: 8px;
-        border-bottom: 1px solid #a8b9cc40;
+        border-bottom: 1px solid #1c66b840;
         position: relative;
-        text-shadow: 0 0 20px rgba(168,185,204,.15);
+        text-shadow: 0 0 20px rgba(28,102,184,.15);
       }
       .content-section h2::before {
         content: '>>';
         font-family: var(--font-mono);
-        color: #a8b9cc;
+        color: #1c66b8;
         margin-right: 12px;
         font-size: 1.5rem;
         opacity: 0.7;
-        text-shadow: 0 0 10px #a8b9cc80;
+        text-shadow: 0 0 10px #1c66b880;
       }
       .content-section ul li {
         position: relative;
@@ -53,7 +49,7 @@
         position: absolute;
         left: 0;
         top: 2px;
-        color: #a8b9cc;
+        color: #1c66b8;
         font-size: 0.8rem;
         opacity: 0.8;
       }
@@ -61,10 +57,177 @@
         background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
         padding: 18px 24px;
         border-radius: 4px;
-        border-left: 2px solid #a8b9cc30;
+        border-left: 2px solid #1c66b830;
+        line-height: 1.8;
       }
+
+      /* RICH UX CLASSES */
+      .info-card {
+        background: rgba(28,102,184,0.05);
+        border: 1px solid rgba(28,102,184,0.2);
+        border-radius: 8px;
+        padding: 24px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        margin-bottom: 25px;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(28,102,184,0.1);
+        border-color: rgba(28,102,184,0.4);
+      }
+      .ic-icon { font-size: 2.5rem; background: rgba(28,102,184,0.1); padding: 15px; border-radius: 8px; }
+      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
+      .tech-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+      .tech-tags span {
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        background: rgba(28,102,184,0.1);
+        color: #1c66b8;
+        padding: 6px 12px;
+        border-radius: 4px;
+        border: 1px solid rgba(28,102,184,0.2);
+      }
+
+      .hl-box {
+        background: linear-gradient(135deg, rgba(28,102,184,0.08), rgba(28,102,184,0.02));
+        border-left: 4px solid #1c66b8;
+        padding: 24px 30px;
+        border-radius: 0 8px 8px 0;
+        margin: 25px 0;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      }
+
+      .app-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin: 25px 0;
+      }
+      .app-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 22px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .app-card:hover {
+        border-color: #1c66b8;
+        background: rgba(28,102,184,0.05);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      }
+      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
+      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
+      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+
+      .feature-list {
+        list-style: none !important;
+        padding: 0 !important;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 25px 0 !important;
+      }
+      .feature-list li {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 18px;
+        border-radius: 8px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        transition: transform 0.2s;
+      }
+      .feature-list li:hover {
+        transform: scale(1.02);
+        border-color: rgba(28,102,184,0.3);
+      }
+      .feature-list li::before { display: none !important; }
+      .fl-icon { font-size: 1.8rem; color: #1c66b8; background: rgba(28,102,184,0.1); padding: 12px; border-radius: 50%; }
+      .fl-text { display: flex; flex-direction: column; gap: 6px; }
+      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
+      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+
+      @media (max-width: 768px) {
+        .feature-list { grid-template-columns: 1fr; }
+        .info-card { flex-direction: column; }
+      }
+    
+      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
+      .app-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 160px;
+        display: block;
+        padding: 0;
+      }
+      .ac-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .ac-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .feature-list li {
+        position: relative;
+        overflow: hidden;
+        min-height: 120px;
+        display: block;
+        padding: 0;
+        text-align: center;
+      }
+      .fl-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .fl-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .fl-front .fl-icon { margin-bottom: 10px; }
+      .fl-front strong { margin-bottom: 0; }
+
     </style>
-  
 </head>
 <body>
 
@@ -220,7 +383,18 @@
 
     <section id="history">
       <h2>History</h2>
-      <p>C was developed by Dennis Ritchie at Bell Labs between 1969 and 1973 as a systems language for writing the Unix operating system. It evolved from the earlier B language. C was standardized as ANSI C (C89) in 1989, C99 in 1999, C11 in 2011, and C17 in 2018. C23 (2024) is the current standard. Dennis Ritchie and Ken Thompson won the Turing Award in 1983 for creating Unix and C. C remains the #1 language in the TIOBE Index for embedded and systems programming.</p>
+      <div class="info-card">
+        <div class="ic-icon">🕰️</div>
+        <div class="ic-content">
+          <p>Developed by <strong>Dennis Ritchie</strong> at Bell Labs between 1969 and 1973, C was originally designed as a systems language for writing the Unix operating system. It evolved from the earlier B language and fundamentally changed how software was built.</p>
+          <div class="tech-tags">
+            <span>ANSI C (1989)</span>
+            <span>C99 (1999)</span>
+            <span>C11 (2011)</span>
+            <span>C23 (2024)</span>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="images">
@@ -239,30 +413,93 @@
 
     <section id="why">
       <h2>Why We Use C</h2>
-      <p>C is fast because it compiles to efficient machine code, provides direct memory access via pointers, and has minimal runtime overhead. The operating system kernel, database engines, interpreters for Python and Ruby, game engines, and embedded firmware are all written in C. Understanding C gives deep insight into how computers actually work.</p>
+      <div class="hl-box">
+        <strong>Unmatched Performance & Control</strong><br>
+        C is exceptionally fast because it compiles directly to highly efficient machine code. It provides low-level direct memory access via pointers while maintaining a relatively minimal runtime overhead, making it the backbone of modern computing infrastructure.
+      </div>
     </section>
 
     <section id="applications">
       <h2>Applications &amp; Use Cases</h2>
-      <ul>
-      <li>Operating system kernels (Linux, Windows NT, macOS XNU)</li>
-      <li>Embedded systems and firmware (microcontrollers, IoT)</li>
-      <li>Database engines (SQLite, portions of MySQL, PostgreSQL)</li>
-      <li>Programming language interpreters (CPython, Ruby MRI)</li>
-      <li>Network drivers and protocol stacks</li>
-      <li>Real-time systems and safety-critical applications</li>
-      </ul>
+      <div class="app-grid">
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">⚙️</span>
+            <span class="ac-title">OS Kernels</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">The core of Linux, Windows NT, and macOS XNU are written entirely in C.</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🔌</span>
+            <span class="ac-title">Embedded Systems</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Microcontrollers, IoT devices, and hardware firmware rely on C's hardware-level control.</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🗄️</span>
+            <span class="ac-title">Database Engines</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">High-performance DBs like SQLite and core engines of PostgreSQL use C.</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🐍</span>
+            <span class="ac-title">Language Interpreters</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Higher-level languages like Python (CPython) and Ruby are built on C.</span>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="facts">
       <h2>Key Facts &amp; Features</h2>
-      <ul>
-      <li>Manual memory management: malloc/free gives total control (and risk)</li>
-      <li>Pointers: variables that hold memory addresses, core to C's power</li>
-      <li>Stack vs heap memory: local variables on stack, dynamic allocation on heap</li>
-      <li>Undefined behavior: a major source of security vulnerabilities (buffer overflow)</li>
-      <li>Standard C Library (libc): stdio, stdlib, string, math, time functions</li>
-      <li>C compilers: GCC, Clang (LLVM), MSVC; all produce highly optimized native code</li>
+      <ul class="feature-list">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🧠</span>
+            <strong>Manual Memory Management</strong>
+          </div>
+          <div class="fl-back">
+            <span>malloc/free gives complete control over resource allocation.</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎯</span>
+            <strong>Pointers</strong>
+          </div>
+          <div class="fl-back">
+            <span>Direct access to memory addresses, central to C's power.</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚡</span>
+            <strong>Native Compilation</strong>
+          </div>
+          <div class="fl-back">
+            <span>Compilers (GCC, Clang) produce highly optimized native machine code.</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚠️</span>
+            <strong>Undefined Behavior</strong>
+          </div>
+          <div class="fl-back">
+            <span>High risk, high reward. Buffer overflows demand careful coding.</span>
+          </div>
+        </li>
       </ul>
     </section>
 
@@ -270,18 +507,47 @@
       <h2>Where to Learn</h2>
 
       <h3>Online Courses</h3>
-      <ul>
-      <li>CS50 – Harvard's Intro to CS (teaches C first, free)</li>
-      <li>Udemy – C Programming for Beginners – Master the C Language</li>
-      <li>Coursera – C for Everyone: Programming Fundamentals (UC Santa Cruz)</li>
-      <li>Learn-C.org — interactive C tutorial (free)</li>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎓</span>
+            <strong>CS50 – Harvard's Intro to CS</strong>
+          </div>
+          <div class="fl-back">
+            <span>World-famous free course that teaches C fundamentally.</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💻</span>
+            <strong>Learn-C.org</strong>
+          </div>
+          <div class="fl-back">
+            <span>Free interactive online C programming tutorial.</span>
+          </div>
+        </li>
       </ul>
 
       <h3>Books &amp; References</h3>
-      <ul>
-      <li>'The C Programming Language' – Brian Kernighan & Dennis Ritchie ('K&R C', the definitive text)</li>
-      <li>'C Programming: A Modern Approach' – K.N. King</li>
-      <li>'Expert C Programming: Deep C Secrets' – Peter van der Linden</li>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📘</span>
+            <strong>The C Programming Language</strong>
+          </div>
+          <div class="fl-back">
+            <span>By Kernighan & Ritchie (The definitive "K&R C" text).</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📙</span>
+            <strong>Expert C Programming</strong>
+          </div>
+          <div class="fl-back">
+            <span>Deep C Secrets by Peter van der Linden.</span>
+          </div>
+        </li>
       </ul>
     </section>
   </main>
@@ -312,34 +578,24 @@
 </footer>
 
 
+<!-- ─── CLI TERMINAL OVERLAY ─── -->
+<div id="terminal-overlay">
+  <div class="term-header">
+    <span>USCS_OS v1.0.4 — TERMINAL_ACCESS</span>
+    <span id="term-time"></span>
+  </div>
+  <div id="term-output">
+    <span class="term-line">System initialized. Type 'help' to see available commands.</span>
+  </div>
+  <div class="term-input-wrap">
+    <span class="term-prompt">visitor@uscs:~$</span>
+    <input type="text" id="term-input" placeholder="Type a command..." autocomplete="off">
+  </div>
+  <span class="term-hint">Press 'ESC' to close terminal</span>
+</div>
+
 <button class="cli-trigger" id="cli-open">_></button>
 
-<!-- ─── WASTE GAME OVERLAY ─── -->
-<div id="game-overlay">
-  <div class="game-hdr">
-    <div class="gh-left">
-      <span class="g-title">WASTE_SORTER_v1.0</span>
-      <div class="g-stats">
-        <span>SCORE: <span id="g-score">000</span></span>
-        <span>TIME: <span id="g-timer">30s</span></span>
-      </div>
-    </div>
-    <button class="g-close" id="game-close">✕</button>
-  </div>
-  <div id="game-canvas">
-    <div class="g-start-screen" id="game-start">
-      <h2>CLEAN THE CAMPUS</h2>
-      <p>Drag the falling e-waste into the correct bins before they hit the ground.</p>
-      <button class="btn-primary" id="game-start-btn">INITIALIZE MISSION</button>
-    </div>
-  </div>
-  <div class="game-bins">
-    <div class="g-bin" data-type="recycle"><span class="bin-icon">♻️</span><span class="bin-lbl">RECYCLABLE</span></div>
-    <div class="g-bin" data-type="toxic"><span class="bin-icon">⚠️</span><span class="bin-lbl">TOXIC WASTE</span></div>
-    <div class="g-bin" data-type="art"><span class="bin-icon">🎨</span><span class="bin-lbl">ART MATERIAL</span></div>
-  </div>
-</div>
-<button class="cli-trigger" id="game-open" style="bottom: 90px;">♻️</button>
 
 <script src="../data.js"></script>
 <script src="../main.js"></script>

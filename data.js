@@ -55,7 +55,7 @@ const techs = [
 
   // Page 4: Cyber Security (cyber.html)
   {name:'Kali Linux',   icon:'<img src="icon/kali linux.png" class="ti ti-lg">', type:'os',        c:'#557cf2', a:'rgba(85,124,242,.12)', slug:'kalilinux'},
-  {name:'Encryption',   icon:'<img src="icon/encryption.png" class="ti ti-lg">', type:'os',        c:'#ffcc00', a:'rgba(255,204,0,.12)',  slug:'encryption'},
+  {name:'Encryption',   icon:'<img src="icon/encryption.png" class="ti ti-lg">', type:'os',        c:'#1e4b6e', a:'rgba(30,75,110,.15)',  slug:'encryption'},
   {name:'Linux',        icon:'<img src="icon/linux.png" class="ti ti-md">', type:'os',        c:'#fcc624', a:'rgba(252,198,36,.12)', slug:'linux'},
   {name:'Bug Bounty',   icon:'<img src="icon/bugbounty.png" class="ti ti-lg">', type:'os',        c:'#ff4d4d', a:'rgba(255,77,77,.12)',  slug:'bugbounty'},
   {name:'Firewall',     icon:'<img src="icon/firewall.png" class="ti ti-md">', type:'os',        c:'#e65100', a:'rgba(230,81,0,.12)',   slug:'firewall'},
@@ -65,7 +65,7 @@ const techs = [
   {name:'Google',       icon:'<img src="icon/google.png" class="ti ti-md">', type:'cloud',     c:'#4285f4', a:'rgba(66,133,244,.12)', slug:'google'},
 
   // Page 6: Big Data (bigdata.html)
-  {name:'Kafka',        icon:'<img src="icon/kafka.png" class="ti ti-lg">', type:'framework', c:'#ffffff', a:'rgba(255,255,255,.1)', slug:'kafka'},
+  {name:'Kafka',        icon:'<img src="icon/kafka.png" class="ti ti-lg">', type:'framework', c:'#f04f23', a:'rgba(240,79,35,.12)', slug:'kafka'},
   {name:'Hadoop',       icon:'<img src="icon/hadoop.png" class="ti ti-lg">', type:'framework', c:'#ffca28', a:'rgba(255,202,40,.12)', slug:'hadoop'},
 
   // Page 7: Web Development (webdev.html)
@@ -77,20 +77,20 @@ const techs = [
   {name:'Streamlit',    icon:'<img src="icon/streamlit.png" class="ti ti-lg">', type:'framework', c:'#ff4b4b', a:'rgba(255,75,75,.1)',  slug:'streamlit'},
 
   // Page 8: Programming Language (prog.html)
-  {name:'Binary',       icon:'<img src="icon/binary.png" class="ti ti-lg">', type:'framework', c:'#00ff88', a:'rgba(0,255,136,.1)',  slug:'binary'},
+  {name:'Binary',       icon:'<img src="icon/binary.png" class="ti ti-lg">', type:'framework', c:'#00ff41', a:'rgba(0,255,65,.1)',  slug:'binary'},
   {name:'Assembly',     icon:'<img src="icon/assembly.png" class="ti ti-lg">', type:'lang',      c:'#6a8aaa', a:'rgba(106,138,170,.12)',slug:'assembly'},
   {name:'Fortran',      icon:'<img src="icon/fortran.png" class="ti ti-lg">', type:'lang',      c:'#734f96', a:'rgba(115,79,150,.12)', slug:'fortran'},
   {name:'COBOL',        icon:'<img src="icon/cobol.png" class="ti ti-lg">', type:'lang',      c:'#005a9c', a:'rgba(0,90,156,.12)',   slug:'cobol'},
   {name:'C',            icon:'<img src="icon/c.png" class="ti ti-md">', type:'lang',      c:'#a8b9cc', a:'rgba(168,185,204,.15)',slug:'c'},
   {name:'C++',          icon:'<img src="icon/cpp.png" class="ti ti-md">', type:'lang',      c:'#00599c', a:'rgba(0,89,156,.15)',   slug:'cpp'},
-  {name:'C#',           icon:'<img src="icon/c sharp.png" class="ti ti-md">', type:'lang',      c:'#239120', a:'rgba(35,145,32,.12)',  slug:'csharp'},
+  {name:'C#',           icon:'<img src="icon/c sharp.png" class="ti ti-md">', type:'lang',      c:'#512bd4', a:'rgba(81,43,212,.12)',  slug:'csharp'},
   {name:'Python',       icon:'<img src="icon/python.png" class="ti ti-md">', type:'lang',      c:'#3776ab', a:'rgba(55,118,171,.15)', slug:'python'},
 
   // Page 9: WiFi (wifi.html)
-  {name:'WiFi',         icon:'<img src="icon/wifi.png" class="ti ti-md">', type:'os',        c:'#00ff88', a:'rgba(0,255,136,.12)', slug:'wifi'},
+  {name:'WiFi',         icon:'<img src="icon/wifi.png" class="ti ti-md">', type:'os',        c:'#0078d4', a:'rgba(0,120,212,.12)', slug:'wifi'},
 
   // Page 10: Dino Game (dino.html)
-  {name:'Dino Game',    icon:'<img src="icon/dinosaur-game-logo-png.png" class="ti ti-lg">', type:'os',        c:'#fcc624', a:'rgba(252,198,36,.12)', slug:'dinogame'},
+  {name:'Dino Game',    icon:'<img src="icon/dinosaur-game-logo-png.png" class="ti ti-lg">', type:'os',        c:'#535353', a:'rgba(83,83,83,.12)', slug:'dinogame'},
 ];
 
 const students = [
@@ -115,16 +115,3 @@ const guide = {
   c:'#ffb84d', a:'rgba(255,184,77,0.08)', isGuide:true,
   desc:'Offered technical mentorship and academic guidance throughout the lifecycle of the project.'
 };
-
-const wasteParts = [
-  { name: 'CPU Chip', icon: '<img src="icon/chip.png" class="ti ti-md">', type: 'art', desc: 'Silicon gold mine' },
-  { name: 'Keyboard Key', icon: '<img src="icon/keyboard keys.png" class="ti ti-md">', type: 'art', desc: 'Perfect for mosaics' },
-  { name: 'Lithium Battery', icon: '<img src="icon/cmos batteries.png" class="ti ti-md">', type: 'toxic', desc: 'Highly reactive' },
-  { name: 'Broken Screen', icon: '📱', type: 'toxic', desc: 'Lead & Mercury' },
-  { name: 'Copper Wire', icon: '<img src="icon/ribbon cables .png" class="ti ti-md">', type: 'recycle', desc: '100% recyclable' },
-  { name: 'Aluminum Casing', icon: '📦', type: 'recycle', desc: 'High scrap value' },
-  { name: 'RAM Stick', icon: '<img src="icon/ram.png" class="ti ti-md">', type: 'art', desc: 'Technical aesthetic' },
-  { name: 'CR Monitor', icon: '📺', type: 'toxic', desc: 'Phosphor & Lead' },
-  { name: 'Plastic Shell', icon: '🐚', type: 'recycle', desc: 'Standard polymer' },
-  { name: 'Screws & Bolts', icon: '🔩', type: 'art', desc: 'Industrial detail' }
-];

@@ -65,6 +65,172 @@
       }
     </style>
   
+
+    <style>
+      .content-section p {
+        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
+        padding: 18px 24px;
+        border-radius: 4px;
+        border-left: 2px solid var(--green);
+        line-height: 1.8;
+      }
+      /* RICH UX CLASSES */
+      .info-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 24px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        margin-bottom: 25px;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border-color: var(--green);
+      }
+      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
+      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
+      
+      .hl-box {
+        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+        border-left: 4px solid var(--green);
+        padding: 24px 30px;
+        border-radius: 0 8px 8px 0;
+        margin: 25px 0;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      }
+
+      .app-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin: 25px 0;
+      }
+      .app-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 22px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .app-card:hover {
+        border-color: var(--green);
+        background: rgba(255,255,255,0.03);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      }
+      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
+      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
+      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+
+      .feature-list {
+        list-style: none !important;
+        padding: 0 !important;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 25px 0 !important;
+      }
+      .feature-list li {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 18px;
+        border-radius: 8px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        transition: transform 0.2s;
+      }
+      .feature-list li:hover {
+        transform: scale(1.02);
+        border-color: var(--green);
+      }
+      .feature-list li::before { display: none !important; }
+      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
+      .fl-text { display: flex; flex-direction: column; gap: 6px; }
+      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
+      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+
+      @media (max-width: 768px) {
+        .feature-list { grid-template-columns: 1fr; }
+        .info-card { flex-direction: column; }
+      }
+    
+      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
+      .app-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 160px;
+        display: block;
+        padding: 0;
+      }
+      .ac-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .ac-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .feature-list li {
+        position: relative;
+        overflow: hidden;
+        min-height: 120px;
+        display: block;
+        padding: 0;
+        text-align: center;
+      }
+      .fl-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .fl-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .fl-front .fl-icon { margin-bottom: 10px; }
+      .fl-front strong { margin-bottom: 0; }
+
+    </style>
 </head>
 <body>
 
@@ -220,7 +386,12 @@
 
     <section id="history">
       <h2>History</h2>
-      <p>Linux was created by Linus Torvalds, a Finnish computer science student, who announced it on August 25, 1991 in a Usenet post as 'just a hobby'. He released it under the GPL license in 1992. Richard Stallman's GNU project provided most of the userland tools, making 'GNU/Linux' a complete OS. Today Linux powers 96.3% of the world's top 1 million web servers, all 500 top supercomputers, and Android devices used by 3+ billion people.</p>
+      <div class="info-card">
+        <div class="ic-icon">🕰️</div>
+        <div class="ic-content">
+          <p>Linux was created by Linus Torvalds, a Finnish computer science student, who announced it on August 25, 1991 in a Usenet post as 'just a hobby'. He released it under the GPL license in 1992. Richard Stallman's GNU project provided most of the userland tools, making 'GNU/Linux' a complete OS. Today Linux powers 96.3% of the world's top 1 million web servers, all 500 top supercomputers, and Android devices used by 3+ billion people.</p>
+        </div>
+      </div>
     </section>
 
     <section id="images">
@@ -239,30 +410,130 @@
 
     <section id="why">
       <h2>Why We Use Linux</h2>
-      <p>Linux is free, open-source, secure, and endlessly customizable. Its kernel design gives unmatched performance for server workloads, and the package management systems of distributions like Ubuntu, Debian, and Red Hat make software deployment trivial. The command-line interface enables powerful automation via shell scripting.</p>
+      <div class="hl-box">
+        Linux is free, open-source, secure, and endlessly customizable. Its kernel design gives unmatched performance for server workloads, and the package management systems of distributions like Ubuntu, Debian, and Red Hat make software deployment trivial. The command-line interface enables powerful automation via shell scripting.
+      </div>
     </section>
 
     <section id="applications">
       <h2>Applications &amp; Use Cases</h2>
-      <ul>
-      <li>Web servers (Nginx, Apache on Ubuntu/CentOS/Debian)</li>
-      <li>Cloud infrastructure (all major cloud VMs run Linux)</li>
-      <li>Android mobile OS (Linux kernel)</li>
-      <li>Embedded systems: routers, TVs, cars, IoT devices</li>
-      <li>Supercomputing and HPC clusters</li>
-      <li>DevOps, Docker containers, and Kubernetes nodes</li>
-      </ul>
+      <div class="app-grid">
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">⚙️</span>
+            <span class="ac-title">Web servers (Nginx,...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Web servers (Nginx, Apache on Ubuntu/CentOS/Debian)</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🔌</span>
+            <span class="ac-title">Cloud infrastructure (all...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Cloud infrastructure (all major cloud VMs run Linux)</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🗄️</span>
+            <span class="ac-title">Android mobile OS...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Android mobile OS (Linux kernel)</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🐍</span>
+            <span class="ac-title">Embedded systems</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">routers, TVs, cars, IoT devices</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🚀</span>
+            <span class="ac-title">Supercomputing and HPC clusters</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Supercomputing and HPC clusters</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🛠️</span>
+            <span class="ac-title">DevOps, Docker containers,...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">DevOps, Docker containers, and Kubernetes nodes</span>
+          </div>
+        </div>
+        
+      </div>
     </section>
 
     <section id="facts">
       <h2>Key Facts &amp; Features</h2>
-      <ul>
-      <li>Monolithic kernel with loadable kernel modules (LKMs)</li>
-      <li>Everything is a file — even hardware devices in /dev</li>
-      <li>Multi-user, multi-tasking, with fine-grained permissions</li>
-      <li>Distributions: Ubuntu, Debian, Fedora, Arch, CentOS, Kali, Alpine</li>
-      <li>Package managers: apt, yum/dnf, pacman, snap, flatpak</li>
-      <li>systemd is the standard init system in modern distributions</li>
+      <ul class="feature-list">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🧠</span>
+            <strong>Monolithic kernel with</strong>
+          </div>
+          <div class="fl-back">
+            <span>Monolithic kernel with loadable kernel modules (LKMs)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎯</span>
+            <strong>Everything is a file</strong>
+          </div>
+          <div class="fl-back">
+            <span>even hardware devices in /dev</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚡</span>
+            <strong>Multi-user, multi-tasking, with</strong>
+          </div>
+          <div class="fl-back">
+            <span>Multi-user, multi-tasking, with fine-grained permissions</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚠️</span>
+            <strong>Distributions</strong>
+          </div>
+          <div class="fl-back">
+            <span>Ubuntu, Debian, Fedora, Arch, CentOS, Kali, Alpine</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📌</span>
+            <strong>Package managers</strong>
+          </div>
+          <div class="fl-back">
+            <span>apt, yum/dnf, pacman, snap, flatpak</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💡</span>
+            <strong>systemd is the</strong>
+          </div>
+          <div class="fl-back">
+            <span>systemd is the standard init system in modern distributions</span>
+          </div>
+        </li>
+        
       </ul>
     </section>
 
@@ -270,19 +541,75 @@
       <h2>Where to Learn</h2>
 
       <h3>Online Courses</h3>
-      <ul>
-      <li>Linux Foundation – Introduction to Linux (edX, free)</li>
-      <li>Udemy – Linux Mastery: Master the Linux Command Line – Ziyad Yehia</li>
-      <li>TryHackMe – Linux Fundamentals (free)</li>
-      <li>The Linux Command Line (free at linuxcommand.org)</li>
-      </ul>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎓</span>
+            <strong>Linux Foundation</strong>
+          </div>
+          <div class="fl-back">
+            <span>Introduction to Linux (edX, free)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💻</span>
+            <strong>Udemy</strong>
+          </div>
+          <div class="fl-back">
+            <span>Linux Mastery: Master the Linux Command Line – Ziyad Yehia</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📘</span>
+            <strong>TryHackMe</strong>
+          </div>
+          <div class="fl-back">
+            <span>Linux Fundamentals (free)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📙</span>
+            <strong>The Linux Command Line</strong>
+          </div>
+          <div class="fl-back">
+            <span>The Linux Command Line (free at linuxcommand.org)</span>
+          </div>
+        </li>
+              </ul>
 
       <h3>Books &amp; References</h3>
-      <ul>
-      <li>'The Linux Command Line' – William Shotts (free online)</li>
-      <li>'Linux Bible' – Christopher Negus</li>
-      <li>'How Linux Works' – Brian Ward</li>
-      </ul>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎓</span>
+            <strong>'The Linux Command Line'</strong>
+          </div>
+          <div class="fl-back">
+            <span>William Shotts (free online)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💻</span>
+            <strong>'Linux Bible'</strong>
+          </div>
+          <div class="fl-back">
+            <span>Christopher Negus</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📘</span>
+            <strong>'How Linux Works'</strong>
+          </div>
+          <div class="fl-back">
+            <span>Brian Ward</span>
+          </div>
+        </li>
+              </ul>
     </section>
   </main>
 </div>
@@ -312,34 +639,24 @@
 </footer>
 
 
+<!-- ─── CLI TERMINAL OVERLAY ─── -->
+<div id="terminal-overlay">
+  <div class="term-header">
+    <span>USCS_OS v1.0.4 — TERMINAL_ACCESS</span>
+    <span id="term-time"></span>
+  </div>
+  <div id="term-output">
+    <span class="term-line">System initialized. Type 'help' to see available commands.</span>
+  </div>
+  <div class="term-input-wrap">
+    <span class="term-prompt">visitor@uscs:~$</span>
+    <input type="text" id="term-input" placeholder="Type a command..." autocomplete="off">
+  </div>
+  <span class="term-hint">Press 'ESC' to close terminal</span>
+</div>
+
 <button class="cli-trigger" id="cli-open">_></button>
 
-<!-- ─── WASTE GAME OVERLAY ─── -->
-<div id="game-overlay">
-  <div class="game-hdr">
-    <div class="gh-left">
-      <span class="g-title">WASTE_SORTER_v1.0</span>
-      <div class="g-stats">
-        <span>SCORE: <span id="g-score">000</span></span>
-        <span>TIME: <span id="g-timer">30s</span></span>
-      </div>
-    </div>
-    <button class="g-close" id="game-close">✕</button>
-  </div>
-  <div id="game-canvas">
-    <div class="g-start-screen" id="game-start">
-      <h2>CLEAN THE CAMPUS</h2>
-      <p>Drag the falling e-waste into the correct bins before they hit the ground.</p>
-      <button class="btn-primary" id="game-start-btn">INITIALIZE MISSION</button>
-    </div>
-  </div>
-  <div class="game-bins">
-    <div class="g-bin" data-type="recycle"><span class="bin-icon">♻️</span><span class="bin-lbl">RECYCLABLE</span></div>
-    <div class="g-bin" data-type="toxic"><span class="bin-icon">⚠️</span><span class="bin-lbl">TOXIC WASTE</span></div>
-    <div class="g-bin" data-type="art"><span class="bin-icon">🎨</span><span class="bin-lbl">ART MATERIAL</span></div>
-  </div>
-</div>
-<button class="cli-trigger" id="game-open" style="bottom: 90px;">♻️</button>
 
 <script src="../data.js"></script>
 <script src="../main.js"></script>

@@ -65,6 +65,172 @@
       }
     </style>
   
+
+    <style>
+      .content-section p {
+        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
+        padding: 18px 24px;
+        border-radius: 4px;
+        border-left: 2px solid var(--green);
+        line-height: 1.8;
+      }
+      /* RICH UX CLASSES */
+      .info-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 24px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        margin-bottom: 25px;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border-color: var(--green);
+      }
+      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
+      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
+      
+      .hl-box {
+        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+        border-left: 4px solid var(--green);
+        padding: 24px 30px;
+        border-radius: 0 8px 8px 0;
+        margin: 25px 0;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      }
+
+      .app-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin: 25px 0;
+      }
+      .app-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 22px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .app-card:hover {
+        border-color: var(--green);
+        background: rgba(255,255,255,0.03);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      }
+      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
+      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
+      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+
+      .feature-list {
+        list-style: none !important;
+        padding: 0 !important;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 25px 0 !important;
+      }
+      .feature-list li {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 18px;
+        border-radius: 8px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        transition: transform 0.2s;
+      }
+      .feature-list li:hover {
+        transform: scale(1.02);
+        border-color: var(--green);
+      }
+      .feature-list li::before { display: none !important; }
+      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
+      .fl-text { display: flex; flex-direction: column; gap: 6px; }
+      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
+      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+
+      @media (max-width: 768px) {
+        .feature-list { grid-template-columns: 1fr; }
+        .info-card { flex-direction: column; }
+      }
+    
+      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
+      .app-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 160px;
+        display: block;
+        padding: 0;
+      }
+      .ac-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .ac-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .feature-list li {
+        position: relative;
+        overflow: hidden;
+        min-height: 120px;
+        display: block;
+        padding: 0;
+        text-align: center;
+      }
+      .fl-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .fl-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .fl-front .fl-icon { margin-bottom: 10px; }
+      .fl-front strong { margin-bottom: 0; }
+
+    </style>
 </head>
 <body>
 
@@ -220,7 +386,12 @@
 
     <section id="history">
       <h2>History</h2>
-      <p>C++ was created by Bjarne Stroustrup at Bell Labs starting in 1979, initially called 'C with Classes'. It added object-oriented features to C while maintaining C's performance. The name C++ (using the increment operator) was coined in 1983. It was standardized as C++98, with major updates in C++11, C++14, C++17, C++20, and C++23. C++11 was a landmark modernization with move semantics, lambdas, range-based for loops, and smart pointers.</p>
+      <div class="info-card">
+        <div class="ic-icon">🕰️</div>
+        <div class="ic-content">
+          <p>C++ was created by Bjarne Stroustrup at Bell Labs starting in 1979, initially called 'C with Classes'. It added object-oriented features to C while maintaining C's performance. The name C++ (using the increment operator) was coined in 1983. It was standardized as C++98, with major updates in C++11, C++14, C++17, C++20, and C++23. C++11 was a landmark modernization with move semantics, lambdas, range-based for loops, and smart pointers.</p>
+        </div>
+      </div>
     </section>
 
     <section id="images">
@@ -239,30 +410,130 @@
 
     <section id="why">
       <h2>Why We Use C++</h2>
-      <p>C++ provides the control of C with the abstraction power of OOP and generic programming (templates). This combination — zero-cost abstractions — makes it ideal for software where every nanosecond matters: game engines (Unreal Engine), browsers (Chrome V8, Firefox Gecko), scientific computing, high-frequency trading, and embedded systems with more resources than pure C projects.</p>
+      <div class="hl-box">
+        C++ provides the control of C with the abstraction power of OOP and generic programming (templates). This combination — zero-cost abstractions — makes it ideal for software where every nanosecond matters: game engines (Unreal Engine), browsers (Chrome V8, Firefox Gecko), scientific computing, high-frequency trading, and embedded systems with more resources than pure C projects.
+      </div>
     </section>
 
     <section id="applications">
       <h2>Applications &amp; Use Cases</h2>
-      <ul>
-      <li>Game engines: Unreal Engine, id Tech, CryEngine</li>
-      <li>Browsers: Chrome (V8, Blink), Firefox (Gecko, SpiderMonkey)</li>
-      <li>Operating system components (Windows, macOS internals)</li>
-      <li>High-frequency trading platforms</li>
-      <li>Computer vision libraries (OpenCV)</li>
-      <li>Scientific and numerical computing (ROOT at CERN)</li>
-      </ul>
+      <div class="app-grid">
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">⚙️</span>
+            <span class="ac-title">Game engines</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Unreal Engine, id Tech, CryEngine</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🔌</span>
+            <span class="ac-title">Browsers</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Chrome (V8, Blink), Firefox (Gecko, SpiderMonkey)</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🗄️</span>
+            <span class="ac-title">Operating system components...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Operating system components (Windows, macOS internals)</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🐍</span>
+            <span class="ac-title">High-frequency trading platforms</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">High-frequency trading platforms</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🚀</span>
+            <span class="ac-title">Computer vision libraries (OpenCV)</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Computer vision libraries (OpenCV)</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🛠️</span>
+            <span class="ac-title">Scientific and numerical...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Scientific and numerical computing (ROOT at CERN)</span>
+          </div>
+        </div>
+        
+      </div>
     </section>
 
     <section id="facts">
       <h2>Key Facts &amp; Features</h2>
-      <ul>
-      <li>RAII (Resource Acquisition Is Initialization): destructors handle cleanup</li>
-      <li>Templates enable generic programming with zero runtime cost</li>
-      <li>STL (Standard Template Library): vector, map, set, algorithm</li>
-      <li>Smart pointers (unique_ptr, shared_ptr) replace manual memory management</li>
-      <li>C++20 added concepts, coroutines, ranges, and modules</li>
-      <li>Compilers: GCC, Clang, MSVC; tools: CMake, vcpkg, Conan</li>
+      <ul class="feature-list">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🧠</span>
+            <strong>RAII (Resource Acquisition Is Initialization)</strong>
+          </div>
+          <div class="fl-back">
+            <span>destructors handle cleanup</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎯</span>
+            <strong>Templates enable generic</strong>
+          </div>
+          <div class="fl-back">
+            <span>Templates enable generic programming with zero runtime cost</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚡</span>
+            <strong>STL (Standard Template Library)</strong>
+          </div>
+          <div class="fl-back">
+            <span>vector, map, set, algorithm</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚠️</span>
+            <strong>Smart pointers (unique_ptr,</strong>
+          </div>
+          <div class="fl-back">
+            <span>Smart pointers (unique_ptr, shared_ptr) replace manual memory management</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📌</span>
+            <strong>C++20 added concepts,</strong>
+          </div>
+          <div class="fl-back">
+            <span>C++20 added concepts, coroutines, ranges, and modules</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💡</span>
+            <strong>Compilers</strong>
+          </div>
+          <div class="fl-back">
+            <span>GCC, Clang, MSVC; tools: CMake, vcpkg, Conan</span>
+          </div>
+        </li>
+        
       </ul>
     </section>
 
@@ -270,19 +541,75 @@
       <h2>Where to Learn</h2>
 
       <h3>Online Courses</h3>
-      <ul>
-      <li>Udemy – Beginning C++ Programming – From Beginner to Beyond – Frank Mitropoulos</li>
-      <li>learncpp.com — free comprehensive C++ tutorial</li>
-      <li>Coursera – C++ for C Programmers (UC Santa Cruz)</li>
-      <li>CppCon YouTube channel — conference talks (free)</li>
-      </ul>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎓</span>
+            <strong>Udemy</strong>
+          </div>
+          <div class="fl-back">
+            <span>Beginning C++ Programming – From Beginner to Beyond – Frank Mitropoulos</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💻</span>
+            <strong>learncpp.com</strong>
+          </div>
+          <div class="fl-back">
+            <span>free comprehensive C++ tutorial</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📘</span>
+            <strong>Coursera</strong>
+          </div>
+          <div class="fl-back">
+            <span>C++ for C Programmers (UC Santa Cruz)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📙</span>
+            <strong>CppCon YouTube channel</strong>
+          </div>
+          <div class="fl-back">
+            <span>conference talks (free)</span>
+          </div>
+        </li>
+              </ul>
 
       <h3>Books &amp; References</h3>
-      <ul>
-      <li>'A Tour of C++' – Bjarne Stroustrup (concise modern overview)</li>
-      <li>'The C++ Programming Language' – Bjarne Stroustrup (comprehensive)</li>
-      <li>'Effective Modern C++' – Scott Meyers</li>
-      </ul>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎓</span>
+            <strong>'A Tour of C++'</strong>
+          </div>
+          <div class="fl-back">
+            <span>Bjarne Stroustrup (concise modern overview)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💻</span>
+            <strong>'The C++ Programming Language'</strong>
+          </div>
+          <div class="fl-back">
+            <span>Bjarne Stroustrup (comprehensive)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📘</span>
+            <strong>'Effective Modern C++'</strong>
+          </div>
+          <div class="fl-back">
+            <span>Scott Meyers</span>
+          </div>
+        </li>
+              </ul>
     </section>
   </main>
 </div>
@@ -312,34 +639,24 @@
 </footer>
 
 
+<!-- ─── CLI TERMINAL OVERLAY ─── -->
+<div id="terminal-overlay">
+  <div class="term-header">
+    <span>USCS_OS v1.0.4 — TERMINAL_ACCESS</span>
+    <span id="term-time"></span>
+  </div>
+  <div id="term-output">
+    <span class="term-line">System initialized. Type 'help' to see available commands.</span>
+  </div>
+  <div class="term-input-wrap">
+    <span class="term-prompt">visitor@uscs:~$</span>
+    <input type="text" id="term-input" placeholder="Type a command..." autocomplete="off">
+  </div>
+  <span class="term-hint">Press 'ESC' to close terminal</span>
+</div>
+
 <button class="cli-trigger" id="cli-open">_></button>
 
-<!-- ─── WASTE GAME OVERLAY ─── -->
-<div id="game-overlay">
-  <div class="game-hdr">
-    <div class="gh-left">
-      <span class="g-title">WASTE_SORTER_v1.0</span>
-      <div class="g-stats">
-        <span>SCORE: <span id="g-score">000</span></span>
-        <span>TIME: <span id="g-timer">30s</span></span>
-      </div>
-    </div>
-    <button class="g-close" id="game-close">✕</button>
-  </div>
-  <div id="game-canvas">
-    <div class="g-start-screen" id="game-start">
-      <h2>CLEAN THE CAMPUS</h2>
-      <p>Drag the falling e-waste into the correct bins before they hit the ground.</p>
-      <button class="btn-primary" id="game-start-btn">INITIALIZE MISSION</button>
-    </div>
-  </div>
-  <div class="game-bins">
-    <div class="g-bin" data-type="recycle"><span class="bin-icon">♻️</span><span class="bin-lbl">RECYCLABLE</span></div>
-    <div class="g-bin" data-type="toxic"><span class="bin-icon">⚠️</span><span class="bin-lbl">TOXIC WASTE</span></div>
-    <div class="g-bin" data-type="art"><span class="bin-icon">🎨</span><span class="bin-lbl">ART MATERIAL</span></div>
-  </div>
-</div>
-<button class="cli-trigger" id="game-open" style="bottom: 90px;">♻️</button>
 
 <script src="../data.js"></script>
 <script src="../main.js"></script>

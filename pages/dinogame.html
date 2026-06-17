@@ -7,41 +7,41 @@
   <link rel="stylesheet" href="../styles.css">
 
   <!-- TECH THEME OVERRIDE -->
-  <script>window.TECH_THEME_COLOR = '#fcc624';</script>
+  <script>window.TECH_THEME_COLOR = '#535353';</script>
   <style>
     :root {
-      --green: #fcc624 !important;
-      --cyan: #fcc624 !important;
-      --aura-color: #fcc624 !important;
-      --aura-glow: rgba(252,198,36,.12) !important;
+      --green: #535353 !important;
+      --cyan: #535353 !important;
+      --aura-color: #535353 !important;
+      --aura-glow: rgba(83,83,83,.12) !important;
     }
-    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #fcc624 !important; }
-    .content-section hr { background: linear-gradient(90deg, #fcc624, transparent) !important; }
-    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #fcc624 !important; }
-    #scroll-progress { background: #fcc624 !important; box-shadow: 0 0 10px #fcc624 !important; }
-    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(252,198,36,.12) !important; }
-    .nav-ticker-item.active { border-bottom: 1px solid #fcc624 !important; }
-    .btn-primary { background: #fcc624 !important; }
-    .btn-primary:hover { box-shadow: 0 0 30px rgba(252,198,36,.12) !important; }
-    .hero-eyebrow .pulse { background: #fcc624 !important; box-shadow: 0 0 10px #fcc624 !important; }
+    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #535353 !important; }
+    .content-section hr { background: linear-gradient(90deg, #535353, transparent) !important; }
+    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #535353 !important; }
+    #scroll-progress { background: #535353 !important; box-shadow: 0 0 10px #535353 !important; }
+    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(83,83,83,.12) !important; }
+    .nav-ticker-item.active { border-bottom: 1px solid #535353 !important; }
+    .btn-primary { background: #535353 !important; }
+    .btn-primary:hover { box-shadow: 0 0 30px rgba(83,83,83,.12) !important; }
+    .hero-eyebrow .pulse { background: #535353 !important; box-shadow: 0 0 10px #535353 !important; }
   </style>
 
     <style>
       .content-section h2 {
         display: inline-block;
         padding-bottom: 8px;
-        border-bottom: 1px solid #fcc62440;
+        border-bottom: 1px solid #53535340;
         position: relative;
-        text-shadow: 0 0 20px rgba(252,198,36,.12);
+        text-shadow: 0 0 20px rgba(83,83,83,.12);
       }
       .content-section h2::before {
         content: '>>';
         font-family: var(--font-mono);
-        color: #fcc624;
+        color: #535353;
         margin-right: 12px;
         font-size: 1.5rem;
         opacity: 0.7;
-        text-shadow: 0 0 10px #fcc62480;
+        text-shadow: 0 0 10px #53535380;
       }
       .content-section ul li {
         position: relative;
@@ -53,7 +53,7 @@
         position: absolute;
         left: 0;
         top: 2px;
-        color: #fcc624;
+        color: #535353;
         font-size: 0.8rem;
         opacity: 0.8;
       }
@@ -61,10 +61,176 @@
         background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
         padding: 18px 24px;
         border-radius: 4px;
-        border-left: 2px solid #fcc62430;
+        border-left: 2px solid #53535330;
       }
     </style>
   
+
+    <style>
+      .content-section p {
+        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
+        padding: 18px 24px;
+        border-radius: 4px;
+        border-left: 2px solid var(--green);
+        line-height: 1.8;
+      }
+      /* RICH UX CLASSES */
+      .info-card {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 24px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
+        margin-bottom: 25px;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        border-color: var(--green);
+      }
+      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
+      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
+      
+      .hl-box {
+        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+        border-left: 4px solid var(--green);
+        padding: 24px 30px;
+        border-radius: 0 8px 8px 0;
+        margin: 25px 0;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      }
+
+      .app-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin: 25px 0;
+      }
+      .app-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 22px;
+        border-radius: 8px;
+        transition: all 0.3s;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .app-card:hover {
+        border-color: var(--green);
+        background: rgba(255,255,255,0.03);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      }
+      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
+      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
+      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+
+      .feature-list {
+        list-style: none !important;
+        padding: 0 !important;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin: 25px 0 !important;
+      }
+      .feature-list li {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        padding: 18px;
+        border-radius: 8px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+        transition: transform 0.2s;
+      }
+      .feature-list li:hover {
+        transform: scale(1.02);
+        border-color: var(--green);
+      }
+      .feature-list li::before { display: none !important; }
+      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
+      .fl-text { display: flex; flex-direction: column; gap: 6px; }
+      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
+      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+
+      @media (max-width: 768px) {
+        .feature-list { grid-template-columns: 1fr; }
+        .info-card { flex-direction: column; }
+      }
+    
+      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
+      .app-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 160px;
+        display: block;
+        padding: 0;
+      }
+      .ac-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .ac-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        padding: 22px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .app-card:hover .ac-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .feature-list li {
+        position: relative;
+        overflow: hidden;
+        min-height: 120px;
+        display: block;
+        padding: 0;
+        text-align: center;
+      }
+      .fl-front {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-front {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      .fl-back {
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        padding: 18px;
+        background: rgba(255,255,255,0.02);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
+      }
+      .feature-list li:hover .fl-back {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .fl-front .fl-icon { margin-bottom: 10px; }
+      .fl-front strong { margin-bottom: 0; }
+
+    </style>
 </head>
 <body>
 
@@ -184,15 +350,15 @@
   <div class="hero-orb o1"></div>
   <div class="hero-grid"></div>
   <div class="hero-content-wrap" style="display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; flex-wrap: wrap; margin-top: 20px;">
-    <div class="reveal in d1" style="background: rgba(252,198,36,.12); border: 1px solid #fcc62440; padding: 30px; border-radius: 28px; box-shadow: 0 15px 40px rgba(252,198,36,.12); display: flex; align-items: center; justify-content: center;">
-      <img src="../icon/dinosaur-game-logo-png.png" style="width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 20px #fcc624);" class="tech-hero-img">
+    <div class="reveal in d1" style="background: rgba(83,83,83,.12); border: 1px solid #53535340; padding: 30px; border-radius: 28px; box-shadow: 0 15px 40px rgba(83,83,83,.12); display: flex; align-items: center; justify-content: center;">
+      <img src="../icon/dinosaur-game-logo-png.png" style="width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 20px #535353);" class="tech-hero-img">
     </div>
     <div style="display: flex; flex-direction: column; align-items: flex-start;">
-      <div class="hero-eyebrow reveal in d2" style="border-color: #fcc62440; background: rgba(252,198,36,.12); color: #fcc624; margin-bottom: 15px;">
-        <span class="pulse" style="background: #fcc624; animation: none; box-shadow: 0 0 10px #fcc624;"></span>
+      <div class="hero-eyebrow reveal in d2" style="border-color: #53535340; background: rgba(83,83,83,.12); color: #535353; margin-bottom: 15px;">
+        <span class="pulse" style="background: #535353; animation: none; box-shadow: 0 0 10px #535353;"></span>
         DOCUMENTATION ARCHIVE
       </div>
-      <h1 class="reveal in d3" style="margin-bottom: 0; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1; letter-spacing: 2px; text-shadow: 0 0 30px rgba(252,198,36,.12);">
+      <h1 class="reveal in d3" style="margin-bottom: 0; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1; letter-spacing: 2px; text-shadow: 0 0 30px rgba(83,83,83,.12);">
         <span style="color: #fff;">Dino Game</span>
       </h1>
       <p class="hero-tech-desc reveal in d4" style="margin-top: 15px; margin-bottom: 0; font-size: 1rem; color: var(--text2); max-width: 400px; font-weight: 300; line-height: 1.6; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 15px;">The iconic 'No Internet' Easter egg game in Google Chrome.</p>
@@ -201,7 +367,7 @@
 </section>
 
 <div class="subpage-container section-z" style="position: relative; overflow: hidden;">
-<div class="tech-watermark" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-family: var(--font-disp); font-size: clamp(8rem, 20vw, 25rem); color: #fcc624; opacity: 0.03; pointer-events: none; z-index: -1; white-space: nowrap; user-select: none;">Dino Game</div>
+<div class="tech-watermark" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-family: var(--font-disp); font-size: clamp(8rem, 20vw, 25rem); color: #535353; opacity: 0.03; pointer-events: none; z-index: -1; white-space: nowrap; user-select: none;">Dino Game</div>
   
   <!-- SIDEBAR NAVIGATION -->
   <aside class="sidebar">
@@ -220,7 +386,12 @@
 
     <section id="history">
       <h2>History</h2>
-      <p>The Chrome Dino game (officially called 'Dinosaur Game' or 'T-Rex Game') was created by Sebastien Gabriel, Alan Bettes, and Edward Jung at Google and launched in September 2014 with Chrome 35. It appears automatically when Chrome detects no internet connection. The dinosaur jumps over cacti and ducks under pterodactyls. It was deliberately kept secret for months. Since launch it has been played 270 million times per month. It also became an easter egg — type chrome://dino to play anytime.</p>
+      <div class="info-card">
+        <div class="ic-icon">🕰️</div>
+        <div class="ic-content">
+          <p>The Chrome Dino game (officially called 'Dinosaur Game' or 'T-Rex Game') was created by Sebastien Gabriel, Alan Bettes, and Edward Jung at Google and launched in September 2014 with Chrome 35. It appears automatically when Chrome detects no internet connection. The dinosaur jumps over cacti and ducks under pterodactyls. It was deliberately kept secret for months. Since launch it has been played 270 million times per month. It also became an easter egg — type chrome://dino to play anytime.</p>
+        </div>
+      </div>
     </section>
 
     <section id="images">
@@ -239,30 +410,130 @@
 
     <section id="why">
       <h2>Why We Use Chrome Dino Game</h2>
-      <p>The Chrome Dino game demonstrates elegant minimalist game design: one mechanic (jump timing), exponential difficulty scaling, procedural obstacle generation, and addictive simplicity. It is a remarkable case study in delivering value under extreme constraint — the entire game fits in a small JavaScript/HTML Canvas bundle embedded in Chrome's browser engine. It also shows Google's culture of delightful Easter eggs in products.</p>
+      <div class="hl-box">
+        The Chrome Dino game demonstrates elegant minimalist game design: one mechanic (jump timing), exponential difficulty scaling, procedural obstacle generation, and addictive simplicity. It is a remarkable case study in delivering value under extreme constraint — the entire game fits in a small JavaScript/HTML Canvas bundle embedded in Chrome's browser engine. It also shows Google's culture of delightful Easter eggs in products.
+      </div>
     </section>
 
     <section id="applications">
       <h2>Applications &amp; Use Cases</h2>
-      <ul>
-      <li>Offline browser entertainment</li>
-      <li>Speed-running and high score competition (world record: 99,999)</li>
-      <li>Accessibility study: minimal input (spacebar/tap/arrow) for one-hand play</li>
-      <li>Game design case study in minimalism and difficulty curves</li>
-      <li>Programming tutorial target: many developers recreate it as a learning project</li>
-      <li>Cultural icon: merchandise, references in pop culture and memes</li>
-      </ul>
+      <div class="app-grid">
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">⚙️</span>
+            <span class="ac-title">Offline browser entertainment</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Offline browser entertainment</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🔌</span>
+            <span class="ac-title">Speed-running and high score competition (world record</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">99,999)</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🗄️</span>
+            <span class="ac-title">Accessibility study</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">minimal input (spacebar/tap/arrow) for one-hand play</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🐍</span>
+            <span class="ac-title">Game design case...</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">Game design case study in minimalism and difficulty curves</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🚀</span>
+            <span class="ac-title">Programming tutorial target</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">many developers recreate it as a learning project</span>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="ac-front">
+            <span class="ac-icon">🛠️</span>
+            <span class="ac-title">Cultural icon</span>
+          </div>
+          <div class="ac-back">
+            <span class="ac-desc">merchandise, references in pop culture and memes</span>
+          </div>
+        </div>
+        
+      </div>
     </section>
 
     <section id="facts">
       <h2>Key Facts &amp; Features</h2>
-      <ul>
-      <li>Written in JavaScript and HTML5 Canvas</li>
-      <li>Obstacle speed increases from ~6 units/s to ~13 units/s (resets at 99,999 points)</li>
-      <li>Pterodactyls appear at score 450+, flying at three heights</li>
-      <li>Night mode (inverted colors) activates at score 700 and toggles every 700 points</li>
-      <li>Full dark theme (night/day cycle) added in 2018 to reduce eye strain</li>
-      <li>Source code is visible at chrome://dino in DevTools</li>
+      <ul class="feature-list">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🧠</span>
+            <strong>Written in JavaScript</strong>
+          </div>
+          <div class="fl-back">
+            <span>Written in JavaScript and HTML5 Canvas</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎯</span>
+            <strong>Obstacle speed increases</strong>
+          </div>
+          <div class="fl-back">
+            <span>Obstacle speed increases from ~6 units/s to ~13 units/s (resets at 99,999 points)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚡</span>
+            <strong>Pterodactyls appear at</strong>
+          </div>
+          <div class="fl-back">
+            <span>Pterodactyls appear at score 450+, flying at three heights</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">⚠️</span>
+            <strong>Night mode (inverted</strong>
+          </div>
+          <div class="fl-back">
+            <span>Night mode (inverted colors) activates at score 700 and toggles every 700 points</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📌</span>
+            <strong>Full dark theme</strong>
+          </div>
+          <div class="fl-back">
+            <span>Full dark theme (night/day cycle) added in 2018 to reduce eye strain</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💡</span>
+            <strong>Source code is visible at chrome</strong>
+          </div>
+          <div class="fl-back">
+            <span>//dino in DevTools</span>
+          </div>
+        </li>
+        
       </ul>
     </section>
 
@@ -270,18 +541,66 @@
       <h2>Where to Learn</h2>
 
       <h3>Online Courses</h3>
-      <ul>
-      <li>chrome://dino — play it right now in Chrome or Edge</li>
-      <li>Ania Kubów YouTube – Build Chrome Dino in JavaScript (free tutorial)</li>
-      <li>freeCodeCamp – JavaScript game development tutorials</li>
-      </ul>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎓</span>
+            <strong>chrome://dino</strong>
+          </div>
+          <div class="fl-back">
+            <span>play it right now in Chrome or Edge</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💻</span>
+            <strong>Ania Kubów YouTube</strong>
+          </div>
+          <div class="fl-back">
+            <span>Build Chrome Dino in JavaScript (free tutorial)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📘</span>
+            <strong>freeCodeCamp</strong>
+          </div>
+          <div class="fl-back">
+            <span>JavaScript game development tutorials</span>
+          </div>
+        </li>
+              </ul>
 
       <h3>Books &amp; References</h3>
-      <ul>
-      <li>'The Art of Game Design' – Jesse Schell (principles seen in Dino game)</li>
-      <li>Chrome DevTools documentation (developer.chrome.com) — inspect the game source</li>
-      <li>JavaScript.info – Canvas API for building browser games</li>
-      </ul>
+      <ul class="feature-list" style="margin-top: 15px !important;">
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">🎓</span>
+            <strong>'The Art of Game Design'</strong>
+          </div>
+          <div class="fl-back">
+            <span>Jesse Schell (principles seen in Dino game)</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">💻</span>
+            <strong>Chrome DevTools documentation (developer.chrome.com)</strong>
+          </div>
+          <div class="fl-back">
+            <span>inspect the game source</span>
+          </div>
+        </li>
+        <li>
+          <div class="fl-front">
+            <span class="fl-icon">📘</span>
+            <strong>JavaScript.info</strong>
+          </div>
+          <div class="fl-back">
+            <span>Canvas API for building browser games</span>
+          </div>
+        </li>
+              </ul>
     </section>
   </main>
 </div>
@@ -311,34 +630,24 @@
 </footer>
 
 
+<!-- ─── CLI TERMINAL OVERLAY ─── -->
+<div id="terminal-overlay">
+  <div class="term-header">
+    <span>USCS_OS v1.0.4 — TERMINAL_ACCESS</span>
+    <span id="term-time"></span>
+  </div>
+  <div id="term-output">
+    <span class="term-line">System initialized. Type 'help' to see available commands.</span>
+  </div>
+  <div class="term-input-wrap">
+    <span class="term-prompt">visitor@uscs:~$</span>
+    <input type="text" id="term-input" placeholder="Type a command..." autocomplete="off">
+  </div>
+  <span class="term-hint">Press 'ESC' to close terminal</span>
+</div>
+
 <button class="cli-trigger" id="cli-open">_></button>
 
-<!-- ─── WASTE GAME OVERLAY ─── -->
-<div id="game-overlay">
-  <div class="game-hdr">
-    <div class="gh-left">
-      <span class="g-title">WASTE_SORTER_v1.0</span>
-      <div class="g-stats">
-        <span>SCORE: <span id="g-score">000</span></span>
-        <span>TIME: <span id="g-timer">30s</span></span>
-      </div>
-    </div>
-    <button class="g-close" id="game-close">✕</button>
-  </div>
-  <div id="game-canvas">
-    <div class="g-start-screen" id="game-start">
-      <h2>CLEAN THE CAMPUS</h2>
-      <p>Drag the falling e-waste into the correct bins before they hit the ground.</p>
-      <button class="btn-primary" id="game-start-btn">INITIALIZE MISSION</button>
-    </div>
-  </div>
-  <div class="game-bins">
-    <div class="g-bin" data-type="recycle"><span class="bin-icon">♻️</span><span class="bin-lbl">RECYCLABLE</span></div>
-    <div class="g-bin" data-type="toxic"><span class="bin-icon">⚠️</span><span class="bin-lbl">TOXIC WASTE</span></div>
-    <div class="g-bin" data-type="art"><span class="bin-icon">🎨</span><span class="bin-lbl">ART MATERIAL</span></div>
-  </div>
-</div>
-<button class="cli-trigger" id="game-open" style="bottom: 90px;">♻️</button>
 
 <script src="../data.js"></script>
 <script src="../main.js"></script>
