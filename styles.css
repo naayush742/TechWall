@@ -2009,3 +2009,7 @@ footer { background:var(--bg); border-top:1px solid var(--border); padding:70px 
   .calc-inputs { grid-template-columns: 1fr; }
   .calc-results { grid-template-columns: 1fr 1fr; gap: 20px; }
 }
+
+/* SMART LINK ARROWS */
+.feature-list li .link-arrow { transition: all 0.3s; }
+.feature-list li:hover .link-arrow { opacity: 1 !important; color: var(--green); transform: scale(1.2); }

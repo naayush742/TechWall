@@ -28,7 +28,7 @@ if (cursor && cursorRing) {
 }
 
 function initCursorHover() {
-  document.querySelectorAll('a,button,.tc,.s-card,.f-pill,.g-cell,.wall-cell').forEach(el => {
+  document.querySelectorAll('a,button,.tc,.s-card,.f-pill,.g-cell,.wall-cell,.feature-list li').forEach(el => {
     el.addEventListener('mouseenter', () => document.body.classList.add('cursor-big'));
     el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-big'));
   });
@@ -554,6 +554,12 @@ const commands = {
     addTermLine(' - go [page]: Navigate to a section (e.g., go cloud, go webdev)', 'res');
     addTermLine(' - list: List all technologies on the wall', 'res');
     addTermLine(' - aura [color]: Change the site aura (cyan, green, pink, etc.)', 'res');
+    addTermLine(' - sysinfo: Display system and project statistics', 'res');
+    addTermLine(' - ping [target]: Check connection to a server', 'res');
+    addTermLine(' - echo [text]: Print text to the terminal', 'res');
+    addTermLine(' - date: Display the current system time', 'res');
+    addTermLine(' - theme: Toggle light/dark mode', 'res');
+    addTermLine(' - sudo: Execute a command as superuser', 'res');
     addTermLine(' - exit: Close the terminal', 'res');
   },
   clear: () => { if (termOutput) termOutput.innerHTML = ''; },
@@ -562,6 +568,36 @@ const commands = {
     addTermLine('TECH STACK ON THE WALL:', 'res');
     const techNames = techs.map(t => t.name).join(', ');
     addTermLine(techNames, 'res');
+  },
+  sysinfo: () => {
+    addTermLine('OS: USCS_OS v1.0.4 (Web Environment)', 'res');
+    addTermLine(`USER_AGENT: ${navigator.userAgent}`, 'res');
+    let count = parseInt(localStorage.getItem('uscs-visitor-count')) || 0;
+    addTermLine(`TOTAL_VISITORS_LOGGED: ${count}`, 'res');
+    addTermLine('STATUS: Installation in Progress. All systems nominal.', 'res');
+  },
+  date: () => {
+    addTermLine(new Date().toString(), 'res');
+  },
+  echo: (args) => {
+    addTermLine(args.join(' '), 'res');
+  },
+  theme: () => {
+    addTermLine('Access Denied: USCS E-WALL operates exclusively in dark mode to conserve energy.', 'error');
+  },
+  sudo: (args) => {
+    addTermLine('visitor is not in the sudoers file. This incident will be reported.', 'error');
+  },
+  ping: (args) => {
+    const target = args[0] || 'localhost';
+    addTermLine(`Pinging ${target}...`, 'res');
+    setTimeout(() => {
+      addTermLine(`64 bytes from ${target}: icmp_seq=1 ttl=119 time=${(Math.random() * 20 + 5).toFixed(1)} ms`, 'res');
+      setTimeout(() => {
+        addTermLine(`64 bytes from ${target}: icmp_seq=2 ttl=119 time=${(Math.random() * 20 + 5).toFixed(1)} ms`, 'res');
+        setTimeout(() => addTermLine(`--- ${target} ping statistics ---\n2 packets transmitted, 2 received, 0% packet loss`, 'res'), 600);
+      }, 600);
+    }, 600);
   },
   who: (args) => {
     if (!args[0]) {
