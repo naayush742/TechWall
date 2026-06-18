@@ -188,7 +188,7 @@
         </div>
         <div class="period-arrow">
           <span class="period-line"></span>
-          <span class="period-tag">6 MONTHS IN PROGRESS</span>
+          <span class="period-tag">WASTE TRANSFORMED INTO ART</span>
           <span class="period-line"></span>
         </div>
         <div class="period-block">
@@ -499,7 +499,7 @@
 <!-- <section class="gallery-section section-z" id="gallery"> 
   <div class="gallery-center">
     <div class="eyebrow reveal">Visual Preview</div>
-    <h2 class="s-heading reveal d1">The Wall<br><span class="hl">In Progress</span></h2>
+    <h2 class="s-heading reveal d1">The Wall<br><span class="hl">Exhibition</span></h2>
     <p class="s-body reveal d2" style="margin:0 auto">From raw components to assembled icons — a glimpse into the process.</p>
   </div>
 
@@ -625,6 +625,12 @@
           <option value="desktop">Desktop PC Tower</option>
           <option value="phone">Smartphone / Tablet</option>
           <option value="monitor">LCD / LED Monitor</option>
+          <option value="motherboard">Motherboard (Desktop)</option>
+          <option value="gpu">Graphics Card (GPU)</option>
+          <option value="ram">RAM Stick / Module</option>
+          <option value="hard_drive">Hard Drive (HDD/SSD)</option>
+          <option value="printer">Printer / Scanner</option>
+          <option value="smps">Power Supply (SMPS)</option>
           <option value="keyboard">Keyboard / Mouse</option>
         </select>
       </div>
@@ -665,7 +671,7 @@
       </div>
     </div>
       <div class="calc-note">
-        *Estimates based on average component yields from EPA data. Shows valuable materials recovered and toxic chemicals (Lead, Mercury) kept out of soil and water.
+        *Estimates are calculated based on average electronic component yields sourced from <strong>EPA (Environmental Protection Agency)</strong> research data. <a href="https://www.epa.gov/recycle/electronics-donation-and-recycling" target="_blank" style="color:var(--cyan); text-decoration:underline;">View Research Data</a>. These figures show the valuable materials recovered and toxic chemicals (Lead, Mercury) diverted from soil and water.
       </div>
   </div>
 </section>
@@ -746,20 +752,70 @@
   </div>
   <div class="footer-btm">
     <span class="f-copy">© 2026 USCS E-WALL PROJECT — BUILT FROM WHAT OTHERS DISCARDED</span>
-    <span class="f-status"><span class="f-dot"></span>INSTALLATION IN PROGRESS</span>
+    <span class="f-status"><span class="f-dot"></span>INSTALLATION LIVE</span>
   </div>
 </footer>
 
 <!-- ─── AURA CONTROL UI ─── -->
 <div class="aura-ctrl">
   <div class="aura-panel">
-    <button class="aura-btn active" data-aura="cyan" title="Cyan Aura"></button>
-    <button class="aura-btn" data-aura="green" title="Matrix Green"></button>
-    <button class="aura-btn" data-aura="pink" title="Cyberpunk Pink"></button>
-    <button class="aura-btn" data-aura="orange" title="Flame Orange"></button>
-    <button class="aura-btn" data-aura="purple" title="Void Purple"></button>
+    <div class="ap-header">
+      <div class="ap-dots"><span></span><span></span><span></span></div>
+      <span class="ap-title">AURA_CALIBRATION</span>
+    </div>
+    <div class="ap-grid">
+      <button class="aura-btn active" data-aura="azure">
+        <span class="ab-box"></span>
+        <span class="ab-label">AZURE</span>
+      </button>
+      <button class="aura-btn" data-aura="green">
+        <span class="ab-box"></span>
+        <span class="ab-label">MATRIX</span>
+      </button>
+      <button class="aura-btn" data-aura="red">
+        <span class="ab-box"></span>
+        <span class="ab-label">PLASMA</span>
+      </button>
+      <button class="aura-btn" data-aura="orange">
+        <span class="ab-box"></span>
+        <span class="ab-label">FLAME</span>
+      </button>
+      <button class="aura-btn" data-aura="purple">
+        <span class="ab-box"></span>
+        <span class="ab-label">VOID</span>
+      </button>
+    </div>
+
+    <div class="ap-header" style="border-top:1px solid var(--border)">
+      <span class="ap-title">SYSTEM_MODS</span>
+    </div>
+    <div class="ap-grid">
+      <button class="aura-btn" onclick="toggleGlitch()" id="glitch-toggle">
+        <span class="ab-box" style="background:var(--text2); border-radius:2px;"></span>
+        <span class="ab-label">GLITCH_MODE</span>
+      </button>
+      <button class="aura-btn active" onclick="toggleCRT()" id="crt-toggle">
+        <span class="ab-box" style="background:var(--text2); border-radius:2px;"></span>
+        <span class="ab-label">CRT_FILTER</span>
+      </button>
+      <button class="aura-btn active" onclick="toggleTrail()" id="trail-toggle">
+        <span class="ab-box" style="background:var(--text2); border-radius:2px;"></span>
+        <span class="ab-label">BIT_TRAIL</span>
+      </button>
+    </div>
+
+    <div class="ap-footer">
+      <span class="ap-code">SYNC_ACTIVE</span>
+    </div>
   </div>
-  <button class="aura-trigger" title="Personalize Aura">⚡</button>
+  <button class="aura-trigger" title="Personalize Aura"><span>🎨</span></button>
+</div>
+
+<!-- LIVE SYSTEM LOG -->
+<div id="system-log">
+  <div class="log-track" id="log-track">
+    <!-- Managed by JS -->
+  </div>
 </div>
 
 <!-- ─── CLI TERMINAL OVERLAY ─── -->
@@ -779,7 +835,7 @@
 </div>
 
 <!-- CLI TRIGGER -->
-<button class="cli-trigger" id="cli-open" title="Open System Terminal">_></button>
+<button class="cli-trigger" id="cli-open" title="Open System Terminal"><span>🤖</span></button>
 
 <script src="data.js"></script>
 <script src="main.js"></script>

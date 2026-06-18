@@ -473,9 +473,9 @@ if (menuToggle) {
 
 /* ─── AURA THEME LOGIC ─── */
 const auraColors = {
-  cyan:   { hex: '#00d4ff', glow: 'rgba(0, 212, 255, 0.3)' },
+  azure:  { hex: '#007cf0', glow: 'rgba(0, 124, 240, 0.3)' },
   green:  { hex: '#00ff88', glow: 'rgba(0, 255, 136, 0.3)' },
-  pink:   { hex: '#ff4d9b', glow: 'rgba(255, 77, 155, 0.3)' },
+  red:    { hex: '#ff3131', glow: 'rgba(255, 49, 49, 0.3)' },
   orange: { hex: '#ff6b2b', glow: 'rgba(255, 107, 43, 0.3)' },
   purple: { hex: '#9b59ff', glow: 'rgba(155, 89, 255, 0.3)' }
 };
@@ -574,7 +574,7 @@ const commands = {
     addTermLine(`USER_AGENT: ${navigator.userAgent}`, 'res');
     let count = parseInt(localStorage.getItem('uscs-visitor-count')) || 0;
     addTermLine(`TOTAL_VISITORS_LOGGED: ${count}`, 'res');
-    addTermLine('STATUS: Installation in Progress. All systems nominal.', 'res');
+    addTermLine('STATUS: Installation Live. All systems nominal.', 'res');
   },
   date: () => {
     addTermLine(new Date().toString(), 'res');
@@ -672,11 +672,17 @@ window.addEventListener('keydown', e => {
 
 /* ─── IMPACT CALCULATOR LOGIC ─── */
 const deviceImpactData = {
-  laptop:   { gold: 0.2,   copper: 0.5,   plastic: 1.0, co2: 25, lead: 2.5, mercury: 0.5 },
-  desktop:  { gold: 0.5,   copper: 1.5,   plastic: 3.0, co2: 50, lead: 15.0, mercury: 1.2 },
-  phone:    { gold: 0.03,  copper: 0.015, plastic: 0.1, co2: 5,  lead: 0.8, mercury: 0.0 },
-  monitor:  { gold: 0.1,   copper: 0.4,   plastic: 2.0, co2: 20, lead: 20.0, mercury: 4.5 },
-  keyboard: { gold: 0.005, copper: 0.05,  plastic: 0.8, co2: 2,  lead: 0.1, mercury: 0.0 }
+  laptop:      { gold: 0.2,   copper: 0.5,   plastic: 1.0, co2: 25, lead: 2.5, mercury: 0.5 },
+  desktop:     { gold: 0.5,   copper: 1.5,   plastic: 3.0, co2: 50, lead: 15.0, mercury: 1.2 },
+  phone:       { gold: 0.03,  copper: 0.015, plastic: 0.1, co2: 5,  lead: 0.8, mercury: 0.0 },
+  monitor:     { gold: 0.1,   copper: 0.4,   plastic: 2.0, co2: 20, lead: 20.0, mercury: 4.5 },
+  motherboard: { gold: 0.15,  copper: 0.3,   plastic: 0.2, co2: 8,  lead: 2.0, mercury: 0.1 },
+  gpu:         { gold: 0.1,   copper: 0.2,   plastic: 0.15,co2: 12, lead: 1.5, mercury: 0.05 },
+  ram:         { gold: 0.05,  copper: 0.02,  plastic: 0.05,co2: 1,  lead: 0.05, mercury: 0.0 },
+  hard_drive:  { gold: 0.02,  copper: 0.1,   plastic: 0.1, co2: 4,  lead: 0.5, mercury: 0.0 },
+  printer:     { gold: 0.05,  copper: 0.8,   plastic: 4.0, co2: 15, lead: 5.0, mercury: 0.2 },
+  smps:        { gold: 0.01,  copper: 0.5,   plastic: 0.2, co2: 10, lead: 4.0, mercury: 0.1 },
+  keyboard:    { gold: 0.005, copper: 0.05,  plastic: 0.8, co2: 2,  lead: 0.1, mercury: 0.0 }
 };
 
 function initImpactCalc() {
@@ -743,6 +749,106 @@ function animateValue(id, target) {
   }
   requestAnimationFrame(step);
 }
+/* ─── SYSTEM MODS & ADVANCED INTERACTIVITY ─── */
+let glitchActive = false;
+let crtActive = true;
+let trailActive = true;
+
+// Toggle Glitch Mode
+function toggleGlitch() {
+  glitchActive = !glitchActive;
+  document.body.classList.toggle('glitch-active', glitchActive);
+  document.getElementById('glitch-toggle').classList.toggle('active', glitchActive);
+  playBeep(glitchActive ? 600 : 400);
+  addLog(`Glitch Mode: ${glitchActive ? 'ENABLED' : 'DISABLED'}`);
+}
+
+// Toggle CRT Filter
+function toggleCRT() {
+  crtActive = !crtActive;
+  document.body.classList.toggle('crt-off', !crtActive);
+  document.getElementById('crt-toggle').classList.toggle('active', crtActive);
+  playBeep(500);
+  addLog(`CRT Filter: ${crtActive ? 'ENABLED' : 'DISABLED'}`);
+}
+
+// Toggle Bit Trail
+function toggleTrail() {
+  trailActive = !trailActive;
+  document.getElementById('trail-toggle').classList.toggle('active', trailActive);
+  playBeep(trailActive ? 700 : 300);
+  addLog(`Bit Trail: ${trailActive ? 'ENABLED' : 'DISABLED'}`);
+}
+
+// Bit Trail Logic
+document.addEventListener('mousemove', (e) => {
+  if (!trailActive) return;
+  if (Math.random() > 0.85) { // Control density
+    const bit = document.createElement('div');
+    bit.className = 'bit-particle';
+    bit.innerText = Math.round(Math.random());
+    bit.style.left = e.clientX + 'px';
+    bit.style.top = e.clientY + 'px';
+    document.body.appendChild(bit);
+    setTimeout(() => bit.remove(), 1000);
+  }
+});
+
+// Live System Log
+const logMessages = [
+  "Scanning e-waste database...",
+  "Recalibrating aura spectrum...",
+  "Monitoring toxic chemical diversion...",
+  "Processing silicon substrate...",
+  "System nominal. All nodes active.",
+  "New visitor detected on port 8080.",
+  "Diverting mercury from soil sensors...",
+  "Syncing digital twin with physical wall...",
+  "Optimizing pixel-art component mapping..."
+];
+
+function addLog(msg) {
+  const logTrack = document.getElementById('log-track');
+  if (!logTrack) return;
+  const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit' });
+  const item = document.createElement('div');
+  item.className = 'log-item';
+  item.innerHTML = `<span class="log-time">[${time}]</span> ${msg}`;
+  logTrack.prepend(item);
+  if (logTrack.children.length > 10) logTrack.lastChild.remove();
+}
+
+// Auto-generate logs
+setInterval(() => {
+  if (Math.random() > 0.7) {
+    addLog(logMessages[Math.floor(Math.random() * logMessages.length)]);
+  }
+}, 4000);
+
+// Cyber Sound FX (Web Audio API)
+let audioCtx;
+function playBeep(freq = 440, duration = 0.05) {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch(e) {}
+}
+
+// Attach beeps to all buttons
+document.addEventListener('click', (e) => {
+  if (e.target.closest('button') || e.target.closest('a')) {
+    playBeep(550, 0.1);
+  }
+});
 
 /* ─── INIT ─── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -753,6 +859,8 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTermTime();
   initImpactCalc();
   initVisitorCounter();
+  addLog("System initialized. Welcome to USCS E-WALL.");
+  
   const mmLinks = document.querySelectorAll('#mobile-menu a');
   mmLinks.forEach(link => {
     link.addEventListener('click', () => {
