@@ -1420,6 +1420,7 @@ footer { background:var(--bg); border-top:1px solid var(--border); padding:70px 
   flex-direction: column;
   align-items: flex-end;
   gap: 12px;
+  pointer-events: none;
 }
 .aura-panel {
   width: 180px;
@@ -1610,6 +1611,7 @@ body.crt-off #scroll-progress { box-shadow: none; }
     inset 0 0 20px rgba(255, 255, 255, 0.05),
     0 0 30px var(--aura-glow);
   z-index: 9999;
+  pointer-events: auto;
 }
 
 .aura-trigger::before {
