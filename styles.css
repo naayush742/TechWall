@@ -1504,7 +1504,7 @@ body.crt-off #scroll-progress { box-shadow: none; }
   background: var(--aura-color) !important;
   box-shadow: 0 0 10px var(--aura-color);
 }
-.aura-ctrl:hover .aura-panel {
+.aura-ctrl.open .aura-panel {
   transform: translateY(0);
   opacity: 1;
   pointer-events: all;

@@ -482,25 +482,47 @@ const auraColors = {
 
 function initAura() {
   if (IS_SUBPAGE) return; // Subpages use their own tech-specific theme
-  const btns = document.querySelectorAll('.aura-btn');
+  const btns = document.querySelectorAll('.aura-btn[data-aura]');
   const trigger = document.querySelector('.aura-trigger');
-  const savedAura = localStorage.getItem('uscs-aura') || 'cyan';
+  const savedAura = localStorage.getItem('uscs-aura') || 'azure';
   applyAura(savedAura);
 
   btns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
       const color = btn.getAttribute('data-aura');
-      applyAura(color);
-      btns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      localStorage.setItem('uscs-aura', color);
+      if (color) {
+        applyAura(color);
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        localStorage.setItem('uscs-aura', color);
+      }
     });
     if (btn.getAttribute('data-aura') === savedAura) btn.classList.add('active');
+  });
+
+  if (trigger) {
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const ctrl = document.querySelector('.aura-ctrl');
+      if (ctrl) {
+        ctrl.classList.toggle('open');
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    const ctrl = document.querySelector('.aura-ctrl');
+    if (ctrl && ctrl.classList.contains('open')) {
+      if (!ctrl.contains(e.target)) {
+        ctrl.classList.remove('open');
+      }
+    }
   });
 }
 
 function applyAura(colorKey) {
   const aura = auraColors[colorKey];
+  if (!aura) return;
   const root = document.documentElement;
   root.style.setProperty('--aura-color', aura.hex);
   root.style.setProperty('--aura-glow', aura.glow);
@@ -553,7 +575,7 @@ const commands = {
     addTermLine(' - who [name]: Information about team members', 'res');
     addTermLine(' - go [page]: Navigate to a section (e.g., go cloud, go webdev)', 'res');
     addTermLine(' - list: List all technologies on the wall', 'res');
-    addTermLine(' - aura [color]: Change the site aura (cyan, green, pink, etc.)', 'res');
+    addTermLine(' - aura [color]: Change the site aura (azure, green, red, orange, purple)', 'res');
     addTermLine(' - sysinfo: Display system and project statistics', 'res');
     addTermLine(' - ping [target]: Check connection to a server', 'res');
     addTermLine(' - echo [text]: Print text to the terminal', 'res');
@@ -644,7 +666,7 @@ const commands = {
       applyAura(color);
       addTermLine(`Aura sequence initiated. Color set to: ${color}`, 'res');
     } else {
-      addTermLine(`Aura "${color}" not recognized. Valid: cyan, green, pink, orange, purple`, 'error');
+      addTermLine(`Aura "${color}" not recognized. Valid: azure, green, red, orange, purple`, 'error');
     }
   }
 };
