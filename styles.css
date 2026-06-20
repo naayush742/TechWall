@@ -364,12 +364,14 @@ body::after {
 @keyframes orbFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-40px) scale(1.04)} }
 
 .hero-grid {
-  position: absolute; inset: 0;
+  position: absolute; inset: -40px;
   background-image:
     linear-gradient(rgba(0,212,255,0.035) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0,212,255,0.035) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  transform: translate(var(--gyro-grid-x, 0px), var(--gyro-grid-y, 0px));
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hero-content {
@@ -415,7 +417,7 @@ body::after {
   display:block; 
   color:transparent; 
   -webkit-text-stroke:1.2px rgba(208,223,240,0.55); 
-  text-shadow: 0 0 20px rgba(0,255,136,0.1);
+  text-shadow: var(--gyro-x, 0px) var(--gyro-y, 0px) 20px rgba(0,255,136,0.1);
 }
 .hero-title .t2 {
   display:block;
@@ -425,7 +427,7 @@ body::after {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: shimmerText 4s linear infinite;
-  text-shadow: 0 0 40px rgba(0,255,136,0.2);
+  text-shadow: var(--gyro-x, 0px) var(--gyro-y, 0px) 40px rgba(0,255,136,0.2);
 }
 .hero-title .t3 { 
   display:block; 
@@ -517,10 +519,10 @@ body::after {
   font-family: var(--font-disp);
   font-size: 3rem; letter-spacing: 2px;
   color: var(--green); display:block; line-height:1; margin-bottom:6px;
-  text-shadow: 0 0 20px rgba(0,255,136,0.3);
-  transition: text-shadow .3s;
+  text-shadow: var(--gyro-x, 0px) var(--gyro-y, 0px) 20px rgba(0,255,136,0.3);
+  transition: text-shadow .2s ease;
 }
-.stat-item:hover .stat-num { text-shadow:0 0 40px rgba(0,255,136,0.8); }
+.stat-item:hover .stat-num { text-shadow: var(--gyro-x, 0px) var(--gyro-y, 0px) 40px rgba(0,255,136,0.8); }
 .stat-label {
   font-family:var(--font-mono); font-size:0.58rem; color:var(--text2);
   letter-spacing:2px; text-transform:uppercase; display:block;
@@ -629,7 +631,7 @@ body::after {
 }
 .meta-line { font-size: 0.68rem; letter-spacing: 0.5px; }
 .m-lbl { color: var(--text2); opacity: 0.7; }
-.m-val { color: var(--green); text-shadow: 0 0 10px rgba(0, 255, 136, 0.2); }
+.m-val { color: var(--green); text-shadow: var(--gyro-x, 0px) var(--gyro-y, 0px) 10px rgba(0, 255, 136, 0.2); }
 .wall-canvas::before {
   content:''; position:absolute; inset:-1px;
   border:1px solid var(--border2); z-index:3; pointer-events:none;
