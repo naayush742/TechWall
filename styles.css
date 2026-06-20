@@ -998,6 +998,14 @@ body::after {
   opacity: 1;
   transform: translateY(0);
 }
+.mat-card.flipped .mc-front {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.mat-card.flipped .mc-back {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 .mb-label {
   font-family: var(--font-mono);
@@ -1797,19 +1805,19 @@ body.crt-off #scroll-progress { box-shadow: none; }
   .aura-ctrl {
     bottom: 25px;
     right: 20px;
+    gap: 10px;
   }
   .aura-trigger {
-    width: 48px;
-    height: 48px;
-    font-size: 1.6rem;
+    width: 52px;
+    height: 52px;
+    font-size: 1.8rem;
   }
   .aura-panel {
-    padding: 8px;
-    gap: 8px;
-  }
-  .aura-btn {
-    width: 28px;
-    height: 28px;
+    width: 200px;
+    border-radius: 10px;
+    padding: 0;
+    max-height: 65vh;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
   }
 }
 
@@ -2197,33 +2205,43 @@ body.crt-off #scroll-progress { box-shadow: none; }
   outline: none;
   cursor: pointer;
 }
-.qty-ctrl {
+.slider-ctrl {
   display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
   background: var(--bg2);
   border: 1px solid var(--border);
+  padding: 10px 15px;
+  box-sizing: border-box;
 }
-.qty-ctrl button {
-  width: 40px;
+.slider-btn {
   background: transparent;
   border: none;
   color: var(--green);
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  font-family: var(--font-mono);
   cursor: pointer;
-  transition: background 0.2s;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s, background 0.2s;
 }
-.qty-ctrl button:hover { background: rgba(0, 255, 136, 0.1); }
+.slider-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.slider-btn:active {
+  transform: scale(0.9);
+}
 #calc-qty {
   flex: 1;
-  background: transparent;
-  border: none;
-  border-left: 1px solid var(--border);
-  border-right: 1px solid var(--border);
-  color: var(--text);
-  text-align: center;
-  font-family: var(--font-mono);
-  width: 50px;
+  accent-color: var(--green);
+  height: 6px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  outline: none;
 }
-#calc-qty::-webkit-inner-spin-button { display: none; }
 
 .calc-results {
   display: grid;
@@ -2474,4 +2492,217 @@ body.crt-off #scroll-progress { box-shadow: none; }
     12px 1.5px, 1.5px 12px !important;
   background-repeat: no-repeat !important;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ─── PERFORMANCE & TICKER OPTIMIZATIONS ─── */
+.log-track, .ticker-track, .nav-ticker-track {
+  will-change: transform;
+}
+
+/* Touch active states feedback */
+a:active, button:active, .tc:active, .mat-card:active, .s-card:active, .fpill:active, .slider-btn:active {
+  background: var(--aura-glow) !important;
+  box-shadow: 0 0 20px var(--aura-color) !important;
+  transition: none !important;
+}
+
+/* ─── MOBILE ONLY RESPONSIVE LAYOUTS ─── */
+@media (max-width: 768px) {
+  .swipe-hint {
+    display: block !important;
+  }
+  /* Raw Materials Horizontal Swipe Carousel */
+  .mat-grid {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 16px !important;
+    padding: 15px 10px 25px 10px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    margin-top: 25px;
+  }
+  .mat-grid::-webkit-scrollbar {
+    display: none !important;
+  }
+  .mat-card {
+    flex: 0 0 85% !important;
+    scroll-snap-align: center !important;
+    aspect-ratio: 4 / 3 !important;
+    height: auto !important;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px !important;
+  }
+  
+  /* Bottom-Docked Mobile Terminal */
+  #terminal-overlay {
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 40vh !important;
+    padding: 15px !important;
+    border-top: 1px solid var(--border) !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), bottom 0.3s ease, visibility 0.4s !important;
+    display: flex !important;
+    box-sizing: border-box;
+    visibility: hidden;
+  }
+  #terminal-overlay.active {
+    transform: translateY(0) !important;
+    visibility: visible !important;
+  }
+  #term-output {
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+    gap: 6px !important;
+  }
+  .term-input-wrap {
+    padding: 10px 15px !important;
+  }
+  
+  /* Hardware Accelerated Mobile Glitch */
+  body.glitch-active .hero-title, 
+  body.glitch-active .s-heading {
+    text-shadow: none !important;
+    animation: mobileGlitch 1.2s infinite !important;
+  }
+  @keyframes mobileGlitch {
+    0%, 100% { opacity: 1; transform: translate(0); }
+    20% { opacity: 0.9; transform: translate(-2px, 1px); }
+    40% { opacity: 0.95; transform: translate(1px, -1px); }
+    60% { opacity: 1; transform: translate(-1px, -1px); }
+    80% { opacity: 0.85; transform: translate(2px, 1px); }
+  }
+}
+
+/* ─── QR BRIDGE STYLING ─── */
+#qr-bridge-trigger {
+  position: fixed;
+  bottom: 110px;
+  left: 30px;
+  z-index: 9995;
+  width: 64px; height: 64px;
+  background: rgba(0, 212, 255, 0.03);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  cursor: pointer;
+  box-shadow: 
+    inset 0 0 20px rgba(0, 212, 255, 0.05),
+    0 0 30px rgba(0, 212, 255, 0.2);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: qrPulse 2s infinite;
+}
+#qr-bridge-trigger::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  padding: 3px;
+  background: conic-gradient(from 0deg, transparent, var(--cyan), transparent, var(--green), transparent);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: qrRotate 4s linear infinite;
+}
+#qr-bridge-trigger:hover {
+  transform: scale(1.1) translateY(-5px);
+  background: rgba(0, 212, 255, 0.08);
+  box-shadow: 
+    inset 0 0 30px rgba(0, 212, 255, 0.1),
+    0 0 50px rgba(0, 212, 255, 0.4);
+}
+@keyframes qrPulse {
+  0%, 100% { box-shadow: 0 0 30px rgba(0, 212, 255, 0.2); }
+  50% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.05); }
+}
+@keyframes qrRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  #qr-bridge-trigger {
+    bottom: 90px;
+    left: 20px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.6rem;
+  }
+}
+
+#qr-bridge-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 5, 10, 0.95);
+  backdrop-filter: blur(15px);
+  z-index: 2000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 20px;
+}
+#qr-bridge-modal.hidden {
+  display: none;
+}
+.qr-modal-content {
+  width: 100%;
+  max-width: 400px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 30px;
+  box-sizing: border-box;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+.qr-modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.5rem;
+  color: var(--text2);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.qr-modal-close:hover {
+  color: var(--green);
+}
+.qr-links-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.qr-link-item {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text);
+  text-decoration: none;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s;
+  border-radius: 4px;
+}
+.qr-link-item:hover {
+  border-color: var(--cyan);
+  background: rgba(0, 212, 255, 0.05);
+  color: var(--cyan);
+  transform: translateX(4px);
 }

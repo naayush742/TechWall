@@ -64,7 +64,7 @@ if (canvas) {
   let columnSpeeds = [];
   let columnFontSizes = [];
   let columnOpacities = [];
-  const colSpacing = 16; // spacing between columns
+  const colSpacing = window.innerWidth <= 768 ? 32 : 16; // spacing between columns (halved density on mobile)
 
   function initializeMatrix() {
     columnsCount = Math.floor(canvas.width / colSpacing) + 1;
@@ -106,6 +106,10 @@ if (canvas) {
   }
 
   function animMatrix() {
+    if (document.hidden) {
+      requestAnimationFrame(animMatrix);
+      return;
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     for (let i = 0; i < columnsCount; i++) {
@@ -767,7 +771,11 @@ function initImpactCalc() {
     animateValue('res-mercury', (data.mercury * qty).toFixed(2));
   };
   deviceSelect.addEventListener('change', updateResults);
-  qtyInput.addEventListener('input', updateResults);
+  qtyInput.addEventListener('input', () => {
+    const valEl = document.getElementById('calc-qty-val');
+    if (valEl) valEl.textContent = qtyInput.value;
+    updateResults();
+  });
   updateResults();
 }
 
@@ -1038,12 +1046,328 @@ function initBootSequence() {
   });
 }
 
-// Attach beeps to all buttons
+// Attach beeps to all buttons & links
 document.addEventListener('click', (e) => {
   if (e.target.closest('button') || e.target.closest('a')) {
     playBeep(550, 0.1);
   }
 });
+
+// Mobile Haptic Vibration Feedback
+document.addEventListener('touchstart', (e) => {
+  if (e.target.closest('a, button, .tc, .s-card, .fpill, .wall-cell, .slider-btn, .mat-card, .bp-sector, .qr-link-item')) {
+    if (navigator.vibrate) {
+      navigator.vibrate(10); // 10ms haptic feedback pulse
+    }
+  }
+}, { passive: true });
+
+// Visual Viewport Keyboard Adjustment for Mobile Terminal
+if (window.visualViewport) {
+  window.visualViewport.addEventListener('resize', () => {
+    const term = document.getElementById('terminal-overlay');
+    if (term && term.classList.contains('active')) {
+      const keyboardHeight = window.innerHeight - window.visualViewport.height;
+      term.style.bottom = `${keyboardHeight}px`;
+      
+      const termInput = document.getElementById('term-input');
+      if (termInput) {
+        termInput.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  });
+}
+
+// ─── PINCH-TO-ZOOM BLUEPRINT MAP GESTURES ───
+function toggleWallView(view) {
+  const grid = document.getElementById('wallGrid');
+  const bp = document.getElementById('blueprint-container');
+  const btnGrid = document.getElementById('btn-show-grid');
+  const btnBp = document.getElementById('btn-show-blueprint');
+  
+  if (!grid || !bp || !btnGrid || !btnBp) return;
+  
+  if (view === 'grid') {
+    grid.classList.remove('hidden');
+    bp.classList.add('hidden');
+    btnGrid.classList.add('active');
+    btnBp.classList.remove('active');
+  } else {
+    grid.classList.add('hidden');
+    bp.classList.remove('hidden');
+    btnGrid.classList.remove('active');
+    btnBp.classList.add('active');
+    initBlueprintGestures();
+  }
+  playBeep(500, 0.05);
+}
+
+function initBlueprintGestures() {
+  const container = document.getElementById('blueprint-zoom-area');
+  const content = document.getElementById('blueprint-content');
+  if (!container || !content) return;
+
+  let scale = 1;
+  let translateX = 0;
+  let translateY = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let startDist = 0;
+  let startScale = 1;
+
+  // Touch support
+  container.ontouchstart = (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      startX = e.touches[0].clientX - translateX;
+      startY = e.touches[0].clientY - translateY;
+    } else if (e.touches.length === 2) {
+      isDragging = false;
+      startDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      startScale = scale;
+    }
+  };
+
+  container.ontouchmove = (e) => {
+    if (isDragging && e.touches.length === 1) {
+      translateX = e.touches[0].clientX - startX;
+      translateY = e.touches[0].clientY - startY;
+      applyTransform();
+    } else if (e.touches.length === 2) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      const factor = dist / startDist;
+      scale = Math.min(Math.max(startScale * factor, 0.8), 3);
+      applyTransform();
+    }
+  };
+
+  container.ontouchend = () => {
+    isDragging = false;
+  };
+
+  // Mouse gestures for desktop testing
+  let isMouseDragging = false;
+  let mouseStartX = 0;
+  let mouseStartY = 0;
+
+  container.onmousedown = (e) => {
+    isMouseDragging = true;
+    mouseStartX = e.clientX - translateX;
+    mouseStartY = e.clientY - translateY;
+    container.style.cursor = 'grabbing';
+  };
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isMouseDragging) return;
+    translateX = e.clientX - mouseStartX;
+    translateY = e.clientY - mouseStartY;
+    applyTransform();
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isMouseDragging) {
+      isMouseDragging = false;
+      container.style.cursor = 'grab';
+    }
+  });
+
+  container.onwheel = (e) => {
+    e.preventDefault();
+    const zoomFactor = 0.1;
+    const delta = e.deltaY < 0 ? 1 : -1;
+    scale = Math.min(Math.max(scale + delta * zoomFactor, 0.8), 3);
+    applyTransform();
+  };
+
+  function applyTransform() {
+    content.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+  }
+
+  // Tapping blueprint sectors highlights them and updates info
+  const sectors = content.querySelectorAll('.bp-sector');
+  const infoEl = document.getElementById('blueprintInfo');
+  sectors.forEach(s => {
+    s.onclick = (e) => {
+      e.stopPropagation();
+      const sectorName = s.getAttribute('data-sector');
+      if (infoEl) {
+        infoEl.innerHTML = `SECTOR ACTIVE: <span style="color:var(--green)">${sectorName.toUpperCase()}</span> — SCANNING COMPONENTS...`;
+      }
+      sectors.forEach(sec => sec.querySelector('rect').style.strokeWidth = "1.5");
+      s.querySelector('rect').style.strokeWidth = "3";
+      playBeep(650, 0.05);
+
+      // Sync and highlight corresponding Raw Materials card
+      const mapping = {
+        'CPUs': '01',
+        'Keyboard Keys': '02',
+        'HDD Platters': '03',
+        'Circuit Boards': '05',
+        'RAM Sticks': '06'
+      };
+      const cardId = mapping[sectorName];
+      if (cardId) {
+        const targetCard = document.querySelector(`.mat-card[data-i="${cardId}"]`);
+        if (targetCard) {
+          const isMobile = window.innerWidth <= 768;
+          if (isMobile) {
+            const grid = document.querySelector('.mat-grid');
+            if (grid) {
+              const cardOffset = targetCard.offsetLeft - (grid.clientWidth / 2) + (targetCard.clientWidth / 2);
+              grid.scrollTo({ left: cardOffset, behavior: 'smooth' });
+            }
+          } else {
+            const materialsSec = document.getElementById('materials');
+            if (materialsSec) {
+              materialsSec.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+          // Flip the card
+          const matCards = document.querySelectorAll('.mat-card');
+          matCards.forEach(c => c.classList.remove('flipped'));
+          targetCard.classList.add('flipped');
+        }
+      }
+    };
+  });
+}
+
+// ─── QR BRIDGE LOGIC ───
+function initQRBridge() {
+  const isQR = window.location.search.includes('qr=') || window.location.search.includes('source=qr') || localStorage.getItem('qr-bridge') === 'active';
+  if (isQR) {
+    localStorage.setItem('qr-bridge', 'active');
+    
+    let btn = document.getElementById('qr-bridge-trigger');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'qr-bridge-trigger';
+      btn.innerHTML = '<span>📷</span>';
+      btn.title = 'QR Location Bridge';
+      document.body.appendChild(btn);
+    }
+    
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      showQRBridgeModal();
+    };
+  }
+}
+
+function showQRBridgeModal() {
+  let modal = document.getElementById('qr-bridge-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'qr-bridge-modal';
+    modal.className = 'hidden';
+    modal.innerHTML = `
+      <div class="qr-modal-content">
+        <span class="qr-modal-close" onclick="closeQRBridgeModal()">&times;</span>
+        <h3 style="font-family:var(--font-mono); color:var(--green); letter-spacing:2px; font-size:1rem; margin-bottom:15px; text-transform:uppercase;">QR Node Bridge</h3>
+        <p style="font-size:0.75rem; color:var(--text2); margin-bottom:20px; line-height:1.5;">You scanned the E-WALL QR code. Select your physical location sector below to synchronize your digital screen:</p>
+        
+        <div class="qr-links-grid" style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+          <a href="#about" class="qr-link-item" onclick="syncQRLocation('Sector A (CPU Mosaic)')">SECTOR A (CPUs) ➔</a>
+          <a href="#about" class="qr-link-item" onclick="syncQRLocation('Sector B (RAM Arrays)')">SECTOR B (RAM) ➔</a>
+          <a href="#about" class="qr-link-item" onclick="syncQRLocation('Sector C (PCB Framing)')">SECTOR C (PCBs) ➔</a>
+          <a href="#about" class="qr-link-item" onclick="syncQRLocation('Sector D (HDD Platters)')">SECTOR D (HDD) ➔</a>
+          <a href="#about" class="qr-link-item" onclick="syncQRLocation('Sector E (Keyboard Pixels)')">SECTOR E (KEYS) ➔</a>
+        </div>
+        
+        <div style="border-top:1px solid var(--border); padding-top:20px;">
+          <button class="btn-primary" style="width:100%; font-size:0.75rem; padding:12px; font-family:var(--font-mono);" onclick="triggerNativeCamera()">SCAN NEXT QR NODE</button>
+        </div>
+        <input type="file" accept="image/*" capture="environment" id="qr-camera-input" style="display:none;" onchange="handleQRScan(this)">
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+  modal.classList.remove('hidden');
+  playBeep(600, 0.1);
+}
+
+function closeQRBridgeModal() {
+  const modal = document.getElementById('qr-bridge-modal');
+  if (modal) modal.classList.add('hidden');
+  playBeep(400, 0.05);
+}
+
+function syncQRLocation(sectorName) {
+  closeQRBridgeModal();
+  addLog(`QR Synced: User is standing in front of ${sectorName}`);
+  
+  // Activate blueprint view and select the sector
+  toggleWallView('blueprint');
+  const bpInfo = document.getElementById('blueprintInfo');
+  if (bpInfo) {
+    bpInfo.innerHTML = `SECTOR ACTIVE: <span style="color:var(--green)">${sectorName.toUpperCase()}</span> — SYNCED VIA QR BRIDGE`;
+  }
+  
+  // Highlight sector in SVG
+  const content = document.getElementById('blueprint-content');
+  if (content) {
+    const sectors = content.querySelectorAll('.bp-sector');
+    sectors.forEach(s => {
+      const match = sectorName.toLowerCase().includes(s.getAttribute('data-sector').toLowerCase().split(' ')[0]);
+      if (match) {
+        s.querySelector('rect').style.strokeWidth = "3";
+      } else {
+        s.querySelector('rect').style.strokeWidth = "1.5";
+      }
+    });
+  }
+}
+
+function triggerNativeCamera() {
+  const input = document.getElementById('qr-camera-input');
+  if (input) input.click();
+}
+
+function handleQRScan(input) {
+  if (input.files && input.files[0]) {
+    closeQRBridgeModal();
+    addLog("Analyzing e-waste node QR code...");
+    setTimeout(() => {
+      playBeep(880, 0.05);
+      setTimeout(() => playBeep(1100, 0.1), 50);
+      addLog("Node detected: Sector B (RAM Arrays) synced.");
+      syncQRLocation('Sector B (RAM Arrays)');
+    }, 1500);
+  }
+}
+
+function initMobileFlipCards() {
+  const matCards = document.querySelectorAll('.mat-card');
+  matCards.forEach(card => {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    card.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    card.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      // Check if it was a quick tap, not a swipe (threshold 10px)
+      if (Math.abs(touchEndX - touchStartX) < 10 && Math.abs(touchEndY - touchStartY) < 10) {
+        // Toggle flipped class, and remove it from all other cards
+        matCards.forEach(c => {
+          if (c !== card) c.classList.remove('flipped');
+        });
+        card.classList.toggle('flipped');
+        playBeep(600, 0.05);
+      }
+    }, { passive: true });
+  });
+}
 
 /* ─── INIT ─── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1054,10 +1378,14 @@ document.addEventListener('DOMContentLoaded', () => {
   updateTermTime();
   initImpactCalc();
   initVisitorCounter();
+  initMobileFlipCards();
   addLog("System initialized. Welcome to USCS E-WALL.");
   
   // Initialize Boot Sequence
   initBootSequence();
+
+  // Initialize QR Location Bridge
+  initQRBridge();
   
   const mmLinks = document.querySelectorAll('#mobile-menu a');
   mmLinks.forEach(link => {
