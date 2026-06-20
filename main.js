@@ -865,6 +865,136 @@ function playBeep(freq = 440, duration = 0.05) {
   } catch(e) {}
 }
 
+// Cyberpunk Text Scramble Effect
+function scrambleText(element, duration = 300) {
+  if (!element) return;
+  
+  // Find all text nodes recursively
+  const textNodes = [];
+  function findTextNodes(node) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      if (node.textContent.trim().length > 0) {
+        textNodes.push(node);
+      }
+    } else {
+      if (node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+        for (let child of node.childNodes) {
+          findTextNodes(child);
+        }
+      }
+    }
+  }
+  findTextNodes(element);
+  
+  textNodes.forEach(node => {
+    const text = node.textContent;
+    const chars = '01010#$@%?&*-+[]{}<>XYZ#/\\';
+    const start = performance.now();
+    
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const lockedCount = Math.floor(progress * text.length);
+      
+      let currentText = '';
+      for (let i = 0; i < text.length; i++) {
+        if (i < lockedCount || text[i] === ' ' || text[i] === '\n') {
+          currentText += text[i];
+        } else {
+          currentText += chars[Math.floor(Math.random() * chars.length)];
+        }
+      }
+      
+      node.textContent = currentText;
+      
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        node.textContent = text;
+      }
+    }
+    requestAnimationFrame(update);
+  });
+}
+
+function initScrambleEffect() {
+  const headings = document.querySelectorAll('.hero-title, .s-heading, .content-section h2');
+  if ('IntersectionObserver' in window) {
+    const scrambleObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          scrambleText(entry.target, 300);
+          scrambleObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    headings.forEach(h => scrambleObs.observe(h));
+  } else {
+    headings.forEach(h => scrambleText(h, 300));
+  }
+}
+
+// "Click to Boot" Initial Overlay
+function initBootSequence() {
+  const bootOverlay = document.getElementById('boot-overlay');
+  const bootBtn = document.getElementById('boot-btn');
+  const bootTerminal = document.getElementById('boot-terminal');
+  
+  if (!bootOverlay || !bootBtn || !bootTerminal) {
+    initScrambleEffect();
+    return;
+  }
+  
+  bootBtn.addEventListener('click', () => {
+    // Hide button, show terminal
+    bootBtn.style.display = 'none';
+    bootTerminal.classList.remove('hidden');
+    
+    // Play initial beep
+    playBeep(440, 0.08);
+    
+    const logs = [
+      { text: "INITIATING SYSTEM BOOT PROCESS...", delay: 100, freq: 440 },
+      { text: "LOADING WEB ASSETS & MODULES...", delay: 350, freq: 520 },
+      { text: "CALIBRATING AURA CORE SYSTEM...", delay: 650, freq: 600 },
+      { text: "ESTABLISHING DIGITAL PROTOCOLS...", delay: 950, freq: 680 },
+      { text: "RETRIEVING 34 TECHNOLOGY NODES...", delay: 1250, freq: 760 },
+      { text: "AURA STATUS: AZURE EMISSION [ONLINE]", delay: 1550, freq: 840, success: true },
+      { text: "SYSTEM ONLINE. WELCOME TO USCS E-WALL.", delay: 1850, freq: 960, success: true }
+    ];
+    
+    logs.forEach(log => {
+      setTimeout(() => {
+        const logLine = document.createElement('div');
+        logLine.className = 'boot-log' + (log.success ? ' success' : '');
+        logLine.innerText = log.text;
+        bootTerminal.appendChild(logLine);
+        bootTerminal.scrollTop = bootTerminal.scrollHeight;
+        playBeep(log.freq, 0.05);
+        
+        if (log.text.includes("SYSTEM ONLINE")) {
+          setTimeout(() => {
+            playBeep(960, 0.05);
+            setTimeout(() => playBeep(1200, 0.1), 50);
+            
+            // Hide boot overlay
+            bootOverlay.classList.add('hidden');
+            
+            // Trigger scramble on hero title when page reveals
+            setTimeout(() => {
+              const heroTitle = document.querySelector('.hero-title');
+              if (heroTitle) scrambleText(heroTitle, 400);
+              
+              // Now start observing the rest of headings
+              initScrambleEffect();
+            }, 600);
+          }, 300);
+        }
+      }, log.delay);
+    });
+  });
+}
+
 // Attach beeps to all buttons
 document.addEventListener('click', (e) => {
   if (e.target.closest('button') || e.target.closest('a')) {
@@ -882,6 +1012,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initImpactCalc();
   initVisitorCounter();
   addLog("System initialized. Welcome to USCS E-WALL.");
+  
+  // Initialize Boot Sequence
+  initBootSequence();
   
   const mmLinks = document.querySelectorAll('#mobile-menu a');
   mmLinks.forEach(link => {
