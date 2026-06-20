@@ -35,7 +35,7 @@ function initCursorHover() {
 }
 initCursorHover();
 
-/* ─── PARTICLES CANVAS ─── */
+/* ─── MATRIX BACKGROUND CANVAS ─── */
 const canvas = document.getElementById('particles-canvas');
 if (canvas) {
   const ctx = canvas.getContext('2d');
@@ -43,80 +43,123 @@ if (canvas) {
   function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    initializeMatrix();
   }
+
+  let mouseX = -1000;
+  let mouseY = -1000;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  window.addEventListener('mouseleave', () => {
+    mouseX = -1000;
+    mouseY = -1000;
+  });
+
+  let columnsCount = 0;
+  let drops = [];
+  let columnSpeeds = [];
+  let columnFontSizes = [];
+  let columnOpacities = [];
+  const colSpacing = 16; // spacing between columns
+
+  function initializeMatrix() {
+    columnsCount = Math.floor(canvas.width / colSpacing) + 1;
+    drops = [];
+    columnSpeeds = [];
+    columnFontSizes = [];
+    columnOpacities = [];
+
+    for (let i = 0; i < columnsCount; i++) {
+      drops[i] = Math.random() * canvas.height;
+      columnSpeeds[i] = Math.random() * 0.8 + 0.3; // slow drop speed
+      columnFontSizes[i] = Math.floor(Math.random() * 5) + 9; // 9px to 13px
+      columnOpacities[i] = Math.random() * 0.14 + 0.04; // subtle visibility
+    }
+  }
+
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
 
-  const particles = [];
-  const PARTICLE_COUNT = 70;
-
-  class Particle {
-    constructor() { this.reset(); }
-    reset() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      this.size = Math.random() * 1.5 + 0.3;
-      this.speedX = (Math.random() - 0.5) * 0.3;
-      this.speedY = (Math.random() - 0.5) * 0.3;
-      this.opacity = Math.random() * 0.5 + 0.1;
-      const p1 = window.TECH_THEME_COLOR || '#00ff88';
-      const p2 = window.TECH_THEME_COLOR || '#00d4ff';
-      const p3 = window.TECH_THEME_COLOR || '#9b59ff';
-      this.color = Math.random() > 0.6 ? p1 : Math.random() > 0.5 ? p2 : p3;
-      this.pulse = Math.random() * Math.PI * 2;
+  function getThemeColorWithOpacity(opacity, isHead) {
+    if (isHead) {
+      return `rgba(255, 255, 255, ${opacity * 1.8})`;
     }
-    update() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-      this.pulse += 0.02;
-      this.currentOpacity = this.opacity * (0.7 + 0.3 * Math.sin(this.pulse));
-      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+    
+    let themeColor = window.TECH_THEME_COLOR;
+    if (!themeColor) {
+      themeColor = document.documentElement.style.getPropertyValue('--aura-color') || '#007cf0';
     }
-    draw() {
-      ctx.save();
-      ctx.globalAlpha = this.currentOpacity;
-      ctx.fillStyle = this.color;
-      ctx.shadowBlur = 6;
-      ctx.shadowColor = this.color;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
+    themeColor = themeColor.trim();
+    
+    if (themeColor.startsWith('#')) {
+      const r = parseInt(themeColor.slice(1, 3), 16);
+      const g = parseInt(themeColor.slice(3, 5), 16);
+      const b = parseInt(themeColor.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     }
+    
+    return `rgba(0, 255, 136, ${opacity})`;
   }
 
-  for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
-
-  // Draw connections
-  function drawConnections() {
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
+  function animMatrix() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    for (let i = 0; i < columnsCount; i++) {
+      const x = i * colSpacing;
+      const y = drops[i];
+      const speed = columnSpeeds[i];
+      const size = columnFontSizes[i];
+      const opacity = columnOpacities[i];
+      
+      ctx.font = size + 'px monospace';
+      
+      const trailLength = 12;
+      for (let j = 0; j < trailLength; j++) {
+        const charY = y - (j * size);
+        
+        if (charY < -size || charY > canvas.height + size) continue;
+        
+        let drawX = x;
+        let drawY = charY;
+        
+        const dx = drawX - mouseX;
+        const dy = drawY - mouseY;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
-          ctx.save();
-          ctx.globalAlpha = (1 - dist / 120) * 0.08;
-          ctx.strokeStyle = window.TECH_THEME_COLOR || '#00ff88';
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.stroke();
-          ctx.restore();
+        
+        if (dist < 140) {
+          const force = (140 - dist) / 140;
+          const angle = Math.atan2(dy, dx);
+          // Push binary stream elements away from mouse cursor
+          drawX += Math.cos(angle) * force * 35;
+          drawY += Math.sin(angle) * force * 35;
         }
+        
+        const finalOpacity = opacity * (1 - (j / trailLength));
+        ctx.fillStyle = getThemeColorWithOpacity(finalOpacity, j === 0);
+        
+        // Select random binary digits
+        const char = Math.random() > 0.5 ? '1' : '0';
+        ctx.fillText(char, drawX, drawY);
+      }
+      
+      drops[i] += speed;
+      
+      if (drops[i] > canvas.height + (trailLength * size)) {
+        drops[i] = -Math.random() * 100;
+        columnSpeeds[i] = Math.random() * 0.8 + 0.3;
       }
     }
+    
+    requestAnimationFrame(animMatrix);
   }
-
-  function animParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawConnections();
-    particles.forEach(p => { p.update(); p.draw(); });
-    requestAnimationFrame(animParticles);
-  }
-  animParticles();
+  
+  animMatrix();
 }
+
 
 /* ─── SCROLL PROGRESS ─── */
 const progressBar = document.getElementById('scroll-progress');

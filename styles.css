@@ -2384,3 +2384,94 @@ body.crt-off #scroll-progress { box-shadow: none; }
 @keyframes logFadeIn {
   to { opacity: 1; }
 }
+
+/* ─── HUD FRAMING AESTHETIC ─── */
+.tc, .mat-card, .s-card, .info-card, .app-card, .impact-calc, .term-input-wrap {
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  background-image:
+    linear-gradient(to right, var(--frame-color, rgba(255, 255, 255, 0.15)) 8px, transparent 8px),
+    linear-gradient(to bottom, var(--frame-color, rgba(255, 255, 255, 0.15)) 8px, transparent 8px),
+    linear-gradient(to left, var(--frame-color, rgba(255, 255, 255, 0.15)) 8px, transparent 8px),
+    linear-gradient(to bottom, var(--frame-color, rgba(255, 255, 255, 0.15)) 8px, transparent 8px),
+    linear-gradient(to right, var(--frame-color, rgba(255, 255, 255, 0.15)) 8px, transparent 8px),
+    linear-gradient(to top, var(--frame-color, rgba(255, 255, 255, 0.15)) 8px, transparent 8px),
+    linear-gradient(to left, var(--frame-color, rgba(255, 255, 255, 0.15)) 8px, transparent 8px),
+    linear-gradient(to top, var(--frame-color, rgba(255, 255, 255, 0.15)) 8px, transparent 8px) !important;
+  background-position: 
+    0 0, 0 0,
+    100% 0, 100% 0,
+    0 100%, 0 100%,
+    100% 100%, 100% 100% !important;
+  background-size: 
+    10px 1.5px, 1.5px 10px,
+    10px 1.5px, 1.5px 10px,
+    10px 1.5px, 1.5px 10px,
+    10px 1.5px, 1.5px 10px !important;
+  background-repeat: no-repeat !important;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s !important;
+}
+
+/* Specific theme variables for cards */
+.tc {
+  --frame-color: rgba(255, 255, 255, 0.15);
+}
+.tc:hover {
+  --frame-color: var(--tc-c, var(--green));
+}
+.mat-card {
+  --frame-color: rgba(255, 255, 255, 0.15);
+}
+.mat-card:hover {
+  --frame-color: var(--orange);
+}
+.s-card {
+  --frame-color: rgba(255, 255, 255, 0.15);
+}
+.s-card:hover {
+  --frame-color: var(--sc-c, var(--green));
+}
+.info-card {
+  --frame-color: rgba(255, 255, 255, 0.15);
+}
+.info-card:hover {
+  --frame-color: var(--green);
+}
+.app-card {
+  --frame-color: rgba(255, 255, 255, 0.15);
+}
+.app-card:hover {
+  --frame-color: var(--green);
+}
+.impact-calc {
+  --frame-color: rgba(255, 255, 255, 0.12);
+}
+.term-input-wrap {
+  --frame-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Technology subpages hero image wrapper framing */
+.page-hero .reveal:has(> .tech-hero-img) {
+  border-radius: 4px !important;
+  border: 1px solid rgba(255, 255, 255, 0.04) !important;
+  background-image:
+    linear-gradient(to right, var(--aura-color, var(--green)) 10px, transparent 10px),
+    linear-gradient(to bottom, var(--aura-color, var(--green)) 10px, transparent 10px),
+    linear-gradient(to left, var(--aura-color, var(--green)) 10px, transparent 10px),
+    linear-gradient(to bottom, var(--aura-color, var(--green)) 10px, transparent 10px),
+    linear-gradient(to right, var(--aura-color, var(--green)) 10px, transparent 10px),
+    linear-gradient(to top, var(--aura-color, var(--green)) 10px, transparent 10px),
+    linear-gradient(to left, var(--aura-color, var(--green)) 10px, transparent 10px),
+    linear-gradient(to top, var(--aura-color, var(--green)) 10px, transparent 10px) !important;
+  background-position: 
+    0 0, 0 0,
+    100% 0, 100% 0,
+    0 100%, 0 100%,
+    100% 100%, 100% 100% !important;
+  background-size: 
+    12px 1.5px, 1.5px 12px,
+    12px 1.5px, 1.5px 12px,
+    12px 1.5px, 1.5px 12px,
+    12px 1.5px, 1.5px 12px !important;
+  background-repeat: no-repeat !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4) !important;
+}
