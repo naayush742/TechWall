@@ -1078,166 +1078,7 @@ if (window.visualViewport) {
   });
 }
 
-// ─── PINCH-TO-ZOOM BLUEPRINT MAP GESTURES ───
-function toggleWallView(view) {
-  const grid = document.getElementById('wallGrid');
-  const bp = document.getElementById('blueprint-container');
-  const btnGrid = document.getElementById('btn-show-grid');
-  const btnBp = document.getElementById('btn-show-blueprint');
-  
-  if (!grid || !bp || !btnGrid || !btnBp) return;
-  
-  if (view === 'grid') {
-    grid.classList.remove('hidden');
-    bp.classList.add('hidden');
-    btnGrid.classList.add('active');
-    btnBp.classList.remove('active');
-  } else {
-    grid.classList.add('hidden');
-    bp.classList.remove('hidden');
-    btnGrid.classList.remove('active');
-    btnBp.classList.add('active');
-    initBlueprintGestures();
-  }
-  playBeep(500, 0.05);
-}
 
-function initBlueprintGestures() {
-  const container = document.getElementById('blueprint-zoom-area');
-  const content = document.getElementById('blueprint-content');
-  if (!container || !content) return;
-
-  let scale = 1;
-  let translateX = 0;
-  let translateY = 0;
-  let isDragging = false;
-  let startX = 0;
-  let startY = 0;
-  let startDist = 0;
-  let startScale = 1;
-
-  // Touch support
-  container.ontouchstart = (e) => {
-    if (e.touches.length === 1) {
-      isDragging = true;
-      startX = e.touches[0].clientX - translateX;
-      startY = e.touches[0].clientY - translateY;
-    } else if (e.touches.length === 2) {
-      isDragging = false;
-      startDist = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      startScale = scale;
-    }
-  };
-
-  container.ontouchmove = (e) => {
-    if (isDragging && e.touches.length === 1) {
-      translateX = e.touches[0].clientX - startX;
-      translateY = e.touches[0].clientY - startY;
-      applyTransform();
-    } else if (e.touches.length === 2) {
-      const dist = Math.hypot(
-        e.touches[0].clientX - e.touches[1].clientX,
-        e.touches[0].clientY - e.touches[1].clientY
-      );
-      const factor = dist / startDist;
-      scale = Math.min(Math.max(startScale * factor, 0.8), 3);
-      applyTransform();
-    }
-  };
-
-  container.ontouchend = () => {
-    isDragging = false;
-  };
-
-  // Mouse gestures for desktop testing
-  let isMouseDragging = false;
-  let mouseStartX = 0;
-  let mouseStartY = 0;
-
-  container.onmousedown = (e) => {
-    isMouseDragging = true;
-    mouseStartX = e.clientX - translateX;
-    mouseStartY = e.clientY - translateY;
-    container.style.cursor = 'grabbing';
-  };
-
-  window.addEventListener('mousemove', (e) => {
-    if (!isMouseDragging) return;
-    translateX = e.clientX - mouseStartX;
-    translateY = e.clientY - mouseStartY;
-    applyTransform();
-  });
-
-  window.addEventListener('mouseup', () => {
-    if (isMouseDragging) {
-      isMouseDragging = false;
-      container.style.cursor = 'grab';
-    }
-  });
-
-  container.onwheel = (e) => {
-    e.preventDefault();
-    const zoomFactor = 0.1;
-    const delta = e.deltaY < 0 ? 1 : -1;
-    scale = Math.min(Math.max(scale + delta * zoomFactor, 0.8), 3);
-    applyTransform();
-  };
-
-  function applyTransform() {
-    content.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-  }
-
-  // Tapping blueprint sectors highlights them and updates info
-  const sectors = content.querySelectorAll('.bp-sector');
-  const infoEl = document.getElementById('blueprintInfo');
-  sectors.forEach(s => {
-    s.onclick = (e) => {
-      e.stopPropagation();
-      const sectorName = s.getAttribute('data-sector');
-      if (infoEl) {
-        infoEl.innerHTML = `SECTOR ACTIVE: <span style="color:var(--green)">${sectorName.toUpperCase()}</span> — SCANNING COMPONENTS...`;
-      }
-      sectors.forEach(sec => sec.querySelector('rect').style.strokeWidth = "1.5");
-      s.querySelector('rect').style.strokeWidth = "3";
-      playBeep(650, 0.05);
-
-      // Sync and highlight corresponding Raw Materials card
-      const mapping = {
-        'CPUs': '01',
-        'Keyboard Keys': '02',
-        'HDD Platters': '03',
-        'Circuit Boards': '05',
-        'RAM Sticks': '06'
-      };
-      const cardId = mapping[sectorName];
-      if (cardId) {
-        const targetCard = document.querySelector(`.mat-card[data-i="${cardId}"]`);
-        if (targetCard) {
-          const isMobile = window.innerWidth <= 768;
-          if (isMobile) {
-            const grid = document.querySelector('.mat-grid');
-            if (grid) {
-              const cardOffset = targetCard.offsetLeft - (grid.clientWidth / 2) + (targetCard.clientWidth / 2);
-              grid.scrollTo({ left: cardOffset, behavior: 'smooth' });
-            }
-          } else {
-            const materialsSec = document.getElementById('materials');
-            if (materialsSec) {
-              materialsSec.scrollIntoView({ behavior: 'smooth' });
-            }
-          }
-          // Flip the card
-          const matCards = document.querySelectorAll('.mat-card');
-          matCards.forEach(c => c.classList.remove('flipped'));
-          targetCard.classList.add('flipped');
-        }
-      }
-    };
-  });
-}
 
 // ─── QR BRIDGE LOGIC ───
 function initQRBridge() {
@@ -1303,25 +1144,36 @@ function syncQRLocation(sectorName) {
   closeQRBridgeModal();
   addLog(`QR Synced: User is standing in front of ${sectorName}`);
   
-  // Activate blueprint view and select the sector
-  toggleWallView('blueprint');
-  const bpInfo = document.getElementById('blueprintInfo');
-  if (bpInfo) {
-    bpInfo.innerHTML = `SECTOR ACTIVE: <span style="color:var(--green)">${sectorName.toUpperCase()}</span> — SYNCED VIA QR BRIDGE`;
-  }
-  
-  // Highlight sector in SVG
-  const content = document.getElementById('blueprint-content');
-  if (content) {
-    const sectors = content.querySelectorAll('.bp-sector');
-    sectors.forEach(s => {
-      const match = sectorName.toLowerCase().includes(s.getAttribute('data-sector').toLowerCase().split(' ')[0]);
-      if (match) {
-        s.querySelector('rect').style.strokeWidth = "3";
+  // Find the corresponding card in the Raw Materials grid and scroll to it
+  const mapping = {
+    'Sector A (CPU Mosaic)': '01',
+    'Sector B (RAM Arrays)': '06',
+    'Sector C (PCB Framing)': '05',
+    'Sector D (HDD Platters)': '03',
+    'Sector E (Keyboard Pixels)': '02'
+  };
+  const cardId = mapping[sectorName];
+  if (cardId) {
+    const targetCard = document.querySelector(`.mat-card[data-i="${cardId}"]`);
+    if (targetCard) {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        const grid = document.querySelector('.mat-grid');
+        if (grid) {
+          const cardOffset = targetCard.offsetLeft - (grid.clientWidth / 2) + (targetCard.clientWidth / 2);
+          grid.scrollTo({ left: cardOffset, behavior: 'smooth' });
+        }
       } else {
-        s.querySelector('rect').style.strokeWidth = "1.5";
+        const materialsSec = document.getElementById('materials');
+        if (materialsSec) {
+          materialsSec.scrollIntoView({ behavior: 'smooth' });
+        }
       }
-    });
+      // Flip the card
+      const matCards = document.querySelectorAll('.mat-card');
+      matCards.forEach(c => c.classList.remove('flipped'));
+      targetCard.classList.add('flipped');
+    }
   }
 }
 

@@ -240,53 +240,8 @@
     </div>
 
     <div class="about-visual reveal-r">
-      <div class="wall-canvas" style="position: relative; overflow: hidden; height: 320px;">
+      <div class="wall-canvas">
         <div class="wall-grid" id="wallGrid"></div>
-        <div id="blueprint-container" class="hidden" style="width: 100%; height: 100%; position: absolute; inset: 0; background: rgba(2, 5, 10, 0.95); display: flex; flex-direction: column; overflow: hidden;">
-          <div class="blueprint-info" id="blueprintInfo">DRAG & PINCH TO ZOOM ◈ TAP SECTOR FOR DATA</div>
-          <div id="blueprint-zoom-area" style="flex: 1; width: 100%; height: 100%; overflow: hidden; position: relative; touch-action: none; display: flex; align-items: center; justify-content: center;">
-            <svg id="blueprint-svg" viewBox="0 0 400 300" style="width: 90%; height: 90%; max-height: 100%; max-width: 100%;">
-              <g id="blueprint-content" style="transform-origin: center; transition: transform 0.05s ease-out;">
-                <!-- Grid background pattern -->
-                <rect width="400" height="300" fill="rgba(10, 25, 40, 0.2)" stroke="rgba(0, 255, 136, 0.1)" stroke-width="1" />
-                <path d="M 0,50 L 400,50 M 0,100 L 400,100 M 0,150 L 400,150 M 0,200 L 400,200 M 0,250 L 400,250 M 50,0 L 50,300 M 100,0 L 100,300 M 150,0 L 150,300 M 200,0 L 200,300 M 250,0 L 250,300 M 300,0 L 300,300 M 350,0 L 350,300" fill="none" stroke="rgba(0, 255, 136, 0.04)" stroke-width="0.5" />
-                
-                <!-- Sectors -->
-                <g class="bp-sector" data-sector="CPUs" style="cursor: pointer;">
-                  <rect x="140" y="90" width="120" height="120" rx="4" fill="rgba(0, 124, 240, 0.08)" stroke="#007cf0" stroke-width="1.5" style="transition: all 0.3s;" />
-                  <text x="200" y="140" fill="#007cf0" font-family="monospace" font-size="11" text-anchor="middle" font-weight="bold">SECTOR A</text>
-                  <text x="200" y="160" fill="#fff" font-family="monospace" font-size="8" text-anchor="middle">CPU MOSAIC</text>
-                </g>
-                <g class="bp-sector" data-sector="RAM Sticks" style="cursor: pointer;">
-                  <rect x="30" y="30" width="90" height="240" rx="4" fill="rgba(0, 255, 136, 0.08)" stroke="#00ff88" stroke-width="1.5" style="transition: all 0.3s;" />
-                  <text x="75" y="140" fill="#00ff88" font-family="monospace" font-size="11" text-anchor="middle" font-weight="bold">SECTOR B</text>
-                  <text x="75" y="160" fill="#fff" font-family="monospace" font-size="8" text-anchor="middle">RAM ARRAYS</text>
-                </g>
-                <g class="bp-sector" data-sector="Circuit Boards" style="cursor: pointer;">
-                  <rect x="280" y="30" width="90" height="240" rx="4" fill="rgba(255, 49, 49, 0.08)" stroke="#ff3131" stroke-width="1.5" style="transition: all 0.3s;" />
-                  <text x="325" y="140" fill="#ff3131" font-family="monospace" font-size="11" text-anchor="middle" font-weight="bold">SECTOR C</text>
-                  <text x="325" y="160" fill="#fff" font-family="monospace" font-size="8" text-anchor="middle">PCB FRAMING</text>
-                </g>
-                <g class="bp-sector" data-sector="HDD Platters" style="cursor: pointer;">
-                  <rect x="140" y="30" width="120" height="45" rx="4" fill="rgba(155, 89, 255, 0.08)" stroke="#9b59ff" stroke-width="1.5" style="transition: all 0.3s;" />
-                  <text x="200" y="52" fill="#9b59ff" font-family="monospace" font-size="9" text-anchor="middle" font-weight="bold">SECTOR D</text>
-                  <text x="200" y="65" fill="#fff" font-family="monospace" font-size="7" text-anchor="middle">HDD PLATTERS</text>
-                </g>
-                <g class="bp-sector" data-sector="Keyboard Keys" style="cursor: pointer;">
-                  <rect x="140" y="225" width="120" height="45" rx="4" fill="rgba(255, 107, 43, 0.08)" stroke="#ff6b2b" stroke-width="1.5" style="transition: all 0.3s;" />
-                  <text x="200" y="247" fill="#ff6b2b" font-family="monospace" font-size="9" text-anchor="middle" font-weight="bold">SECTOR E</text>
-                  <text x="200" y="260" fill="#fff" font-family="monospace" font-size="7" text-anchor="middle">KEYBOARD PIXELS</text>
-                </g>
-              </g>
-            </svg>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Mobile Visual Toggle -->
-      <div class="wall-view-toggle" style="display: flex; gap: 10px; margin-top: 15px;">
-        <button class="active" id="btn-show-grid" onclick="toggleWallView('grid')" style="flex: 1; font-family: var(--font-mono); font-size: 0.65rem; padding: 10px 0; border: 1px solid var(--border); background: rgba(255,255,255,0.02); color: var(--text2); cursor: pointer; letter-spacing: 1px;">EMOJI PREVIEW</button>
-        <button id="btn-show-blueprint" onclick="toggleWallView('blueprint')" style="flex: 1; font-family: var(--font-mono); font-size: 0.65rem; padding: 10px 0; border: 1px solid var(--border); background: rgba(255,255,255,0.02); color: var(--text2); cursor: pointer; letter-spacing: 1px;">BLUEPRINT MAP</button>
       </div>
       
       <!-- Decorative Metadata UI -->
