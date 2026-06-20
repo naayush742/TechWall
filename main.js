@@ -985,63 +985,6 @@ function initScrambleEffect() {
   }
 }
 
-/* ─── GYROSCOPE TILT EFFECT ─── */
-let gyroActive = false;
-
-function handleOrientation(e) {
-  let beta = e.beta;   // tilt front/back [-180, 180]
-  let gamma = e.gamma; // tilt left/right [-90, 90]
-  
-  if (beta === null || gamma === null) return;
-  
-  // Normal holding angle is ~60 degrees for beta. Left/right is 0 for gamma.
-  let tiltY = beta - 60;
-  let tiltX = gamma;
-  
-  // Clamp values to ±30 degrees
-  tiltY = Math.max(-30, Math.min(30, tiltY));
-  tiltX = Math.max(-30, Math.min(30, tiltX));
-  
-  // Shift values (parallax opposite shifting)
-  const textShiftX = -(tiltX * 0.4); 
-  const textShiftY = -(tiltY * 0.4);
-  const gridShiftX = (tiltX * 0.8);  
-  const gridShiftY = (tiltY * 0.8);
-  
-  const root = document.documentElement;
-  root.style.setProperty('--gyro-x', `${textShiftX}px`);
-  root.style.setProperty('--gyro-y', `${textShiftY}px`);
-  root.style.setProperty('--gyro-grid-x', `${gridShiftX}px`);
-  root.style.setProperty('--gyro-grid-y', `${gridShiftY}px`);
-}
-
-function requestGyroPermission() {
-  if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-    DeviceOrientationEvent.requestPermission()
-      .then(response => {
-        if (response === 'granted' && !gyroActive) {
-          window.addEventListener('deviceorientation', handleOrientation);
-          gyroActive = true;
-          addLog("Gyroscope calibration: PERMISSION GRANTED.");
-        }
-      })
-      .catch(err => {
-        console.warn("DeviceOrientation permission error:", err);
-      });
-  } else if (!gyroActive) {
-    window.addEventListener('deviceorientation', handleOrientation);
-    gyroActive = true;
-  }
-}
-
-function initGyroscopeTilt() {
-  // Bind directly for non-permission required devices (like Android/Emulators)
-  if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission !== 'function') {
-    window.addEventListener('deviceorientation', handleOrientation);
-    gyroActive = true;
-  }
-}
-
 // "Click to Boot" Initial Overlay
 function initBootSequence() {
   const bootOverlay = document.getElementById('boot-overlay');
@@ -1065,9 +1008,6 @@ function initBootSequence() {
     // Hide button, show terminal
     bootBtn.style.display = 'none';
     bootTerminal.classList.remove('hidden');
-    
-    // Request Gyroscope permission if iOS
-    requestGyroPermission();
     
     // Play initial beep
     playBeep(440, 0.08);
@@ -1316,7 +1256,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initVisitorCounter();
   initMobileFlipCards();
   initHUDFrame();
-  initGyroscopeTilt();
   addLog("System initialized. Welcome to USCS E-WALL.");
   
   // Initialize Boot Sequence
