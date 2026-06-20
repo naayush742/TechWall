@@ -996,6 +996,14 @@ function initBootSequence() {
     return;
   }
   
+  // Check if system has already booted in this session
+  if (sessionStorage.getItem('uscs-booted') === 'true') {
+    bootOverlay.classList.add('hidden');
+    bootOverlay.style.display = 'none';
+    initScrambleEffect();
+    return;
+  }
+  
   bootBtn.addEventListener('click', () => {
     // Hide button, show terminal
     bootBtn.style.display = 'none';
@@ -1030,6 +1038,9 @@ function initBootSequence() {
             
             // Hide boot overlay
             bootOverlay.classList.add('hidden');
+            
+            // Mark as booted for this session
+            sessionStorage.setItem('uscs-booted', 'true');
             
             // Trigger scramble on hero title when page reveals
             setTimeout(() => {
@@ -1221,6 +1232,19 @@ function initMobileFlipCards() {
   });
 }
 
+/* ─── HUD VIEWPORT & CONTROL DECK ─── */
+function initHUDFrame() {
+  const frame = document.createElement('div');
+  frame.className = 'hud-frame';
+  frame.innerHTML = `
+    <div class="hud-corner top-left"><span class="hud-tag">SYS_ACTIVE</span></div>
+    <div class="hud-corner top-right"><span class="hud-tag">USCS_OS v1.0.4</span></div>
+    <div class="hud-corner bottom-left"><span class="hud-tag">GRID_SEC_X9</span></div>
+    <div class="hud-corner bottom-right"><span class="hud-tag">E-WALL_HUD</span></div>
+  `;
+  document.body.appendChild(frame);
+}
+
 /* ─── INIT ─── */
 document.addEventListener('DOMContentLoaded', () => {
   renderWallPreview();
@@ -1231,6 +1255,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initImpactCalc();
   initVisitorCounter();
   initMobileFlipCards();
+  initHUDFrame();
   addLog("System initialized. Welcome to USCS E-WALL.");
   
   // Initialize Boot Sequence
@@ -1247,3 +1272,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+

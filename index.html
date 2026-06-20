@@ -14,6 +14,11 @@
     <button id="boot-btn">[ INITIATE SYSTEM BOOT ]</button>
     <div id="boot-terminal" class="hidden"></div>
   </div>
+  <script>
+    if (sessionStorage.getItem('uscs-booted') === 'true') {
+      document.getElementById('boot-overlay').style.display = 'none';
+    }
+  </script>
 </div>
 
 <!-- CUSTOM CURSOR -->
@@ -153,29 +158,6 @@
       <span class="stat-label">Student Builders</span>
       <span class="stat-bar" style="background:linear-gradient(90deg,var(--gold),var(--orange))"></span>
     </a>
-  </div>
-</div>
-
-<!-- ─── MARQUEE ─── -->
-<div class="marquee-section section-z">
-  <div class="marquee-track">
-    <span class="m-item">WHERE DEAD TECH LIVES ON <span class="m-dot">◈</span></span>
-    <span class="m-item">E-WASTE IS ART <span class="m-dot">◈</span></span>
-    <span class="m-item">SECOND LIFE FOR SILICON <span class="m-dot">◈</span></span>
-    <span class="m-item">CIRCUITS BECOME CANVAS <span class="m-dot">◈</span></span>
-    <span class="m-item">CPU MOSAICS <span class="m-dot">◈</span></span>
-    <span class="m-item">KEYBOARD KEY ART <span class="m-dot">◈</span></span>
-    <span class="m-item">RAM FRAME BORDERS <span class="m-dot">◈</span></span>
-    <span class="m-item">HDD PLATTER RINGS <span class="m-dot">◈</span></span>
-    <!-- dup -->
-    <span class="m-item">WHERE DEAD TECH LIVES ON <span class="m-dot">◈</span></span>
-    <span class="m-item">E-WASTE IS ART <span class="m-dot">◈</span></span>
-    <span class="m-item">SECOND LIFE FOR SILICON <span class="m-dot">◈</span></span>
-    <span class="m-item">CIRCUITS BECOME CANVAS <span class="m-dot">◈</span></span>
-    <span class="m-item">CPU MOSAICS <span class="m-dot">◈</span></span>
-    <span class="m-item">KEYBOARD KEY ART <span class="m-dot">◈</span></span>
-    <span class="m-item">RAM FRAME BORDERS <span class="m-dot">◈</span></span>
-    <span class="m-item">HDD PLATTER RINGS <span class="m-dot">◈</span></span>
   </div>
 </div>
 
