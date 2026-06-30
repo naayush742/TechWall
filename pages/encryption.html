@@ -1,233 +1,653 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Encryption — USCS E-WALL</title>
-  <link rel="stylesheet" href="../styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encryption — Secrets, Made Mathematical</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
-  <script>window.TECH_THEME_COLOR = '#1e4b6e';</script>
-  <style>
-    :root {
-      --green: #1e4b6e !important;
-      --cyan: #1e4b6e !important;
-      --aura-color: #1e4b6e !important;
-      --aura-glow: rgba(30,75,110,.12) !important;
+  :root{
+    --bg: #02050a;
+    --card: rgba(6, 13, 22, 0.95);
+    --ink: #ffffff;
+    --ink-soft: #a0b8d0;
+    --line: rgba(63, 198, 241, 0.18);
+    --accent: #ffb454;
+    --accent2: #5ee6c4;
+    --cyan: #ffb454;
+    --teal: #5ee6c4;
+    --green: #ffb454;
+    --green2: #ffb454;
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.5);
+    --shadow-md: 0 10px 35px rgba(0,0,0,0.8);
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: linear-gradient(rgba(2, 5, 10, 0.92), rgba(2, 5, 10, 0.92)), url('../img/bg.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color:var(--ink);
+    font-family:'DM Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    position: relative;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Website Premium Scanlines & Noise overlays */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.5;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+    pointer-events: none;
+    z-index: 9989;
+  }
+
+  h1,h2,.display{
+    font-family:'Bebas Neue',sans-serif;
+    margin:0;
+    letter-spacing:0.04em;
+  }
+  h3{
+    font-family:'JetBrains Mono',monospace;
+    margin:0;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--cyan); transition: color 0.2s ease;}
+  a:hover{color: var(--accent2); text-decoration: none;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0; border-bottom:1px solid var(--line);}
+  .lede{font-size:18px;color:var(--ink-soft);line-height:1.65;max-width:640px;font-weight:300; margin-bottom:40px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(2, 5, 10, 0.88);
+    backdrop-filter:blur(20px) saturate(1.5);
+    border-bottom:1px solid var(--line);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  }
+  nav .inner{
+    max-width:1080px;margin:0 auto;padding:14px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-logo .accent {
+    color: var(--teal);
+  }
+  @media(max-width: 480px) {
+    .nav-logo {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
     }
-    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #1e4b6e !important; }
-    .content-section hr { background: linear-gradient(90deg, #1e4b6e, transparent) !important; }
-    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #1e4b6e !important; }
-    #scroll-progress { background: #1e4b6e !important; box-shadow: 0 0 10px #1e4b6e !important; }
-    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(30,75,110,.15) !important; }
-    .nav-ticker-item.active { border-bottom: 1px solid #1e4b6e !important; }
-    .btn-primary { background: #1e4b6e !important; }
-    .btn-primary:hover { box-shadow: 0 0 30px rgba(30,75,110,.15) !important; }
-    .hero-eyebrow .pulse { background: #1e4b6e !important; box-shadow: 0 0 10px #1e4b6e !important; }
+  }
+  @media(max-width: 360px) {
+    .nav-logo {
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+  }
+  nav ul{list-style:none;display:flex;gap:26px;margin:0;padding:0;}
+  nav ul a{
+    color:var(--ink);text-decoration:none;font-size:14px;font-weight:500;
+    opacity:0.75;transition:opacity .15s, color .15s;
+  }
+  nav ul a:hover{opacity:1;color:var(--cyan);}
+  @media (max-width:720px){ nav ul{display:none;} }
 
-      .content-section h2 {
-        display: inline-block;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #1e4b6e40;
-        position: relative;
-        text-shadow: 0 0 20px rgba(30,75,110,.15);
-      }
-      .content-section h2::before {
-        content: '>>';
-        font-family: var(--font-mono);
-        color: #1e4b6e;
-        margin-right: 12px;
-        font-size: 1.5rem;
-        opacity: 0.7;
-        text-shadow: 0 0 10px #1e4b6e80;
-      }
-      .content-section ul li {
-        position: relative;
-        padding-left: 20px;
-        list-style: none;
-      }
-      .content-section ul li::before {
-        content: '◈';
-        position: absolute;
-        left: 0;
-        top: 2px;
-        color: #1e4b6e;
-        font-size: 0.8rem;
-        opacity: 0.8;
-      }
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid #1e4b6e30;
-      }
-    </style>
+  /* ===== SECTION TAG ===== */
+  .section-head{display:flex; align-items:baseline; gap:16px; margin-bottom:46px; flex-wrap:wrap;}
+  .section-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--card);color:var(--ink);
+    padding:6px 14px 6px 10px;border-radius:20px;
+    border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  }
+
+  h2{font-size:38px;font-weight:800;color:var(--ink);letter-spacing:1px;text-shadow:0 0 20px rgba(255,255,255,0.05);}
+  @media (max-width:540px){ h2{font-size:28px;} }
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(63, 198, 241, 0.3);
+    box-shadow:0 12px 30px rgba(63, 198, 241, 0.15);
+  }
+
+  /* ===== HERO ===== */
+  header.hero{padding:90px 0 70px;position:relative;overflow:hidden; border-bottom:1px solid var(--line);}
+  header.hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 80% 10%, rgba(63,198,241,0.12), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(255,60,95,0.10), transparent 50%);
+    pointer-events:none;
+  }
+  header.hero .wrap{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:center;position:relative;z-index:2;}
+  @media (max-width:860px){ header.hero .wrap{grid-template-columns:1fr;} }
   
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent);
+    letter-spacing:.12em; text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:8px; height:8px; border-radius:50%; background:var(--accent2); box-shadow:0 0 0 4px rgba(255,60,95,.15);}
 
-    <style>
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid var(--green);
-        line-height: 1.8;
-      }
-      /* RICH UX CLASSES */
-      .info-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 24px;
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
-        margin-bottom: 25px;
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-      .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        border-color: var(--green);
-      }
-      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
-      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
-      
-      .hl-box {
-        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-        border-left: 4px solid var(--green);
-        padding: 24px 30px;
-        border-radius: 0 8px 8px 0;
-        margin: 25px 0;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      }
+  h1.title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:64px;
+    line-height:1.06;
+    font-weight:800;
+    color:var(--ink);
+    text-shadow: 0 0 30px rgba(63, 198, 241, 0.3);
+    letter-spacing:1px;
+  }
+  @media (max-width:540px){ h1.title{font-size:42px;} }
+  h1.title span{color:var(--cyan); text-shadow:0 0 20px rgba(63,198,241,0.4);}
+  h1.title em{font-style:normal; color:var(--cyan); text-shadow:0 0 20px rgba(63,198,241,0.4);}
+  .subtitle{font-size:16.5px;color:var(--ink-soft);margin-top:18px;max-width:520px;line-height:1.65;font-weight:300;}
+  
+  .hero-meta{display:flex;gap:28px;margin-top:32px;flex-wrap:wrap;}
+  .hero-meta div span{display:block; color:var(--ink-soft); font-size:11px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px;}
+  .hero-meta div strong{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:26px;color:var(--cyan);letter-spacing:1px;}
 
-      .app-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
-        margin: 25px 0;
-      }
-      .app-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 22px;
-        border-radius: 8px;
-        transition: all 0.3s;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .app-card:hover {
-        border-color: var(--green);
-        background: rgba(255,255,255,0.03);
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-      }
-      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
-      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
-      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+  .warning-strip{
+    margin-top:36px; max-width:680px; padding:14px 18px; border:1px solid rgba(255,60,95,.35);
+    background:rgba(255,60,95,.06); border-radius:12px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#ffb0bc;
+    display:flex; gap:10px; align-items:flex-start;
+  }
 
-      .feature-list {
-        list-style: none !important;
-        padding: 0 !important;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin: 25px 0 !important;
-      }
-      .feature-list li {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 18px;
-        border-radius: 8px;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        transition: transform 0.2s;
-      }
-      .feature-list li:hover {
-        transform: scale(1.02);
-        border-color: var(--green);
-      }
-      .feature-list li::before { display: none !important; }
-      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
-      .fl-text { display: flex; flex-direction: column; gap: 6px; }
-      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
-      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+  /* grid stage overridden to display logo and pulse animation */
+  .grid-stage{display:flex;justify-content:center;align-items:center;height:280px;position:relative;}
+  .pulse-ring{
+    position:absolute;border-radius:50%;border:2px solid var(--cyan);
+    width:240px;height:240px;opacity:0;
+    animation:pulse 2.8s ease-out infinite;
+  }
+  .pulse-ring.r2{animation-delay:.9s;}
+  .pulse-ring.r3{animation-delay:1.8s;}
+  @keyframes pulse{
+    0%{ width:200px;height:200px;opacity:.55;}
+    100%{ width:440px;height:440px;opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){ .pulse-ring{animation:none;display:none;} }
+  .cloud-icon{width:280px;height:280px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 35px rgba(63, 198, 241, 0.55)); transition: transform 0.3s ease;}
+  .cloud-icon:hover{transform: scale(1.05);}
 
-      @media (max-width: 768px) {
-        .feature-list { grid-template-columns: 1fr; }
-        .info-card { flex-direction: column; }
-      }
-    
-      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
-      .app-card {
-        position: relative;
-        overflow: hidden;
-        min-height: 160px;
-        display: block;
-        padding: 0;
-      }
-      .ac-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .ac-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
+  p.body-text{max-width:680px; color:var(--ink-soft); margin-bottom:18px; font-size:15.5px;}
+  p.body-text strong{color:var(--ink); font-weight:600;}
 
-      .feature-list li {
-        position: relative;
-        overflow: hidden;
-        min-height: 120px;
-        display: block;
-        padding: 0;
-        text-align: center;
-      }
-      .fl-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .fl-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .fl-front .fl-icon { margin-bottom: 10px; }
-      .fl-front strong { margin-bottom: 0; }
+  /* ---------- TIMELINE ---------- */
+  .timeline-scroll{overflow-x:auto; padding-bottom:18px; margin:0 -28px; padding-left:28px; padding-right:28px;}
+  .timeline-svg-holder{
+    min-width:1000px;
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .timeline-svg-holder svg text {
+    fill: var(--ink) !important;
+  }
+  .timeline-svg-holder svg g[fill="#141417"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#15171f"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#12151a"] {
+    fill: var(--card) !important;
+  }
 
-    </style>
+  /* ---------- DIAGRAM PANEL ---------- */
+  .diagram-panel{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:30px; margin-top:10px; overflow-x:auto;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .diagram-panel text {
+    fill: var(--ink) !important;
+  }
+  .diagram-panel g[fill="#141417"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#15171f"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#12151a"] {
+    fill: var(--card) !important;
+  }
+  .diagram-caption{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-soft);
+    margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);
+  }
+
+  /* ---------- CARDS GRID ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; background:transparent; border:none;}
+  .grid .card{padding:26px; background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-md); backdrop-filter:blur(10px);}
+  .card h3{font-family:'JetBrains Mono',monospace; font-size:13.5px; color:var(--accent); margin-bottom:9px; display:flex; align-items:center; gap:8px;}
+  .card p{font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
+  @media(max-width:760px){.grid{grid-template-columns:1fr;} }
+
+  /* ---------- STATS ---------- */
+  .stats-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; background:transparent; border:none; margin-top:40px;}
+  .stat{background:var(--card); padding:24px 20px; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-md); backdrop-filter:blur(10px);}
+  .stat strong{display:block; font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--accent); font-weight:700;}
+  .stat span{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em;}
+  @media(max-width:760px){.stats-row{grid-template-columns:repeat(2,1fr);} }
+
+  /* ---------- USE CASES ---------- */
+  .usecase{
+    display:grid; grid-template-columns:46px 1fr; gap:20px;
+    padding:22px 0; border-bottom:1px solid var(--line);
+  }
+  .usecase:last-child{border-bottom:none;}
+  .usecase .num{font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:13px; padding-top:4px;}
+  .usecase h4{font-size:16.5px; margin-bottom:6px; font-weight:600; font-family:'DM Sans',sans-serif;}
+  .usecase p{color:var(--ink-soft); font-size:14.5px; max-width:600px;}
+
+  /* ---------- RESOURCES / LEARN ---------- */
+  .resource-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;}
+  .resource{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:18px 20px; transition:border-color .15s, transform .15s;
+    box-shadow:var(--shadow-sm); backdrop-filter:blur(10px);
+  }
+  .resource:hover{border-color:var(--accent); transform: translateY(-2px);}
+  .resource .rtype{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;}
+  .resource a{font-weight:600; color:var(--ink); font-size:14.5px; text-decoration:none;}
+  .resource a:hover{color:var(--accent);}
+  .resource p{font-size:13px; color:var(--ink-soft); margin-top:6px; line-height:1.5;}
+  @media(max-width:760px){.resource-list{grid-template-columns:1fr;} }
+
+  /* ---------- REFERENCES ---------- */
+  .ref-list{list-style:none; counter-reset:ref; max-width:760px;}
+  .ref-list li{
+    counter-increment:ref; position:relative; padding-left:38px;
+    padding-bottom:16px; margin-bottom:16px; border-bottom:1px solid var(--line);
+    font-size:14.5px; color:var(--ink-soft);
+  }
+  .ref-list li::before{
+    content:counter(ref); position:absolute; left:0; top:0;
+    font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:13px;
+    border:1px solid var(--line); width:24px; height:24px; border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--card);
+  }
+  .ref-list a{font-weight:500; color:var(--ink); text-decoration:none;}
+  .ref-list a:hover{color:var(--accent);}
+
+  footer{
+    padding:40px 0 50px;border-top:1px solid var(--line);margin-top:30px;
+    background:rgba(6, 13, 22, 0.6);
+  }
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer p{font-size:12px;color:var(--ink-soft);margin:0;}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: width .15s, height .15s, background .15s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(63, 198, 241, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: width .25s, height .25s, border-color .25s;
+  }
+  .cursor-big #cursor { width: 18px; height: 18px; background: var(--accent); }
+  .cursor-big #cursor-ring { width: 56px; height: 56px; border-color: var(--accent); }
+
+  /* ─── SCROLL PROGRESS ─── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--cyan), var(--accent2));
+    z-index: 10000;
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  /* ─── PARTICLE CANVAS ─── */
+  #particles-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ─── MENU TOGGLE ─── */
+  #menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2001;
+    padding: 10px;
+  }
+  #menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #menu-toggle span:nth-child(2) { width: 18px; align-self: flex-end; }
+  #menu-toggle:hover span:nth-child(2) { width: 28px; }
+
+  #menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 28px; }
+  #menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  #menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 28px; }
+
+  @media (max-width: 720px) {
+    #menu-toggle { display: flex; }
+  }
+
+  /* ─── MOBILE MENU ─── */
+  #mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #mobile-menu.active { transform: translateX(0); }
+  .mm-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: center;
+    width: 100%;
+  }
+  .mm-content a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  #mobile-menu.active .mm-content a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #mobile-menu.active .mm-content a:nth-child(1) { transition-delay: 0.1s; }
+  #mobile-menu.active .mm-content a:nth-child(2) { transition-delay: 0.2s; }
+  #mobile-menu.active .mm-content a:nth-child(3) { transition-delay: 0.3s; }
+  #mobile-menu.active .mm-content a:nth-child(4) { transition-delay: 0.4s; }
+  #mobile-menu.active .mm-content a:nth-child(5) { transition-delay: 0.5s; }
+  #mobile-menu.active .mm-content a:nth-child(6) { transition-delay: 0.6s; }
+
+  .mm-content a:hover { color: var(--accent); transform: scale(1.05); letter-spacing: 10px; }
+
+  /* ─── CLI TERMINAL ─── */
+  #terminal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    padding: 40px;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    text-align: left;
+  }
+  #terminal-overlay.active { display: flex; }
+
+  .term-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+  }
+  #term-output {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .term-line { display: block; }
+  .term-line.cmd { color: var(--cyan); }
+  .term-line.cmd::before { content: "> "; }
+  .term-line.res { color: var(--ink-soft); }
+  .term-line.error { color: var(--accent2); }
+
+  .term-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 20px;
+    border: 1px solid var(--line);
+  }
+  .term-prompt { color: var(--cyan); font-weight: bold; }
+  #term-input {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+  }
+  .term-hint {
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    opacity: 0.5;
+  }
+
+  /* CLI TRIGGER BUTTON */
+  .cli-trigger {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9995;
+    width: 64px; height: 64px;
+    background: rgba(63, 198, 241, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(63, 198, 241, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    cursor: pointer;
+    box-shadow: 
+      inset 0 0 20px rgba(63, 198, 241, 0.05),
+      0 0 30px rgba(63, 198, 241, 0.2);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cli-trigger::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(from 0deg, transparent, var(--accent), transparent, var(--accent2), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: cliRotate 4s linear infinite;
+  }
+
+  @keyframes cliRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .cli-trigger span {
+    filter: drop-shadow(0 0 15px var(--accent));
+    animation: cliFloat 3s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes cliFloat {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.1) translateY(-5px); }
+  }
+
+  .cli-trigger:hover { 
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(63, 198, 241, 0.08);
+    box-shadow: 
+      inset 0 0 30px rgba(63, 198, 241, 0.1),
+      0 0 50px rgba(63, 198, 241, 0.4);
+  }
+  .cli-trigger:hover::before {
+    animation-duration: 1.5s;
+  }
+
+  /* ─── HUD SCANNER FRAME ─── */
+  .hud-frame {
+    position: fixed;
+    inset: 16px;
+    pointer-events: none;
+    z-index: 9998;
+    transition: inset 0.3s;
+  }
+
+  .hud-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(63, 198, 241, 0.08);
+    box-shadow: inset 0 0 20px rgba(63, 198, 241, 0.03);
+    pointer-events: none;
+  }
+
+  .hud-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--accent);
+    transition: border-color 0.3s;
+  }
+
+  .hud-corner.top-left {
+    top: 0; left: 0;
+    border-right: none; border-bottom: none;
+  }
+
+  .hud-corner.top-right {
+    top: 0; right: 0;
+    border-left: none; border-bottom: none;
+  }
+
+  .hud-corner.bottom-left {
+    bottom: 0; left: 0;
+    border-right: none; border-top: none;
+  }
+
+  .hud-corner.bottom-right {
+    bottom: 0; right: 0;
+    border-left: none; border-top: none;
+  }
+
+  .hud-tag {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--accent-soft);
+    position: absolute;
+    white-space: nowrap;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .top-left .hud-tag { top: -14px; left: 0; }
+  .top-right .hud-tag { top: -14px; right: 0; text-align: right; }
+  .bottom-left .hud-tag { bottom: -14px; left: 0; }
+  .bottom-right .hud-tag { bottom: -14px; right: 0; text-align: right; }
+
+  @media (max-width: 768px) {
+    .hud-frame {
+      inset: 8px;
+    }
+    .hud-tag {
+      display: none;
+    }
+  }
+</style>
+<script>window.TECH_THEME_COLOR = '#ffb454';</script>
 </head>
 <body>
 
@@ -241,95 +661,29 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── SMART NAV ─── -->
-<div class="smart-nav">
-  <nav id="navbar">
+<!-- HUD VIEWPORT FRAME -->
+<div class="hud-frame">
+  <div class="hud-corner top-left"><span class="hud-tag">SYS_ACTIVE</span></div>
+  <div class="hud-corner top-right"><span class="hud-tag">USCS_OS v1.0.4</span></div>
+  <div class="hud-corner bottom-left"><span class="hud-tag">GRID_SEC_X9</span></div>
+  <div class="hud-corner bottom-right"><span class="hud-tag">E-WALL_HUD</span></div>
+</div>
+
+<nav id="navbar">
+  <div class="inner">
     <a href="../index.html#home" class="nav-logo">USCS<span class="accent"> E-WALL</span></a>
-    <div class="nav-links">
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#wall">The Wall</a>
-      <a href="../index.html#materials">Materials</a>
-      <a href="../index.html#impact">Impact</a>
-      <a href="../index.html#creators">Team</a>
-    </div>
+    <ul>
+      <li><a href="#history">History</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#usecases">Use cases</a></li>
+      <li><a href="#learn">Learn</a></li>
+      <li><a href="#refs">References</a></li>
+    </ul>
     <button id="menu-toggle" aria-label="Toggle Menu">
       <span></span><span></span><span></span>
     </button>
-  </nav>
-
-  <div class="nav-ticker">
-    <div class="nav-ticker-track">
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-    </div>
   </div>
-</div>
+</nav>
 
 <!-- MOBILE MENU OVERLAY -->
 <div id="mobile-menu">
@@ -342,308 +696,276 @@
   </div>
 </div>
 
-<!-- ─── SUBPAGE HERO ─── -->
-<section class="page-hero section-z">
-  <div class="hero-orb o1"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content-wrap" style="display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; flex-wrap: wrap; margin-top: 20px;">
-    <div class="reveal in d1" style="background: rgba(30,75,110,.12); border: 1px solid #1e4b6e40; padding: 30px; border-radius: 28px; box-shadow: 0 15px 40px rgba(30,75,110,.12); display: flex; align-items: center; justify-content: center;">
-      <img src="../icon/encryption.png" style="width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 20px #1e4b6e);" class="tech-hero-img">
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-      <div class="hero-eyebrow reveal in d2" style="border-color: #1e4b6e40; background: rgba(30,75,110,.12); color: #1e4b6e; margin-bottom: 15px;">
-        <span class="pulse" style="background: #1e4b6e; animation: none; box-shadow: 0 0 10px #1e4b6e;"></span>
-        DOCUMENTATION ARCHIVE
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">cryptography · symmetric & asymmetric · since 100 BC</div>
+      <h1 class="title">Turning meaning into <em>noise</em> — and back again, only for the right key.</h1>
+      <p class="subtitle">Encryption is the practice of scrambling information so only someone holding the correct key can read it. It's quietly running underneath almost every digital interaction you have — this page covers where the idea came from, how the math actually works, where it's used today, and where to learn it properly.</p>
+      <div class="hero-meta">
+        
+      <div><span>Earliest known use</span><strong>~100 BC, Rome</strong></div>
+      <div><span>Modern standard</span><strong>AES-256</strong></div>
+      <div><span>Key exchange method</span><strong>RSA / ECC</strong></div>
+      <div><span>Public-key concept</span><strong>1976 (Diffie–Hellman)</strong></div>
+    
       </div>
-      <h1 class="reveal in d3" style="margin-bottom: 0; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1; letter-spacing: 2px; text-shadow: 0 0 30px rgba(30,75,110,.12);">
-        <span style="color: #fff;">Encryption</span>
-      </h1>
-      <p class="hero-tech-desc reveal in d4" style="margin-top: 15px; margin-bottom: 0; font-size: 1rem; color: var(--text2); max-width: 400px; font-weight: 300; line-height: 1.6; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 15px;">The process of encoding information to keep it secure.</p>
+      
+    </div>
+    <div class="grid-stage">
+      <div class="pulse-ring r1"></div>
+      <div class="pulse-ring r2"></div>
+      <div class="pulse-ring r3"></div>
+      <img src="../icon/encryption.png" class="cloud-icon" alt="Encryption Logo">
+    </div>
+  </div>
+</header>
+
+<!-- ================= HISTORY ================= -->
+<section id="history" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">01 / origin</span>
+      <h2>From shaved heads to silicon chips</h2>
+    </div>
+    <p class="lede">Encryption is older than computers by roughly two thousand years — only the medium has changed.</p>
+
+    <p class="body-text">The earliest documented technique isn't even encryption by modern definition — it's <strong>steganography</strong>: the Greek historian Herodotus describes a message tattooed onto a servant's shaved scalp, hidden once the hair regrew. The first true cipher most people learn is the <strong>Caesar cipher</strong>, used by Julius Caesar around 100–44 BC, which simply shifts each letter a fixed number of places down the alphabet. It held up for centuries until the 9th-century Arab mathematician <strong>Al-Kindi</strong> broke it using frequency analysis — counting how often each letter appears in a language to reverse-engineer the shift.</p>
+
+    <p class="body-text">The 20th century turned cryptography into mechanical engineering. In 1918, German engineer <strong>Arthur Scherbius</strong> built the <strong>Enigma machine</strong>, a rotor-based device the German military relied on heavily through WWII. Polish mathematician <strong>Marian Rejewski</strong> first broke Enigma in 1932, and the effort was later scaled up at Bletchley Park by British codebreakers including <strong>Alan Turing</strong> — a campaign widely credited with shortening the war and seeding the foundations of modern computing.</p>
+
+    <p class="body-text">The digital era split encryption into two parallel revolutions. In the 1970s, <strong>IBM</strong> developed a cipher that became the <strong>Data Encryption Standard (DES)</strong>, adopted as a US federal standard in 1976/77 — the first encryption standard built for computers rather than humans. Then in <strong>1976</strong>, <strong>Whitfield Diffie</strong> and <strong>Martin Hellman</strong> published the idea of <strong>public-key cryptography</strong>: a way to securely exchange a secret without ever having met. A year later, <strong>Rivest, Shamir, and Adleman</strong> turned that idea into a working algorithm — <strong>RSA</strong>, still in everyday use today. By 2001, DES's short 56-bit key had become breakable, and it was formally replaced by the <strong>Advanced Encryption Standard (AES)</strong>, the symmetric cipher that still secures most of the internet.</p>
+
+    <div class="timeline-scroll">
+      <div class="timeline-svg-holder">
+        <svg width="1040" height="240" viewBox="0 0 1040 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline of encryption history from 100 BC to 2001">
+          <line x1="40" y1="120" x2="1000" y2="120" stroke="#262936" stroke-width="2"/>
+          <g font-family="IBM Plex Mono, monospace">
+            <!-- Caesar -->
+            <circle cx="70" cy="120" r="7" fill="#ffb454"/>
+            <line x1="70" y1="120" x2="70" y2="74" stroke="#262936" stroke-width="1.5"/>
+            <text x="70" y="62" fill="#e9ebf2" font-size="12" text-anchor="middle" font-weight="600">~100 BC</text>
+            <text x="70" y="150" fill="#8c91a3" font-size="10.5" text-anchor="middle">Caesar cipher</text>
+
+            <!-- Al-Kindi -->
+            <circle cx="220" cy="120" r="6" fill="#7d8cff"/>
+            <line x1="220" y1="120" x2="220" y2="166" stroke="#262936" stroke-width="1.5"/>
+            <text x="220" y="62" fill="#8c91a3" font-size="11" text-anchor="middle">~850 AD</text>
+            <text x="220" y="182" fill="#e9ebf2" font-size="11.5" text-anchor="middle" font-weight="600">Al-Kindi breaks</text>
+            <text x="220" y="195" fill="#8c91a3" font-size="10.5" text-anchor="middle">it via frequency analysis</text>
+
+            <!-- Enigma -->
+            <circle cx="430" cy="120" r="8" fill="#ffb454" stroke="#0b0c10" stroke-width="3"/>
+            <line x1="430" y1="120" x2="430" y2="74" stroke="#262936" stroke-width="1.5"/>
+            <text x="430" y="62" fill="#e9ebf2" font-size="12.5" text-anchor="middle" font-weight="700">1918</text>
+            <text x="430" y="150" fill="#e9ebf2" font-size="12" text-anchor="middle" font-weight="600">Enigma machine</text>
+            <text x="430" y="163" fill="#8c91a3" font-size="10.5" text-anchor="middle">built by Scherbius</text>
+
+            <!-- Bletchley -->
+            <circle cx="580" cy="120" r="6" fill="#7d8cff"/>
+            <line x1="580" y1="120" x2="580" y2="166" stroke="#262936" stroke-width="1.5"/>
+            <text x="580" y="62" fill="#8c91a3" font-size="11" text-anchor="middle">1939–45</text>
+            <text x="580" y="182" fill="#e9ebf2" font-size="11.5" text-anchor="middle" font-weight="600">Enigma broken</text>
+            <text x="580" y="195" fill="#8c91a3" font-size="10.5" text-anchor="middle">Bletchley Park / Turing</text>
+
+            <!-- DES -->
+            <circle cx="730" cy="120" r="6" fill="#5ee6c4"/>
+            <line x1="730" y1="120" x2="730" y2="74" stroke="#262936" stroke-width="1.5"/>
+            <text x="730" y="62" fill="#e9ebf2" font-size="12" text-anchor="middle" font-weight="600">1976</text>
+            <text x="730" y="150" fill="#e9ebf2" font-size="12" text-anchor="middle" font-weight="600">DES adopted</text>
+            <text x="730" y="163" fill="#8c91a3" font-size="10.5" text-anchor="middle">US federal standard</text>
+
+            <!-- Diffie-Hellman / RSA -->
+            <circle cx="850" cy="120" r="9" fill="#5ee6c4" stroke="#0b0c10" stroke-width="3"/>
+            <line x1="850" y1="120" x2="850" y2="166" stroke="#262936" stroke-width="1.5"/>
+            <text x="850" y="62" fill="#8c91a3" font-size="11" text-anchor="middle">1976–77</text>
+            <text x="850" y="182" fill="#e9ebf2" font-size="12.5" text-anchor="middle" font-weight="700">Public-key crypto</text>
+            <text x="850" y="195" fill="#8c91a3" font-size="10.5" text-anchor="middle">Diffie–Hellman, then RSA</text>
+
+            <!-- AES -->
+            <circle cx="980" cy="120" r="7" fill="#ffb454"/>
+            <line x1="980" y1="120" x2="980" y2="74" stroke="#262936" stroke-width="1.5"/>
+            <text x="980" y="62" fill="#e9ebf2" font-size="12" text-anchor="middle" font-weight="600">2001</text>
+            <text x="980" y="150" fill="#e9ebf2" font-size="12" text-anchor="middle" font-weight="600">AES replaces DES</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><strong>2,100+</strong><span>Years since first cipher</span></div>
+      <div class="stat"><strong>256-bit</strong><span>Standard AES key size</span></div>
+      <div class="stat"><strong>2^128</strong><span>Possible 128-bit keys</span></div>
+      <div class="stat"><strong>1997</strong><span>RSA's secret history declassified*</span></div>
     </div>
   </div>
 </section>
 
-<div class="subpage-container section-z" style="position: relative; overflow: hidden;">
-<div class="tech-watermark" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-family: var(--font-disp); font-size: clamp(8rem, 20vw, 25rem); color: #1e4b6e; opacity: 0.03; pointer-events: none; z-index: -1; white-space: nowrap; user-select: none;">Encryption</div>
-  
-  <!-- SIDEBAR NAVIGATION -->
-  <aside class="sidebar">
-    <span class="sidebar-h">CONTENTS</span>
-    <ul class="sidebar-links">
-      <li><a href="#history">History</a></li>
-      <li><a href="#why">Why Use This?</a></li>
-      <li><a href="#applications">Applications</a></li>
-      <li><a href="#facts">Key Facts</a></li>
-      <li><a href="#learn">Resources</a></li>
-    </ul>
-  </aside>
-
-  <!-- CONTENT ARTICLES -->
-  <main class="content-section">
-
-    <section id="history">
-      <h2>History</h2>
-      <div class="info-card">
-        <div class="ic-icon">🕰️</div>
-        <div class="ic-content">
-          <p>The history of encryption spans thousands of years. Julius Caesar used a simple substitution cipher (Caesar Cipher) around 58 BC. In WWII, the Enigma machine used rotor-based encryption, broken by Alan Turing at Bletchley Park. The modern era began with DES (1977), followed by RSA public-key cryptography (1978). AES became the US federal standard in 2001 and remains dominant. TLS/SSL brought encryption to the web.</p>
-        </div>
-      </div>
-    </section>
-
-    
-
-    <section id="why">
-      <h2>Why We Use Encryption</h2>
-      <div class="hl-box">
-        Encryption protects data confidentiality, ensures integrity, and enables authentication. Without encryption, passwords, financial transactions, medical records, and private messages would be exposed to any network observer. HTTPS (which encrypts web traffic using TLS) is now used by 98%+ of websites. End-to-end encryption in messaging apps like Signal and WhatsApp protects billions of conversations daily.
-      </div>
-    </section>
-
-    <section id="applications">
-      <h2>Applications &amp; Use Cases</h2>
-      <div class="app-grid">
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">⚙️</span>
-            <span class="ac-title">HTTPS</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">securing all web communications</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🔌</span>
-            <span class="ac-title">VPN tunnels for...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">VPN tunnels for private networking</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🗄️</span>
-            <span class="ac-title">End-to-end encrypted messaging...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">End-to-end encrypted messaging (Signal, WhatsApp)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🐍</span>
-            <span class="ac-title">Full-disk encryption (BitLocker,...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Full-disk encryption (BitLocker, FileVault, LUKS)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🚀</span>
-            <span class="ac-title">Email encryption (PGP/GPG, S/MIME)</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Email encryption (PGP/GPG, S/MIME)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🛠️</span>
-            <span class="ac-title">Digital signatures and...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Digital signatures and certificate authorities</span>
-          </div>
-        </div>
-        
-      </div>
-    </section>
-
-    <section id="facts">
-      <h2>Key Facts &amp; Features</h2>
-      <ul class="feature-list">
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🧠</span>
-            <strong>Symmetric encryption (AES)</strong>
-          </div>
-          <div class="fl-back">
-            <span>same key encrypts and decrypts</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🎯</span>
-            <strong>Asymmetric encryption (RSA, ECC)</strong>
-          </div>
-          <div class="fl-back">
-            <span>public key encrypts, private key decrypts</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚡</span>
-            <strong>TLS 1.3 is</strong>
-          </div>
-          <div class="fl-back">
-            <span>TLS 1.3 is the current web standard, deprecating older versions</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚠️</span>
-            <strong>Quantum computing threatens</strong>
-          </div>
-          <div class="fl-back">
-            <span>Quantum computing threatens RSA; post-quantum algorithms (NIST 2024) are emerging</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">📌</span>
-            <strong>Hash functions (SHA-256,</strong>
-          </div>
-          <div class="fl-back">
-            <span>Hash functions (SHA-256, SHA-3) create fixed-length fingerprints of data</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">💡</span>
-            <strong>Key lengths</strong>
-          </div>
-          <div class="fl-back">
-            <span>AES-256 is considered quantum-resistant for now</span>
-          </div>
-        </li>
-        
-      </ul>
-    </section>
-
-    <section id="learn">
-      <h2>Where to Learn</h2>
-
-      <h3>Online Courses</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Encryption%20Coursera', '_blank')" style="cursor: pointer;" title="Go to Coursera">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>Coursera</strong>
-          </div>
-          <div class="fl-back">
-            <span>Cryptography I & II – Dan Boneh (Stanford, free to audit)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Encryption%20Udemy', '_blank')" style="cursor: pointer;" title="Go to Udemy">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>Udemy</strong>
-          </div>
-          <div class="fl-back">
-            <span>The Complete Cyber Security Course – Nathan House</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Encryption%20edX', '_blank')" style="cursor: pointer;" title="Go to edX">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>edX</strong>
-          </div>
-          <div class="fl-back">
-            <span>Cybersecurity Fundamentals (Rochester Institute of Technology)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Encryption%20Khan%20Academy', '_blank')" style="cursor: pointer;" title="Go to Khan Academy">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📙</span>
-            <strong>Khan Academy</strong>
-          </div>
-          <div class="fl-back">
-            <span>Cryptography (free)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-
-      <h3>Books &amp; References</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Encryption%20'Applied%20Cryptography'', '_blank')" style="cursor: pointer;" title="Go to 'Applied Cryptography'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>'Applied Cryptography'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Bruce Schneier</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Encryption%20'Cryptography%20and%20Network%20Security'', '_blank')" style="cursor: pointer;" title="Go to 'Cryptography and Network Security'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>'Cryptography and Network Security'</strong>
-          </div>
-          <div class="fl-back">
-            <span>William Stallings</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Encryption%20'The%20Code%20Book'', '_blank')" style="cursor: pointer;" title="Go to 'The Code Book'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>'The Code Book'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Simon Singh (accessible history)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-    </section>
-  </main>
-</div>
-
-<!-- ─── FOOTER ─── -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <span class="f-brand-name">USCS<span class="a"> E-WALL</span></span>
-      <p>An e-waste art installation by <strong>USCS (Uttaranchal School of Computing Sciences)</strong>, celebrating the IT field through creative reuse of technology.</p>
+<!-- ================= HOW IT WORKS ================= -->
+<section id="how" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">02 / mechanics</span>
+      <h2>Two families of encryption — and how they team up</h2>
     </div>
-    <div>
-      <div class="f-col-h">Navigate</div>
-      <ul class="f-lnks">
-        <li><a href="../index.html#about">About Project</a></li>
-        <li><a href="../index.html#wall">Interactive Wall</a></li>
-        <li><a href="../index.html#materials">Raw Materials</a></li>
-        <li><a href="../index.html#impact">Our Impact</a></li>
-        <li><a href="../index.html#creators">The Team</a></li>
-      </ul>
+    <p class="lede">Nearly everything in modern cryptography is one of two approaches, often combined: one fast secret-sharing method, and one clever trick for exchanging that secret safely in the first place.</p>
+
+    <div class="diagram-panel">
+      <svg width="100%" height="360" viewBox="0 0 940 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram comparing symmetric and asymmetric encryption">
+        <!-- Symmetric box -->
+        <g font-family="Inter">
+          <rect x="20" y="30" width="420" height="150" rx="10" fill="#15171f" stroke="#ffb454" stroke-width="1.5"/>
+          <text x="40" y="56" fill="#ffb454" font-family="IBM Plex Mono" font-size="12" font-weight="700">SYMMETRIC — e.g. AES</text>
+
+          <!-- sender -->
+          <circle cx="80" cy="110" r="20" fill="none" stroke="#e9ebf2" stroke-width="1.5"/>
+          <text x="80" y="115" fill="#e9ebf2" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">A</text>
+          <!-- key icon -->
+          <text x="225" y="100" fill="#5ee6c4" font-size="20" text-anchor="middle">🔑</text>
+          <text x="225" y="122" fill="#8c91a3" font-size="10.5" text-anchor="middle" font-family="IBM Plex Mono">same key, both sides</text>
+          <!-- receiver -->
+          <circle cx="370" cy="110" r="20" fill="none" stroke="#e9ebf2" stroke-width="1.5"/>
+          <text x="370" y="115" fill="#e9ebf2" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">B</text>
+
+          <line x1="100" y1="110" x2="205" y2="110" stroke="#ffb454" stroke-width="2"/>
+          <line x1="245" y1="110" x2="350" y2="110" stroke="#ffb454" stroke-width="2"/>
+
+          <text x="40" y="155" fill="#c4c7d3" font-size="12">Fast — used for the actual bulk data once a</text>
+          <text x="40" y="170" fill="#c4c7d3" font-size="12">shared key exists. The hard part: how do A and B</text>
+        </g>
+
+        <!-- Asymmetric box -->
+        <g font-family="Inter">
+          <rect x="500" y="30" width="420" height="150" rx="10" fill="#15171f" stroke="#5ee6c4" stroke-width="1.5"/>
+          <text x="520" y="56" fill="#5ee6c4" font-family="IBM Plex Mono" font-size="12" font-weight="700">ASYMMETRIC — e.g. RSA</text>
+
+          <circle cx="560" cy="110" r="20" fill="none" stroke="#e9ebf2" stroke-width="1.5"/>
+          <text x="560" y="115" fill="#e9ebf2" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">A</text>
+          <text x="705" y="98" fill="#ffb454" font-size="10.5" text-anchor="middle" font-family="IBM Plex Mono">B's public key</text>
+          <text x="705" y="124" fill="#7d8cff" font-size="10.5" text-anchor="middle" font-family="IBM Plex Mono">B's private key</text>
+          <circle cx="850" cy="110" r="20" fill="none" stroke="#e9ebf2" stroke-width="1.5"/>
+          <text x="850" y="115" fill="#e9ebf2" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">B</text>
+
+          <line x1="580" y1="105" x2="800" y2="105" stroke="#ffb454" stroke-width="2"/>
+          <line x1="800" y1="120" x2="580" y2="120" stroke="#7d8cff" stroke-width="2" stroke-dasharray="4,3"/>
+
+          <text x="520" y="155" fill="#c4c7d3" font-size="12">Two mathematically linked keys — encrypt with</text>
+          <text x="520" y="170" fill="#c4c7d3" font-size="12">the public one, only the matching private key opens it.</text>
+        </g>
+
+        <!-- combined flow underneath -->
+        <rect x="20" y="220" width="900" height="115" rx="10" fill="#0f1117" stroke="#262936" stroke-dasharray="3,3"/>
+        <text x="40" y="246" fill="#ffb454" font-family="IBM Plex Mono" font-size="11.5" font-weight="700">HOW HTTPS ACTUALLY COMBINES THEM</text>
+        <g font-family="IBM Plex Mono" font-size="11.5" fill="#c4c7d3">
+          <text x="40" y="272">1. Browser and server use RSA / ECC (asymmetric) just to agree on a one-time secret</text>
+          <text x="40" y="293">2. That secret becomes a temporary AES (symmetric) session key</text>
+          <text x="40" y="314">3. All actual page data is encrypted fast, using AES, for the rest of the connection</text>
+        </g>
+      </svg>
+      <p class="diagram-caption">Symmetric ciphers are fast but need a pre-shared secret. Asymmetric ciphers solve the sharing problem but are slow. Real systems like HTTPS/TLS use asymmetric encryption only to exchange a key, then switch to symmetric encryption for speed.</p>
+    </div>
+
+    <div class="grid" style="margin-top:50px;">
+      <div class="card"><h3>◆ Plaintext</h3><p>The original, readable message or data before any transformation is applied.</p></div>
+      <div class="card"><h3>◆ Ciphertext</h3><p>The scrambled, unreadable output produced once an encryption algorithm and key are applied.</p></div>
+      <div class="card"><h3>◆ Key</h3><p>The secret value that controls exactly how the scrambling happens — and how it's reversed.</p></div>
+      <div class="card"><h3>◆ Algorithm / cipher</h3><p>The mathematical procedure itself — AES, RSA, ChaCha20 — that's publicly known and trusted to be secure.</p></div>
+      <div class="card"><h3>◆ Hashing (related, not encryption)</h3><p>A one-way fingerprint of data — used for passwords and integrity checks, never meant to be reversed.</p></div>
+      <div class="card"><h3>◆ End-to-end encryption</h3><p>Data is encrypted on the sender's device and only decrypted on the recipient's — not even the service provider in between can read it.</p></div>
     </div>
   </div>
-  <div class="footer-btm">
-    <span class="f-copy">© 2026 USCS E-WALL PROJECT — BUILT FROM DISCARDED TECH</span>
-    <span class="f-status"><span class="f-dot"></span>INSTALLATION LIVE</span>
+</section>
+
+<!-- ================= USE CASES ================= -->
+<section id="usecases" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">03 / applications</span>
+      <h2>Where encryption is quietly working right now</h2>
+    </div>
+    <p class="lede">It's invisible by design — most people interact with strong encryption dozens of times a day without noticing.</p>
+
+    <div class="usecase"><div class="num">01</div><div><h4>Web browsing (HTTPS/TLS)</h4><p>The padlock icon in your browser means traffic between you and the site is encrypted in transit, combining asymmetric key exchange with symmetric bulk encryption.</p></div></div>
+    <div class="usecase"><div class="num">02</div><div><h4>Messaging apps</h4><p>End-to-end encryption in apps like Signal and WhatsApp ensures only the sender and recipient can read messages, not the platform itself.</p></div></div>
+    <div class="usecase"><div class="num">03</div><div><h4>Banking and payments</h4><p>Card transactions, online banking sessions, and crypto-wallet signatures all rely on layered encryption to prevent interception and fraud.</p></div></div>
+    <div class="usecase"><div class="num">04</div><div><h4>Disk and device encryption</h4><p>Tools like BitLocker and FileVault encrypt an entire hard drive, so a stolen laptop's data stays unreadable without the login key.</p></div></div>
+    <div class="usecase"><div class="num">05</div><div><h4>Password storage</h4><p>Services store a salted hash of your password instead of the password itself, so even a database breach doesn't expose your actual credentials.</p></div></div>
+    <div class="usecase"><div class="num">06</div><div><h4>VPNs and corporate networks</h4><p>VPN tunnels encrypt all traffic between a device and a remote server, hiding browsing activity from local networks and ISPs.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= LEARN MORE ================= -->
+<section id="learn" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">04 / go deeper</span>
+      <h2>Free, well-regarded places to actually learn it</h2>
+    </div>
+    <p class="lede">From playful intuition-builders to full university-level courses on the underlying math.</p>
+
+    <div class="resource-list">
+      <div class="resource">
+        <div class="rtype">Interactive · Free</div>
+        <a href="https://cryptohack.org/" target="_blank" rel="noopener">CryptoHack</a>
+        <p>Learn cryptography hands-on by solving puzzles — covers classical ciphers through modern RSA/AES.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">University course · Free</div>
+        <a href="https://www.coursera.org/learn/crypto" target="_blank" rel="noopener">Stanford — Cryptography I (Coursera)</a>
+        <p>Dan Boneh's widely recommended course covering the math behind symmetric and public-key cryptography.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Reference</div>
+        <a href="https://www.khanacademy.org/computing/computer-science/cryptography" target="_blank" rel="noopener">Khan Academy — Cryptography</a>
+        <p>A beginner-friendly, visual introduction to ciphers, key exchange, and modern encryption.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Standard / spec</div>
+        <a href="https://www.nist.gov/publications/advanced-encryption-standard-aes" target="_blank" rel="noopener">NIST — AES Standard (FIPS 197)</a>
+        <p>The official specification document for the Advanced Encryption Standard, straight from NIST.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Book</div>
+        <a href="https://www.schneier.com/books/applied-cryptography/" target="_blank" rel="noopener">Applied Cryptography — Bruce Schneier</a>
+        <p>A classic, widely cited reference text covering both the theory and real-world protocols.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Article</div>
+        <a href="https://www.ibm.com/think/topics/cryptography-history" target="_blank" rel="noopener">IBM — The History of Cryptography</a>
+        <p>A well-sourced, accessible walkthrough of cryptography's evolution from antiquity to today.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REFERENCES ================= -->
+<section id="refs" style="border-bottom:none;" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">05 / sources</span>
+      <h2>References</h2>
+    </div>
+    <ul class="ref-list">
+      <li><a href="https://www.ibm.com/think/topics/cryptography-history" target="_blank" rel="noopener">The History of Cryptography — IBM</a>. Timeline of the Enigma machine, RSA, and the AES/DES transition.</li>
+      <li><a href="https://en.wikipedia.org/wiki/Timeline_of_cryptography" target="_blank" rel="noopener">Timeline of Cryptography — Wikipedia</a>. Detailed chronological reference spanning ancient ciphers to modern standards.</li>
+      <li><a href="https://www.redhat.com/en/blog/brief-history-cryptography" target="_blank" rel="noopener">A Brief History of Cryptography — Red Hat</a>. Background on the IBM "crypto group," Lucifer cipher, and DES standardization.</li>
+      <li><a href="https://interestingengineering.com/innovation/11-cryptographic-methods-that-marked-history-from-the-caesar-cipher-to-enigma-code-and-beyond" target="_blank" rel="noopener">11 Cryptographic Methods That Marked History — Interesting Engineering</a>. Details on public-key cryptography's GCHQ origins and the Vigenère cipher.</li>
+      <li><a href="https://tresorit.com/blog/the-history-of-encryption-the-roots-of-modern-day-cyber-security" target="_blank" rel="noopener">The History of Encryption — Tresorit</a>. Explanation of the Caesar cipher's eventual cryptanalysis by Al-Kindi.</li>
+      <li><a href="https://www.nist.gov/publications/advanced-encryption-standard-aes" target="_blank" rel="noopener">NIST — Advanced Encryption Standard (FIPS 197)</a>. The official AES specification document.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="gap: 12px; display: flex; align-items: center; flex-wrap: wrap;">
+      <a href="../index.html#home" class="nav-logo" style="font-size: 1.2rem; letter-spacing: 2px;">USCS<span class="accent"> E-WALL</span></a>
+      <span style="opacity: 0.3;">|</span>
+      <span style="font-size: 12.5px; color: var(--ink-soft);">Educational overview — not an official page.</span>
+    </div>
+    <p>Sources cited above · Page last assembled June 2026</p>
   </div>
 </footer>
-
 
 <!-- ─── CLI TERMINAL OVERLAY ─── -->
 <div id="terminal-overlay">
@@ -663,8 +985,14 @@
 
 <button class="cli-trigger" id="cli-open"><span>🤖</span></button>
 
-
 <script src="../data.js"></script>
 <script src="../main.js"></script>
+<script>
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+
 </body>
 </html>

@@ -1,236 +1,708 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MySQL — USCS E-WALL</title>
-  <link rel="stylesheet" href="../styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MySQL — A Visual Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
-  <!-- TECH THEME OVERRIDE -->
-  <script>window.TECH_THEME_COLOR = '#4479a1';</script>
-  <style>
-    :root {
-      --green: #4479a1 !important;
-      --cyan: #4479a1 !important;
-      --aura-color: #4479a1 !important;
-      --aura-glow: rgba(68,121,161,.12) !important;
+  :root{
+    --bg: #02050a;
+    --card: rgba(6, 13, 22, 0.95);
+    --ink: #ffffff;
+    --ink-soft: #a0b8d0;
+    --line: rgba(0, 117, 143, 0.18);
+    --teal: #00758F;
+    --teal-deep: #005A70;
+    --orange: #F29111;
+    --orange-deep: #D67700;
+    --navy: #0E2A38;
+    --cyan: #00758F;
+    --green: #00758F;
+    --green2: #F29111;
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.5);
+    --shadow-md: 0 10px 35px rgba(0,0,0,0.8);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: linear-gradient(rgba(2, 5, 10, 0.92), rgba(2, 5, 10, 0.92)), url('../img/bg.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color:var(--ink);
+    font-family:'DM Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    position: relative;
+  }
+
+  /* Website Premium Scanlines & Noise overlays */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.5;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+    pointer-events: none;
+    z-index: 9989;
+  }
+
+  h1,h2,.display{
+    font-family:'Bebas Neue',sans-serif;
+    margin:0;
+    letter-spacing:0.04em;
+  }
+  h3{
+    font-family:'JetBrains Mono',monospace;
+    margin:0;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--cyan); transition: color 0.2s ease;}
+  a:hover{color: var(--orange-deep);}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0;}
+  .lead{font-size:18px;color:var(--ink-soft);line-height:1.65;max-width:640px;font-weight:300;}
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(2, 5, 10, 0.88);
+    backdrop-filter:blur(20px) saturate(1.5);
+    border-bottom:1px solid var(--line);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  }
+  nav .inner{
+    max-width:1080px;margin:0 auto;padding:14px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-logo .accent {
+    color: var(--teal);
+  }
+  @media(max-width: 480px) {
+    .nav-logo {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
     }
-    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #4479a1 !important; }
-    .content-section hr { background: linear-gradient(90deg, #4479a1, transparent) !important; }
-    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #4479a1 !important; }
-    #scroll-progress { background: #4479a1 !important; box-shadow: 0 0 10px #4479a1 !important; }
-    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(68,121,161,.12) !important; }
-    .nav-ticker-item.active { border-bottom: 1px solid #4479a1 !important; }
-    .btn-primary { background: #4479a1 !important; }
-    .btn-primary:hover { box-shadow: 0 0 30px rgba(68,121,161,.12) !important; }
-    .hero-eyebrow .pulse { background: #4479a1 !important; box-shadow: 0 0 10px #4479a1 !important; }
-  </style>
+  }
+  @media(max-width: 360px) {
+    .nav-logo {
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+  }
+  nav ul{list-style:none;display:flex;gap:26px;margin:0;padding:0;}
+  nav ul a{
+    color:var(--ink);text-decoration:none;font-size:14px;font-weight:500;
+    opacity:0.75;transition:opacity .15s, color .15s;
+  }
+  nav ul a:hover{opacity:1;color:var(--cyan);}
+  @media (max-width:720px){ nav ul{display:none;} }
 
-    <style>
-      .content-section h2 {
-        display: inline-block;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #4479a140;
-        position: relative;
-        text-shadow: 0 0 20px rgba(68,121,161,.12);
-      }
-      .content-section h2::before {
-        content: '>>';
-        font-family: var(--font-mono);
-        color: #4479a1;
-        margin-right: 12px;
-        font-size: 1.5rem;
-        opacity: 0.7;
-        text-shadow: 0 0 10px #4479a180;
-      }
-      .content-section ul li {
-        position: relative;
-        padding-left: 20px;
-        list-style: none;
-      }
-      .content-section ul li::before {
-        content: '◈';
-        position: absolute;
-        left: 0;
-        top: 2px;
-        color: #4479a1;
-        font-size: 0.8rem;
-        opacity: 0.8;
-      }
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid #4479a130;
-      }
-    </style>
-  
+  /* ===== SECTION TAG ===== */
+  .sec-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--card);color:var(--ink);
+    padding:6px 14px 6px 10px;border-radius:6px;
+    margin-bottom:26px;
+    border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;
+  }
+  .sec-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);}
 
-    <style>
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid var(--green);
-        line-height: 1.8;
-      }
-      /* RICH UX CLASSES */
-      .info-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 24px;
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
-        margin-bottom: 25px;
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-      .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        border-color: var(--green);
-      }
-      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
-      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
-      
-      .hl-box {
-        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-        border-left: 4px solid var(--green);
-        padding: 24px 30px;
-        border-radius: 0 8px 8px 0;
-        margin: 25px 0;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      }
+  h2.h-title{font-size:38px;font-weight:800;margin-bottom:14px;color:var(--ink);letter-spacing:1px;text-shadow:0 0 20px rgba(255,255,255,0.05);}
+  @media (max-width:540px){ h2.h-title{font-size:28px;} }
 
-      .app-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
-        margin: 25px 0;
-      }
-      .app-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 22px;
-        border-radius: 8px;
-        transition: all 0.3s;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .app-card:hover {
-        border-color: var(--green);
-        background: rgba(255,255,255,0.03);
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-      }
-      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
-      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
-      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(0, 117, 143, 0.3);
+    box-shadow:0 12px 30px rgba(0, 117, 143, 0.15);
+  }
 
-      .feature-list {
-        list-style: none !important;
-        padding: 0 !important;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin: 25px 0 !important;
-      }
-      .feature-list li {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 18px;
-        border-radius: 8px;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        transition: transform 0.2s;
-      }
-      .feature-list li:hover {
-        transform: scale(1.02);
-        border-color: var(--green);
-      }
-      .feature-list li::before { display: none !important; }
-      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
-      .fl-text { display: flex; flex-direction: column; gap: 6px; }
-      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
-      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+  /* ===== HERO ===== */
+  .hero{padding:90px 0 70px;position:relative;overflow:hidden;}
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 80% 10%, rgba(0,117,143,0.12), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(242,145,17,0.10), transparent 50%);
+    pointer-events:none;
+  }
+  .hero .wrap{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:center;position:relative;z-index:2;}
+  @media (max-width:860px){ .hero .wrap{grid-template-columns:1fr;} }
+  .hero h1{
+    font-size:64px;
+    line-height:1.06;
+    font-weight:800;
+    color:var(--ink);
+    text-shadow: 0 0 30px rgba(0, 117, 143, 0.3);
+  }
+  @media (max-width:540px){ .hero h1{font-size:42px;} }
+  .hero h1 .accent{color:var(--orange-deep);}
+  .hero p.sub{font-size:16.5px;color:var(--ink-soft);margin-top:18px;max-width:520px;line-height:1.65;font-weight:300;}
+  .stat-row{display:flex;gap:28px;margin-top:32px;flex-wrap:wrap;}
+  .stat .num{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:32px;color:var(--cyan);letter-spacing:1px;}
+  .stat .label{font-size:12px;color:var(--ink-soft);margin-top:2px;}
 
-      @media (max-width: 768px) {
-        .feature-list { grid-template-columns: 1fr; }
-        .info-card { flex-direction: column; }
-      }
-    
-      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
-      .app-card {
-        position: relative;
-        overflow: hidden;
-        min-height: 160px;
-        display: block;
-        padding: 0;
-      }
-      .ac-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .ac-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
+  /* query stage overridden to display logo and pulse animation */
+  .query-stage{display:flex;justify-content:center;align-items:center;height:280px;position:relative;background:transparent;box-shadow:none;border-radius:0;padding:0;}
+  .pulse-ring{
+    position:absolute;border-radius:50%;border:2px solid var(--cyan);
+    width:240px;height:240px;opacity:0;
+    animation:pulse 2.8s ease-out infinite;
+  }
+  .pulse-ring.r2{animation-delay:.9s;}
+  .pulse-ring.r3{animation-delay:1.8s;}
+  @keyframes pulse{
+    0%{ width:200px;height:200px;opacity:.55;}
+    100%{ width:440px;height:440px;opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){ .pulse-ring{animation:none;display:none;} }
+  .cloud-icon{width:280px;height:280px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 35px rgba(0, 117, 143, 0.55)); transition: transform 0.3s ease;}
+  .cloud-icon:hover{transform: scale(1.05);}
 
-      .feature-list li {
-        position: relative;
-        overflow: hidden;
-        min-height: 120px;
-        display: block;
-        padding: 0;
-        text-align: center;
-      }
-      .fl-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .fl-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .fl-front .fl-icon { margin-bottom: 10px; }
-      .fl-front strong { margin-bottom: 0; }
+  /* ===== ABOUT ===== */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:46px;align-items:start;}
+  @media (max-width:860px){ .about-grid{grid-template-columns:1fr;} }
+  figcaption{font-size:12.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5;}
 
-    </style>
+  .feature-list{list-style:none;margin:0;padding:0;display:grid;gap:13px;}
+  .feature-list li{
+    display:flex;gap:14px;align-items:flex-start;padding:16px 17px;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+  }
+  .feature-list .ic{
+    width:36px;height:36px;border-radius:8px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:16px;
+    background:var(--bg); border: 1px solid var(--line);
+  }
+  .feature-list li strong{font-size:14.5px;display:block;margin-bottom:3px;color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:700;}
+  .feature-list li p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.5;}
+
+  /* ===== ERD DIAGRAM ===== */
+  .erd-wrap{
+    margin-top:46px;padding:28px;overflow-x:auto;
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+  }
+  /* Override SVG text inside labels for dark theme legibility */
+  .erd-wrap g[fill="#0E2A38"] {
+    fill: var(--ink) !important;
+  }
+  .erd-wrap text[fill="#0E2A38"] {
+    fill: var(--ink) !important;
+  }
+  .erd-wrap g[fill="#1A1A2E"] {
+    fill: var(--ink) !important;
+  }
+  .erd-wrap text[fill="#1A1A2E"] {
+    fill: var(--ink) !important;
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline{position:relative;margin-top:54px;padding-left:6px;}
+  .timeline::before{
+    content:"";position:absolute;left:97px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(to bottom, var(--teal), var(--orange));
+    opacity:0.35;
+  }
+  @media (max-width:640px){ .timeline::before{left:54px;} }
+  .t-row{display:grid;grid-template-columns:90px 26px 1fr;gap:0 18px;margin-bottom:28px;}
+  @media (max-width:640px){ .t-row{grid-template-columns:46px 22px 1fr;} }
+  .t-year{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:14px;color:var(--cyan);padding-top:14px;text-align:right;}
+  .t-node{display:flex;justify-content:center;padding-top:16px;}
+  .t-node .dot{width:13px;height:13px;border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 0 2px var(--line);}
+  .t-card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;
+    box-shadow:var(--shadow-sm);
+    backdrop-filter:blur(10px);
+  }
+  .t-card h4{margin:0 0 4px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:15.5px;color:var(--ink);}
+  .t-card p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+
+  /* ===== USE CASES ===== */
+  .case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;}
+  @media (max-width:860px){ .case-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .case-grid{grid-template-columns:1fr;} }
+  .case{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    display:flex;flex-direction:column;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .case:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 117, 143, 0.3);
+  }
+  .case .img-wrap{aspect-ratio:16/10;overflow:hidden;background:var(--bg);position:relative;}
+  .case .img-wrap svg{width:100%;height:100%;transition: transform 0.5s ease;}
+  .case:hover .img-wrap svg{transform: scale(1.05);}
+  .case .body{padding:15px 17px 19px;}
+  .case .body .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--cyan);}
+  .case .body h4{font-family:'DM Sans',sans-serif;font-size:16px;margin:6px 0 6px;font-weight:700;color:var(--ink);}
+  .case .body p{font-size:13px;color:var(--ink-soft);margin:0;line-height:1.55;}
+
+  /* ===== SECURITY / HOW SYNC WORKS ===== */
+  .flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:46px;}
+  @media (max-width:860px){ .flow-steps{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:540px){ .flow-steps{grid-template-columns:1fr;} }
+  .flow-step{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 18px;position:relative;
+    box-shadow:var(--shadow-sm);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .flow-step:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 117, 143, 0.3);
+  }
+  .flow-step .fnum{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);}
+  .flow-step h4{font-family:'DM Sans',sans-serif;font-size:14px;margin:8px 0 6px;font-weight:700;color:var(--ink);}
+  .flow-step p{font-size:12.5px;color:var(--ink-soft);margin:0;line-height:1.5;}
+  .flow-step code{font-size:11.5px;background:var(--bg);padding:2px 6px;border-radius:4px;color:var(--cyan);font-family:'JetBrains Mono',monospace;border:1px solid var(--line);}
+  @media (min-width:861px){
+    .flow-step:not(:last-child)::after{
+      content:"→";position:absolute;right:-21px;top:50%;transform:translateY(-50%);
+      color:var(--cyan);font-size:17px;font-weight:700;
+    }
+  }
+
+  /* ===== PRICING CHART ===== */
+  .chart-card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:32px 34px;margin-top:46px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+  }
+  .plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px;}
+  @media (max-width:860px){ .plan-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:540px){ .plan-grid{grid-template-columns:1fr;} }
+  .plan-tier{
+    padding:20px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,0.03);
+    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+  .plan-tier:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 117, 143, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .plan-tier.highlight{border-color:var(--teal);background:linear-gradient(160deg, rgba(0,117,143,0.08), rgba(255,255,255,0.03));}
+  .plan-tier.highlight:hover {
+    background:linear-gradient(160deg, rgba(0,117,143,0.12), rgba(255,255,255,0.06));
+  }
+  .plan-tier .pname{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;}
+  .plan-tier .pprice{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ink);margin:8px 0;font-weight:700;letter-spacing:1px;}
+  .plan-tier .pprice span{font-size:12px;color:var(--ink-soft);font-weight:400;font-family:'DM Sans',sans-serif;}
+  .plan-tier .pdesc{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+
+  /* ===== REFERENCES ===== */
+  .ref-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;margin-top:30px;}
+  .ref-item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+    box-shadow:var(--shadow-sm);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .ref-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 117, 143, 0.3);
+  }
+  .ref-item .rtitle{font-weight:600;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);}
+  .ref-item .rdesc{font-size:12.5px;color:var(--ink-soft);margin-top:3px;}
+  .ref-item a.go{
+    font-family:'JetBrains Mono',monospace;font-size:12px;text-decoration:none;
+    background:var(--bg);padding:7px 14px;border-radius:6px;white-space:nowrap;
+    border:1px solid var(--line);color:var(--cyan);
+    transition: all 0.2s ease;
+  }
+  .ref-item a.go:hover{background:var(--cyan);color:#04141F;border-color:var(--cyan);}
+  .course-strip{
+    margin-top:36px;border-radius:14px;
+    background:linear-gradient(120deg, var(--teal-deep), rgba(0, 117, 143, 0.4));
+    padding:30px 32px;color:#fff;
+    box-shadow:var(--shadow-md);
+  }
+  .course-strip h3{font-family:'Bebas Neue',sans-serif;font-size:24px;color:#fff;margin-bottom:14px;letter-spacing:1px;}
+  .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:760px){ .course-grid{grid-template-columns:1fr;} }
+  .course-item{
+    background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+    border-radius:10px;padding:14px 16px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .course-item:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .course-item a{color:#fff;text-decoration:none;font-weight:600;font-size:13.5px;font-family:'DM Sans',sans-serif;}
+  .course-item p{color:rgba(255,255,255,0.8);font-size:12px;margin:6px 0 0;line-height:1.5;}
+
+  footer{
+    padding:40px 0 50px;border-top:1px solid var(--line);margin-top:30px;
+    background:rgba(6, 13, 22, 0.6);
+  }
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer p{font-size:12px;color:var(--ink-soft);margin:0;}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: width .15s, height .15s, background .15s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(0, 117, 143, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: width .25s, height .25s, border-color .25s;
+  }
+  .cursor-big #cursor { width: 18px; height: 18px; background: var(--teal-deep); }
+  .cursor-big #cursor-ring { width: 56px; height: 56px; border-color: var(--teal-deep); }
+
+  /* ─── SCROLL PROGRESS ─── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--teal), var(--cyan), var(--orange));
+    z-index: 10000;
+    box-shadow: 0 0 10px var(--teal);
+  }
+
+  /* ─── PARTICLE CANVAS ─── */
+  #particles-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ─── MENU TOGGLE ─── */
+  #menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2001;
+    padding: 10px;
+  }
+  #menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--teal-deep);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #menu-toggle span:nth-child(2) { width: 18px; align-self: flex-end; }
+  #menu-toggle:hover span:nth-child(2) { width: 28px; }
+
+  #menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 28px; }
+  #menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  #menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 28px; }
+
+  @media (max-width: 720px) {
+    #menu-toggle { display: flex; }
+  }
+
+  /* ─── MOBILE MENU ─── */
+  #mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #mobile-menu.active { transform: translateX(0); }
+  .mm-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: center;
+    width: 100%;
+  }
+  .mm-content a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  #mobile-menu.active .mm-content a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #mobile-menu.active .mm-content a:nth-child(1) { transition-delay: 0.1s; }
+  #mobile-menu.active .mm-content a:nth-child(2) { transition-delay: 0.2s; }
+  #mobile-menu.active .mm-content a:nth-child(3) { transition-delay: 0.3s; }
+  #mobile-menu.active .mm-content a:nth-child(4) { transition-delay: 0.4s; }
+  #mobile-menu.active .mm-content a:nth-child(5) { transition-delay: 0.5s; }
+  #mobile-menu.active .mm-content a:nth-child(6) { transition-delay: 0.6s; }
+
+  .mm-content a:hover { color: var(--teal-deep); transform: scale(1.05); letter-spacing: 10px; }
+
+  /* ─── CLI TERMINAL ─── */
+  #terminal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    padding: 40px;
+    font-family: var(--font-mono);
+    color: var(--teal);
+    text-align: left;
+  }
+  #terminal-overlay.active { display: flex; }
+
+  .term-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+  }
+  #term-output {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .term-line { display: block; }
+  .term-line.cmd { color: var(--cyan); }
+  .term-line.cmd::before { content: "> "; }
+  .term-line.res { color: var(--ink-soft); }
+  .term-line.error { color: var(--amber); }
+
+  .term-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 20px;
+    border: 1px solid var(--line);
+  }
+  .term-prompt { color: var(--cyan); font-weight: bold; }
+  #term-input {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+  }
+  .term-hint {
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    opacity: 0.5;
+  }
+
+  /* CLI TRIGGER BUTTON */
+  .cli-trigger {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9995;
+    width: 64px; height: 64px;
+    background: rgba(0, 117, 143, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 117, 143, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    cursor: pointer;
+    box-shadow: 
+      inset 0 0 20px rgba(0, 117, 143, 0.05),
+      0 0 30px rgba(0, 117, 143, 0.2);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cli-trigger::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(from 0deg, transparent, var(--teal), transparent, var(--orange), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: cliRotate 4s linear infinite;
+  }
+
+  @keyframes cliRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .cli-trigger span {
+    filter: drop-shadow(0 0 15px var(--teal));
+    animation: cliFloat 3s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes cliFloat {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.1) translateY(-5px); }
+  }
+
+  .cli-trigger:hover { 
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(0, 117, 143, 0.08);
+    box-shadow: 
+      inset 0 0 30px rgba(0, 117, 143, 0.1),
+      0 0 50px rgba(0, 117, 143, 0.4);
+  }
+  .cli-trigger:hover::before {
+    animation-duration: 1.5s;
+  }
+
+  /* ─── HUD SCANNER FRAME ─── */
+  .hud-frame {
+    position: fixed;
+    inset: 16px;
+    pointer-events: none;
+    z-index: 9998;
+    transition: inset 0.3s;
+  }
+
+  .hud-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(0, 117, 143, 0.08);
+    box-shadow: inset 0 0 20px rgba(0, 117, 143, 0.03);
+    pointer-events: none;
+  }
+
+  .hud-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--teal);
+    transition: border-color 0.3s;
+  }
+
+  .hud-corner.top-left {
+    top: 0; left: 0;
+    border-right: none; border-bottom: none;
+  }
+
+  .hud-corner.top-right {
+    top: 0; right: 0;
+    border-left: none; border-bottom: none;
+  }
+
+  .hud-corner.bottom-left {
+    bottom: 0; left: 0;
+    border-right: none; border-top: none;
+  }
+
+  .hud-corner.bottom-right {
+    bottom: 0; right: 0;
+    border-left: none; border-top: none;
+  }
+
+  .hud-tag {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--teal-deep);
+    position: absolute;
+    white-space: nowrap;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .top-left .hud-tag { top: -14px; left: 0; }
+  .top-right .hud-tag { top: -14px; right: 0; text-align: right; }
+  .bottom-left .hud-tag { bottom: -14px; left: 0; }
+  .bottom-right .hud-tag { bottom: -14px; right: 0; text-align: right; }
+
+  @media (max-width: 768px) {
+    .hud-frame {
+      inset: 8px;
+    }
+    .hud-tag {
+      display: none;
+    }
+  }
+</style>
+<script>window.TECH_THEME_COLOR = '#00758F';</script>
 </head>
 <body>
 
@@ -244,95 +716,29 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── SMART NAV ─── -->
-<div class="smart-nav">
-  <nav id="navbar">
+<!-- HUD VIEWPORT FRAME -->
+<div class="hud-frame">
+  <div class="hud-corner top-left"><span class="hud-tag">SYS_ACTIVE</span></div>
+  <div class="hud-corner top-right"><span class="hud-tag">USCS_OS v1.0.4</span></div>
+  <div class="hud-corner bottom-left"><span class="hud-tag">GRID_SEC_X9</span></div>
+  <div class="hud-corner bottom-right"><span class="hud-tag">E-WALL_HUD</span></div>
+</div>
+
+<nav id="navbar">
+  <div class="inner">
     <a href="../index.html#home" class="nav-logo">USCS<span class="accent"> E-WALL</span></a>
-    <div class="nav-links">
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#wall">The Wall</a>
-      <a href="../index.html#materials">Materials</a>
-      <a href="../index.html#impact">Impact</a>
-      <a href="../index.html#creators">Team</a>
-    </div>
+    <ul>
+      <li><a href="#about">What is it</a></li>
+      <li><a href="#history">History</a></li>
+      <li><a href="#usecases">Use cases</a></li>
+      <li><a href="#erd">ERD Structure</a></li>
+      <li><a href="#refs">Learn more</a></li>
+    </ul>
     <button id="menu-toggle" aria-label="Toggle Menu">
       <span></span><span></span><span></span>
     </button>
-  </nav>
-
-  <div class="nav-ticker">
-    <div class="nav-ticker-track">
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-    </div>
   </div>
-</div>
+</nav>
 
 <!-- MOBILE MENU OVERLAY -->
 <div id="mobile-menu">
@@ -345,320 +751,426 @@
   </div>
 </div>
 
-<!-- ─── SUBPAGE HERO ─── -->
-<section class="page-hero section-z">
-  <div class="hero-orb o1"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content-wrap" style="display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; flex-wrap: wrap; margin-top: 20px;">
-    <div class="reveal in d1" style="background: rgba(68,121,161,.12); border: 1px solid #4479a140; padding: 30px; border-radius: 28px; box-shadow: 0 15px 40px rgba(68,121,161,.12); display: flex; align-items: center; justify-content: center;">
-      <img src="../icon/mysql.png" style="width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 20px #4479a1);" class="tech-hero-img">
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-      <div class="hero-eyebrow reveal in d2" style="border-color: #4479a140; background: rgba(68,121,161,.12); color: #4479a1; margin-bottom: 15px;">
-        <span class="pulse" style="background: #4479a1; animation: none; box-shadow: 0 0 10px #4479a1;"></span>
-        DOCUMENTATION ARCHIVE
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <h1>The database<br>quietly running<br><span class="accent">most of the web.</span></h1>
+      <p class="sub">MySQL is the world's most widely used open-source relational database — the storage engine behind WordPress, Facebook's early infrastructure, and millions of apps in between. Here's where it came from, how it organizes data, and why it became a default choice for developers everywhere.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="num">1995</div><div class="label">First released</div></div>
+        <div class="stat"><div class="num">30+</div><div class="label">Years in production</div></div>
+        <div class="stat"><div class="num">#2</div><div class="label">Most used database (DB-Engines)</div></div>
       </div>
-      <h1 class="reveal in d3" style="margin-bottom: 0; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1; letter-spacing: 2px; text-shadow: 0 0 30px rgba(68,121,161,.12);">
-        <span style="color: #fff;">MySQL</span>
-      </h1>
-      <p class="hero-tech-desc reveal in d4" style="margin-top: 15px; margin-bottom: 0; font-size: 1rem; color: var(--text2); max-width: 400px; font-weight: 300; line-height: 1.6; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 15px;">The world's most popular open-source relational database.</p>
+    </div>
+    <div class="query-stage">
+      <div class="pulse-ring r1"></div>
+      <div class="pulse-ring r2"></div>
+      <div class="pulse-ring r3"></div>
+      <img src="../icon/mysql.png" class="cloud-icon" alt="MySQL Logo">
+    </div>
+  </div>
+</header>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about">
+  <div class="wrap reveal">
+    <div class="sec-tag"><span class="dot"></span>01 — Overview</div>
+    <h2 class="h-title">What exactly is MySQL?</h2>
+    <p class="lead">MySQL is a relational database management system (RDBMS) — it stores data in structured tables with rows and columns, and lets you query, join, and update that data using SQL.</p>
+
+    <div class="about-grid">
+      <figure>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <svg viewBox="0 0 520 300" style="width:100%;display:block;">
+            <rect width="520" height="300" fill="#0E2A38"/>
+            <rect x="0" y="0" width="520" height="36" fill="#0A2230"/>
+            <circle cx="20" cy="18" r="5" fill="#FF5F57"/><circle cx="38" cy="18" r="5" fill="#FFBD2E"/><circle cx="56" cy="18" r="5" fill="#28C840"/>
+            <text x="260" y="22" text-anchor="middle" font-family="Inter" font-size="11" fill="#7C97A6">MySQL Workbench — orders database</text>
+
+            <g font-family="JetBrains Mono" font-size="11" fill="#fff">
+              <rect x="16" y="50" width="220" height="100" rx="6" fill="#13384A"/>
+              <text x="26" y="68" fill="#F29111">TABLE customers</text>
+              <text x="26" y="86" fill="#D7E4E9">id     INT PK</text>
+              <text x="26" y="102" fill="#D7E4E9">name   VARCHAR</text>
+              <text x="26" y="118" fill="#D7E4E9">email  VARCHAR</text>
+              <text x="26" y="134" fill="#D7E4E9">joined DATE</text>
+
+              <rect x="264" y="50" width="240" height="100" rx="6" fill="#13384A"/>
+              <text x="274" y="68" fill="#F29111">TABLE orders</text>
+              <text x="274" y="86" fill="#D7E4E9">id          INT PK</text>
+              <text x="274" y="102" fill="#6FC3E0">customer_id FK</text>
+              <text x="274" y="118" fill="#D7E4E9">total       DECIMAL</text>
+              <text x="274" y="134" fill="#D7E4E9">status      ENUM</text>
+
+              <path d="M236 100 L 264 100" stroke="#F29111" stroke-width="1.5"/>
+              <circle cx="236" cy="100" r="3" fill="#F29111"/>
+              <circle cx="264" cy="100" r="3" fill="#F29111"/>
+            </g>
+
+            <rect x="16" y="166" width="488" height="118" rx="6" fill="#13384A"/>
+            <text x="26" y="186" font-family="JetBrains Mono" font-size="11" fill="#9FC6D6">mysql&gt; SELECT name, total FROM customers JOIN orders ...;</text>
+            <g font-family="JetBrains Mono" font-size="10" fill="#D7E4E9">
+              <text x="26" y="210" fill="#7C97A6">+----------+--------+</text>
+              <text x="26" y="226">| name     | total  |</text>
+              <text x="26" y="240" fill="#7C97A6">+----------+--------+</text>
+              <text x="26" y="254">| J. Smith | 128.50 |</text>
+              <text x="26" y="268">| A. Patel | 64.00  |</text>
+              <text x="26" y="280" fill="#7C97A6">+----------+--------+</text>
+            </g>
+          </svg>
+        </div>
+        <figcaption>A simplified view of MySQL Workbench: two related tables joined together with a single SQL query.</figcaption>
+      </figure>
+
+      <ul class="feature-list">
+        <li class="card">
+          <div class="ic">🗂️</div>
+          <div><strong>Relational tables</strong><p>Data lives in structured tables with defined columns and types — far more organized than a spreadsheet or flat file.</p></div>
+        </li>
+        <li class="card">
+          <div class="ic">🔗</div>
+          <div><strong>Relationships &amp; joins</strong><p>Tables connect via keys, so a single query can pull related data — like customers and their orders — together instantly.</p></div>
+        </li>
+        <li class="card">
+          <div class="ic">🆓</div>
+          <div><strong>Open source</strong><p>Released under the GPL, MySQL Community Edition is free to download, use, and modify, with paid editions for enterprise support.</p></div>
+        </li>
+        <li class="card">
+          <div class="ic">⚙️</div>
+          <div><strong>Pluggable storage engines</strong><p>InnoDB (the default) handles transactions and relationships; other engines optimize for different workloads.</p></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ERD relationship diagram -->
+    <p class="lead" style="margin-top:50px;">How relational data actually connects — a simplified entity relationship diagram:</p>
+    <div class="erd-wrap card">
+      <svg viewBox="0 0 900 220" width="100%" style="min-width:680px;">
+        <g font-family="JetBrains Mono" font-size="11" fill="#0E2A38">
+          <rect x="20" y="30" width="190" height="120" rx="8" fill="#E6F3F6" stroke="#00758F"/>
+          <rect x="20" y="30" width="190" height="28" rx="8" fill="#00758F"/>
+          <text x="115" y="49" text-anchor="middle" fill="#fff" font-weight="600">customers</text>
+          <text x="34" y="78">id (PK)</text>
+          <text x="34" y="96">name</text>
+          <text x="34" y="114">email</text>
+          <text x="34" y="132">joined</text>
+
+          <rect x="355" y="30" width="190" height="140" rx="8" fill="#FFF3E2" stroke="#F29111"/>
+          <rect x="355" y="30" width="190" height="28" rx="8" fill="#F29111"/>
+          <text x="450" y="49" text-anchor="middle" fill="#fff" font-weight="600">orders</text>
+          <text x="369" y="78">id (PK)</text>
+          <text x="369" y="96">customer_id (FK)</text>
+          <text x="369" y="114">total</text>
+          <text x="369" y="132">status</text>
+          <text x="369" y="150">created_at</text>
+
+          <rect x="690" y="60" width="190" height="100" rx="8" fill="#E6F3F6" stroke="#00758F"/>
+          <rect x="690" y="60" width="190" height="28" rx="8" fill="#00758F"/>
+          <text x="785" y="79" text-anchor="middle" fill="#fff" font-weight="600">order_items</text>
+          <text x="704" y="108">order_id (FK)</text>
+          <text x="704" y="126">product</text>
+          <text x="704" y="144">qty</text>
+
+          <path d="M210 90 L 355 90" stroke="#5C7585" stroke-width="1.5" fill="none"/>
+          <text x="282" y="84" text-anchor="middle" font-size="9" fill="#5C7585">1 → many</text>
+          <circle cx="210" cy="90" r="3" fill="#5C7585"/>
+          <circle cx="355" cy="90" r="3" fill="#5C7585"/>
+
+          <path d="M545 100 L 690 110" stroke="#5C7585" stroke-width="1.5" fill="none"/>
+          <text x="617" y="98" text-anchor="middle" font-size="9" fill="#5C7585">1 → many</text>
+          <circle cx="545" cy="100" r="3" fill="#5C7585"/>
+          <circle cx="690" cy="110" r="3" fill="#5C7585"/>
+        </g>
+      </svg>
     </div>
   </div>
 </section>
 
-<div class="subpage-container section-z" style="position: relative; overflow: hidden;">
-<div class="tech-watermark" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-family: var(--font-disp); font-size: clamp(8rem, 20vw, 25rem); color: #4479a1; opacity: 0.03; pointer-events: none; z-index: -1; white-space: nowrap; user-select: none;">MySQL</div>
-  
-  <!-- SIDEBAR NAVIGATION -->
-  <aside class="sidebar">
-    <span class="sidebar-h">CONTENTS</span>
-    <ul class="sidebar-links">
-      <li><a href="#history">History</a></li>
-      <li><a href="#why">Why Use This?</a></li>
-      <li><a href="#applications">Applications</a></li>
-      <li><a href="#facts">Key Facts</a></li>
-      <li><a href="#learn">Resources</a></li>
-    </ul>
-  </aside>
+<!-- ===================== HISTORY ===================== -->
+<section id="history" style="background:var(--card);">
+  <div class="wrap reveal">
+    <div class="sec-tag"><span class="dot"></span>02 — History</div>
+    <h2 class="h-title">From a Swedish consulting tool to Oracle's flagship open-source database</h2>
+    <p class="lead">MySQL began as an internal fix for a data-warehousing problem — then went through two of the biggest acquisitions in tech history while staying free and open source.</p>
 
-  <!-- CONTENT ARTICLES -->
-  <main class="content-section">
-
-    <section id="history">
-      <h2>History</h2>
-      <div class="info-card">
-        <div class="ic-icon">🕰️</div>
-        <div class="ic-content">
-          <p>MySQL was created by Michael Widenius and David Axmark and first released in May 1995. The name combines 'My' (after co-founder's daughter) and SQL. Sun Microsystems acquired MySQL AB in 2008 for $1 billion. Oracle acquired it with Sun in 2010. MySQL now powers over 50% of all websites including Wikipedia, Twitter, and YouTube. MariaDB was forked from MySQL in 2009 to remain fully open source.</p>
+    <div class="timeline">
+      <div class="t-row">
+        <div class="t-year">1994–95</div>
+        <div class="t-node"><div class="dot" style="background:var(--teal);box-shadow:0 0 0 2px var(--card);"></div></div>
+        <div class="t-card card">
+          <h4>Built to replace an aging tool</h4>
+          <p>At Swedish company TcX, Michael "Monty" Widenius and David Axmark need a faster alternative to their old UNIREG database tool. The first version of MySQL is released on May 23, 1995.</p>
         </div>
       </div>
-    </section>
-
-    
-
-    <section id="why">
-      <h2>Why We Use MySQL</h2>
-      <div class="hl-box">
-        MySQL is fast, reliable, easy to install, and has decades of battle-tested stability. It uses a client-server model, supports ACID transactions via InnoDB storage engine, and integrates with virtually every programming language. It is the 'M' in the classic LAMP (Linux-Apache-MySQL-PHP) stack and remains the foundation of countless web applications.
+      <div class="t-row">
+        <div class="t-year">1998</div>
+        <div class="t-node"><div class="dot" style="background:var(--orange);box-shadow:0 0 0 2px var(--card);"></div></div>
+        <div class="t-card card">
+          <h4>MySQL AB is founded</h4>
+          <p>Widenius, Axmark, and Allan Larsson found MySQL AB to formally support, license, and develop MySQL as a standalone product.</p>
+        </div>
       </div>
-    </section>
-
-    <section id="applications">
-      <h2>Applications &amp; Use Cases</h2>
-      <div class="app-grid">
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">⚙️</span>
-            <span class="ac-title">Web application backends...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Web application backends (WordPress, Drupal, Joomla)</span>
-          </div>
+      <div class="t-row">
+        <div class="t-year">2000</div>
+        <div class="t-node"><div class="dot" style="background:var(--teal);box-shadow:0 0 0 2px var(--card);"></div></div>
+        <div class="t-card card">
+          <h4>Goes fully open source under GPL</h4>
+          <p>MySQL AB adopts the GNU General Public License, cementing its commitment to free and open-source software — a decision central to its explosive adoption.</p>
         </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🔌</span>
-            <span class="ac-title">E-commerce platforms (Magento, WooCommerce)</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">E-commerce platforms (Magento, WooCommerce)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🗄️</span>
-            <span class="ac-title">Data warehousing with...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Data warehousing with MySQL partitioning</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🐍</span>
-            <span class="ac-title">Embedded database in...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Embedded database in devices and applications</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🚀</span>
-            <span class="ac-title">SaaS application databases</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">SaaS application databases</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🛠️</span>
-            <span class="ac-title">Logging, analytics, and...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Logging, analytics, and reporting systems</span>
-          </div>
-        </div>
-        
       </div>
-    </section>
-
-    <section id="facts">
-      <h2>Key Facts &amp; Features</h2>
-      <ul class="feature-list">
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🧠</span>
-            <strong>Supports all standard</strong>
-          </div>
-          <div class="fl-back">
-            <span>Supports all standard SQL syntax plus MySQL-specific extensions</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🎯</span>
-            <strong>InnoDB provides full</strong>
-          </div>
-          <div class="fl-back">
-            <span>InnoDB provides full ACID compliance and foreign keys</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚡</span>
-            <strong>Replication</strong>
-          </div>
-          <div class="fl-back">
-            <span>master-slave and group replication built-in</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚠️</span>
-            <strong>Supports JSON data</strong>
-          </div>
-          <div class="fl-back">
-            <span>Supports JSON data type natively since MySQL 5.7</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">📌</span>
-            <strong>MySQL Workbench provides</strong>
-          </div>
-          <div class="fl-back">
-            <span>MySQL Workbench provides GUI for modeling and administration</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">💡</span>
-            <strong>Used by Facebook's</strong>
-          </div>
-          <div class="fl-back">
-            <span>Used by Facebook's original backend infrastructure</span>
-          </div>
-        </li>
-        
-      </ul>
-    </section>
-
-    <section id="learn">
-      <h2>Where to Learn</h2>
-
-      <h3>Online Courses</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+MySQL%20MySQL%20Official%20Documentation%20(dev.mysql.com)', '_blank')" style="cursor: pointer;" title="Go to MySQL Official Documentation (dev.mysql.com)">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>MySQL Official Documentation (dev.mysql.com)</strong>
-          </div>
-          <div class="fl-back">
-            <span>MySQL Official Documentation (dev.mysql.com)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+MySQL%20Udemy', '_blank')" style="cursor: pointer;" title="Go to Udemy">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>Udemy</strong>
-          </div>
-          <div class="fl-back">
-            <span>The Ultimate MySQL Bootcamp – Colt Steele</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+MySQL%20Coursera', '_blank')" style="cursor: pointer;" title="Go to Coursera">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>Coursera</strong>
-          </div>
-          <div class="fl-back">
-            <span>Database Management Essentials (UC Boulder)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+MySQL%20Khan%20Academy', '_blank')" style="cursor: pointer;" title="Go to Khan Academy">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📙</span>
-            <strong>Khan Academy</strong>
-          </div>
-          <div class="fl-back">
-            <span>Intro to SQL (free)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+MySQL%20Mode%20Analytics%20SQL%20Tutorial', '_blank')" style="cursor: pointer;" title="Go to Mode Analytics SQL Tutorial">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📺</span>
-            <strong>Mode Analytics SQL Tutorial</strong>
-          </div>
-          <div class="fl-back">
-            <span>Mode Analytics SQL Tutorial (free, online)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-
-      <h3>Books &amp; References</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+MySQL%20'Learning%20MySQL'', '_blank')" style="cursor: pointer;" title="Go to 'Learning MySQL'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>'Learning MySQL'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Seyed M.M. Tahaghoghi & Hugh E. Williams</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+MySQL%20'High%20Performance%20MySQL'', '_blank')" style="cursor: pointer;" title="Go to 'High Performance MySQL'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>'High Performance MySQL'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Baron Schwartz, Peter Zaitsev & Vadim Tkachenko</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+MySQL%20'MySQL%20Cookbook'', '_blank')" style="cursor: pointer;" title="Go to 'MySQL Cookbook'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>'MySQL Cookbook'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Paul DuBois</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-    </section>
-  </main>
-</div>
-
-<!-- ─── FOOTER ─── -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <span class="f-brand-name">USCS<span class="a"> E-WALL</span></span>
-      <p>An e-waste art installation by <strong>USCS (Uttaranchal School of Computing Sciences)</strong>, celebrating the IT field through creative reuse of technology.</p>
-    </div>
-    <div>
-      <div class="f-col-h">Navigate</div>
-      <ul class="f-lnks">
-        <li><a href="../index.html#about">About Project</a></li>
-        <li><a href="../index.html#wall">Interactive Wall</a></li>
-        <li><a href="../index.html#materials">Raw Materials</a></li>
-        <li><a href="../index.html#impact">Our Impact</a></li>
-        <li><a href="../index.html#creators">The Team</a></li>
-      </ul>
+      <div class="t-row">
+        <div class="t-year">2003</div>
+        <div class="t-node"><div class="dot" style="background:var(--orange);box-shadow:0 0 0 2px var(--card);"></div></div>
+        <div class="t-card card">
+          <h4>InnoDB brings transactions</h4>
+          <p>MySQL 4.0 adds support for the InnoDB storage engine, giving MySQL full ACID-compliant transactions — a turning point for serious production use.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2008</div>
+        <div class="t-node"><div class="dot" style="background:#D13438;box-shadow:0 0 0 2px var(--card);"></div></div>
+        <div class="t-card card">
+          <h4>Sun Microsystems acquires MySQL AB</h4>
+          <p>Sun buys MySQL AB for roughly $1 billion — by then MySQL had grown to 8 million installations and around $100 million in revenue.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2010</div>
+        <div class="t-node"><div class="dot" style="background:#D13438;box-shadow:0 0 0 2px var(--card);"></div></div>
+        <div class="t-card card">
+          <h4>Oracle acquires Sun — and MySQL with it</h4>
+          <p>Oracle's acquisition of Sun sparks a "Save MySQL" petition over fears of Oracle limiting it. The same day, Monty Widenius forks the codebase to create MariaDB.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2013–19</div>
+        <div class="t-node"><div class="dot" style="background:var(--teal);box-shadow:0 0 0 2px var(--card);"></div></div>
+        <div class="t-card card">
+          <h4>Continued evolution under Oracle</h4>
+          <p>MySQL 5.6 and 5.7 add JSON support, better replication, and security improvements, while MySQL 8.0 modernizes the SQL language support and default character sets.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2024–26</div>
+        <div class="t-node"><div class="dot" style="background:var(--orange);box-shadow:0 0 0 2px var(--card);"></div></div>
+        <div class="t-card card">
+          <h4>MySQL 9.x &amp; HeatWave GenAI</h4>
+          <p>MySQL HeatWave adds in-database generative AI, vector search, and AutoML — letting analytics and AI run directly inside the database, no separate tools required.</p>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="footer-btm">
-    <span class="f-copy">© 2026 USCS E-WALL PROJECT — BUILT FROM DISCARDED TECH</span>
-    <span class="f-status"><span class="f-dot"></span>INSTALLATION LIVE</span>
+</section>
+
+<!-- ===================== USE CASES ===================== -->
+<section id="usecases">
+  <div class="wrap reveal">
+    <div class="sec-tag"><span class="dot"></span>03 — Use cases</div>
+    <h2 class="h-title">Who actually runs on MySQL</h2>
+    <p class="lead">From a single WordPress blog to Facebook's earliest infrastructure, the same relational core scales across wildly different sizes.</p>
+
+    <div class="case-grid">
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#EAF1F3"/><circle cx="160" cy="78" r="38" fill="#fff"/><text x="160" y="92" text-anchor="middle" font-size="38">📝</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#DCE6EA"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#DCE6EA"/></svg></div>
+        <div class="body">
+          <div class="tag">CMS platforms</div>
+          <h4>WordPress, Joomla &amp; Drupal</h4>
+          <p>The majority of websites built on WordPress store every post, comment, and setting in a MySQL database behind the scenes.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#EAF1F3"/><circle cx="160" cy="78" r="38" fill="#fff"/><text x="160" y="92" text-anchor="middle" font-size="38">🛒</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#DCE6EA"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#DCE6EA"/></svg></div>
+        <div class="body">
+          <div class="tag">E-commerce</div>
+          <h4>Product catalogs &amp; orders</h4>
+          <p>Online stores rely on MySQL's transactional guarantees to keep inventory counts and order records accurate, even under heavy traffic.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#EAF1F3"/><circle cx="160" cy="78" r="38" fill="#fff"/><text x="160" y="92" text-anchor="middle" font-size="38">🌐</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#DCE6EA"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#DCE6EA"/></svg></div>
+        <div class="body">
+          <div class="tag">Web apps</div>
+          <h4>The "M" in the LAMP stack</h4>
+          <p>Linux, Apache, MySQL, and PHP/Python powered a generation of web applications — and that pattern is still everywhere today.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#EAF1F3"/><circle cx="160" cy="78" r="38" fill="#fff"/><text x="160" y="92" text-anchor="middle" font-size="38">📱</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#DCE6EA"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#DCE6EA"/></svg></div>
+        <div class="body">
+          <div class="tag">Mobile backends</div>
+          <h4>User accounts &amp; app data</h4>
+          <p>Mobile apps store user profiles, sessions, and content in MySQL through a backend API, often managed via cloud services like AWS RDS.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#EAF1F3"/><circle cx="160" cy="78" r="38" fill="#fff"/><text x="160" y="92" text-anchor="middle" font-size="38">🎓</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#DCE6EA"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#DCE6EA"/></svg></div>
+        <div class="body">
+          <div class="tag">Learning SQL</div>
+          <h4>Students &amp; first databases</h4>
+          <p>MySQL's free Community Edition and huge documentation base make it the most common first database students learn SQL on.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#EAF1F3"/><circle cx="160" cy="78" r="38" fill="#fff"/><text x="160" y="92" text-anchor="middle" font-size="38">📊</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#DCE6EA"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#DCE6EA"/></svg></div>
+        <div class="body">
+          <div class="tag">Analytics</div>
+          <h4>Real-time analytics with HeatWave</h4>
+          <p>MySQL HeatWave runs transactional and analytical queries in the same database, skipping the need to move data to a separate warehouse.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ARCHITECTURE ===================== -->
+<section id="architecture" style="background:var(--card);">
+  <div class="wrap reveal">
+    <div class="sec-tag"><span class="dot"></span>04 — How it works</div>
+    <h2 class="h-title">What happens inside MySQL, layer by layer</h2>
+    <p class="lead">MySQL's architecture splits cleanly into a layer that understands SQL and a swappable layer that actually stores the bytes.</p>
+
+    <div class="arch-stacks">
+      <div class="stack-card card">
+        <h4>🧠 SQL layer</h4>
+        <div class="stack-layer" style="background:#E6F3F6;color:#0E2A38;">Connection &amp; authentication</div>
+        <div class="stack-layer" style="background:#E6F3F6;color:#0E2A38;">Query parser</div>
+        <div class="stack-layer" style="background:#E6F3F6;color:#0E2A38;">Query optimizer</div>
+        <div class="stack-layer" style="background:#00758F;color:#fff;">Query execution</div>
+      </div>
+      <div class="stack-card card">
+        <h4>💾 Storage engine layer</h4>
+        <div class="stack-layer" style="background:#FFF3E2;color:#0E2A38;">InnoDB (default — transactions, FK)</div>
+        <div class="stack-layer" style="background:#F4F1EA;color:#0E2A38;">MyISAM (legacy — fast reads)</div>
+        <div class="stack-layer" style="background:#F4F1EA;color:#0E2A38;">Memory (in-RAM temp tables)</div>
+        <div class="stack-layer" style="background:#F29111;color:#fff;">Disk / SSD storage</div>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:18px;font-size:14px;">MySQL's "pluggable storage engine" design means the same SQL commands can run on top of different storage strategies depending on whether you need transactions, speed, or in-memory caching.</p>
+
+    <div class="flow-steps">
+      <div class="flow-step card">
+        <div class="fnum">STEP 1</div>
+        <h4>Define a table</h4>
+        <p><code>CREATE TABLE</code> sets the columns, data types, and keys for a new dataset.</p>
+      </div>
+      <div class="flow-step card">
+        <div class="fnum">STEP 2</div>
+        <h4>Insert data</h4>
+        <p><code>INSERT INTO</code> adds rows — one customer, one order, one product at a time, or in bulk.</p>
+      </div>
+      <div class="flow-step card">
+        <div class="fnum">STEP 3</div>
+        <h4>Query &amp; join</h4>
+        <p><code>SELECT ... JOIN</code> pulls related data from multiple tables in a single request.</p>
+      </div>
+      <div class="flow-step card">
+        <div class="fnum">STEP 4</div>
+        <h4>Update safely</h4>
+        <p>Transactions ensure an <code>UPDATE</code> either fully completes or fully rolls back — never half-applied.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== EDITIONS / PRICING ===================== -->
+<section id="editions">
+  <div class="wrap reveal">
+    <div class="sec-tag"><span class="dot"></span>05 — Editions</div>
+    <h2 class="h-title">Free at its core, paid for enterprise extras</h2>
+    <p class="lead">MySQL Community Edition has always been free — Oracle's commercial editions add support, security tooling, and managed cloud hosting.</p>
+
+    <div class="chart-card card">
+      <div class="plan-grid">
+        <div class="plan-tier highlight">
+          <div class="pname">Community</div>
+          <div class="pprice">$0</div>
+          <div class="pdesc">Free and open source under the GPL. The full relational database engine — what most developers actually run.</div>
+        </div>
+        <div class="plan-tier">
+          <div class="pname">Enterprise Edition</div>
+          <div class="pprice">Custom</div>
+          <div class="pdesc">Adds 24/7 Oracle support, advanced security (encryption, masking, auditing), and high-availability tooling for businesses.</div>
+        </div>
+        <div class="plan-tier">
+          <div class="pname">HeatWave (cloud)</div>
+          <div class="pprice">~$0.35<span>/hr+</span></div>
+          <div class="pdesc">Oracle's managed cloud service combining transactions, analytics, and built-in generative AI in one database, billed by usage.</div>
+        </div>
+      </div>
+      <p class="chart-note">Most developers and small projects never need anything beyond the free Community Edition. Enterprise and HeatWave pricing varies by configuration, region, and usage — check Oracle's official pricing page for current numbers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REFERENCES ===================== -->
+<section id="refs" style="background:var(--card);">
+  <div class="wrap reveal">
+    <div class="sec-tag"><span class="dot"></span>06 — Learn more</div>
+    <h2 class="h-title">References &amp; where to go deeper</h2>
+    <p class="lead">Primary sources used for the facts above, plus places to actually learn the language hands-on.</p>
+
+    <ul class="ref-list">
+      <li class="ref-item card">
+        <div>
+          <div class="rtitle">MySQL — Wikipedia</div>
+          <div class="rdesc">Full technical history, the Sun/Oracle acquisitions, and the MariaDB fork, with citations.</div>
+        </div>
+        <a class="go" href="https://en.wikipedia.org/wiki/MySQL" target="_blank" rel="noopener">en.wikipedia.org ↗</a>
+      </li>
+      <li class="ref-item card">
+        <div>
+          <div class="rtitle">MySQL enters a new decade — official Oracle blog</div>
+          <div class="rdesc">Oracle's own 30th-anniversary retrospective with a detailed year-by-year timeline.</div>
+        </div>
+        <a class="go" href="https://blogs.oracle.com/mysql/mysql-enters-a-new-decade" target="_blank" rel="noopener">blogs.oracle.com ↗</a>
+      </li>
+      <li class="ref-item card">
+        <div>
+          <div class="rtitle">MySQL official documentation</div>
+          <div class="rdesc">The canonical reference manual for every MySQL command and feature.</div>
+        </div>
+        <a class="go" href="https://dev.mysql.com/doc/" target="_blank" rel="noopener">dev.mysql.com ↗</a>
+      </li>
+      <li class="ref-item card">
+        <div>
+          <div class="rtitle">Download MySQL Community Server (free)</div>
+          <div class="rdesc">The official, free download — the best way to start practicing hands-on.</div>
+        </div>
+        <a class="go" href="https://dev.mysql.com/downloads/mysql/" target="_blank" rel="noopener">dev.mysql.com ↗</a>
+      </li>
+    </ul>
+
+    <div class="course-strip">
+      <h3>📚 Free &amp; paid courses to actually learn MySQL</h3>
+      <div class="course-grid">
+        <div class="course-item">
+          <a href="https://www.mysql.com/services/training/" target="_blank" rel="noopener">Oracle MySQL official training ↗</a>
+          <p>Official curriculum and certification paths straight from Oracle.</p>
+        </div>
+        <div class="course-item">
+          <a href="https://www.coursera.org/courses?query=mysql" target="_blank" rel="noopener">Coursera: MySQL courses ↗</a>
+          <p>University-partnered courses covering SQL fundamentals through database design.</p>
+        </div>
+        <div class="course-item">
+          <a href="https://www.udemy.com/topic/mysql/" target="_blank" rel="noopener">Udemy: MySQL topic hub ↗</a>
+          <p>Hands-on, project-based courses from absolute beginner to advanced query optimization.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="gap: 12px; display: flex; align-items: center; flex-wrap: wrap;">
+      <a href="../index.html#home" class="nav-logo" style="font-size: 1.2rem; letter-spacing: 2px;">USCS<span class="accent"> E-WALL</span></a>
+      <span style="opacity: 0.3;">|</span>
+      <span style="font-size: 12.5px; color: var(--ink-soft);">Educational overview — not an official Oracle page.</span>
+    </div>
+    <p>Sources cited above · Page last assembled June 2026</p>
   </div>
 </footer>
-
 
 <!-- ─── CLI TERMINAL OVERLAY ─── -->
 <div id="terminal-overlay">
@@ -678,8 +1190,14 @@
 
 <button class="cli-trigger" id="cli-open"><span>🤖</span></button>
 
-
 <script src="../data.js"></script>
 <script src="../main.js"></script>
+<script>
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+
 </body>
 </html>

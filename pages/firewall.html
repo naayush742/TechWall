@@ -1,236 +1,653 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Firewall — USCS E-WALL</title>
-  <link rel="stylesheet" href="../styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firewall — The Gatekeeper of Every Network</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
-  <!-- TECH THEME OVERRIDE -->
-  <script>window.TECH_THEME_COLOR = '#e65100';</script>
-  <style>
-    :root {
-      --green: #e65100 !important;
-      --cyan: #e65100 !important;
-      --aura-color: #e65100 !important;
-      --aura-glow: rgba(230,81,0,.12) !important;
+  :root{
+    --bg: #02050a;
+    --card: rgba(6, 13, 22, 0.95);
+    --ink: #ffffff;
+    --ink-soft: #a0b8d0;
+    --line: rgba(63, 198, 241, 0.18);
+    --accent: #ff6b4a;
+    --accent2: #58b4ff;
+    --cyan: #ff6b4a;
+    --teal: #58b4ff;
+    --green: #ff6b4a;
+    --green2: #ff6b4a;
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.5);
+    --shadow-md: 0 10px 35px rgba(0,0,0,0.8);
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: linear-gradient(rgba(2, 5, 10, 0.92), rgba(2, 5, 10, 0.92)), url('../img/bg.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color:var(--ink);
+    font-family:'DM Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    position: relative;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Website Premium Scanlines & Noise overlays */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.5;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+    pointer-events: none;
+    z-index: 9989;
+  }
+
+  h1,h2,.display{
+    font-family:'Bebas Neue',sans-serif;
+    margin:0;
+    letter-spacing:0.04em;
+  }
+  h3{
+    font-family:'JetBrains Mono',monospace;
+    margin:0;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--cyan); transition: color 0.2s ease;}
+  a:hover{color: var(--accent2); text-decoration: none;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0; border-bottom:1px solid var(--line);}
+  .lede{font-size:18px;color:var(--ink-soft);line-height:1.65;max-width:640px;font-weight:300; margin-bottom:40px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(2, 5, 10, 0.88);
+    backdrop-filter:blur(20px) saturate(1.5);
+    border-bottom:1px solid var(--line);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  }
+  nav .inner{
+    max-width:1080px;margin:0 auto;padding:14px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-logo .accent {
+    color: var(--teal);
+  }
+  @media(max-width: 480px) {
+    .nav-logo {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
     }
-    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #e65100 !important; }
-    .content-section hr { background: linear-gradient(90deg, #e65100, transparent) !important; }
-    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #e65100 !important; }
-    #scroll-progress { background: #e65100 !important; box-shadow: 0 0 10px #e65100 !important; }
-    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(230,81,0,.12) !important; }
-    .nav-ticker-item.active { border-bottom: 1px solid #e65100 !important; }
-    .btn-primary { background: #e65100 !important; }
-    .btn-primary:hover { box-shadow: 0 0 30px rgba(230,81,0,.12) !important; }
-    .hero-eyebrow .pulse { background: #e65100 !important; box-shadow: 0 0 10px #e65100 !important; }
-  </style>
+  }
+  @media(max-width: 360px) {
+    .nav-logo {
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+  }
+  nav ul{list-style:none;display:flex;gap:26px;margin:0;padding:0;}
+  nav ul a{
+    color:var(--ink);text-decoration:none;font-size:14px;font-weight:500;
+    opacity:0.75;transition:opacity .15s, color .15s;
+  }
+  nav ul a:hover{opacity:1;color:var(--cyan);}
+  @media (max-width:720px){ nav ul{display:none;} }
 
-    <style>
-      .content-section h2 {
-        display: inline-block;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #e6510040;
-        position: relative;
-        text-shadow: 0 0 20px rgba(230,81,0,.12);
-      }
-      .content-section h2::before {
-        content: '>>';
-        font-family: var(--font-mono);
-        color: #e65100;
-        margin-right: 12px;
-        font-size: 1.5rem;
-        opacity: 0.7;
-        text-shadow: 0 0 10px #e6510080;
-      }
-      .content-section ul li {
-        position: relative;
-        padding-left: 20px;
-        list-style: none;
-      }
-      .content-section ul li::before {
-        content: '◈';
-        position: absolute;
-        left: 0;
-        top: 2px;
-        color: #e65100;
-        font-size: 0.8rem;
-        opacity: 0.8;
-      }
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid #e6510030;
-      }
-    </style>
+  /* ===== SECTION TAG ===== */
+  .section-head{display:flex; align-items:baseline; gap:16px; margin-bottom:46px; flex-wrap:wrap;}
+  .section-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--card);color:var(--ink);
+    padding:6px 14px 6px 10px;border-radius:20px;
+    border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  }
+
+  h2{font-size:38px;font-weight:800;color:var(--ink);letter-spacing:1px;text-shadow:0 0 20px rgba(255,255,255,0.05);}
+  @media (max-width:540px){ h2{font-size:28px;} }
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(63, 198, 241, 0.3);
+    box-shadow:0 12px 30px rgba(63, 198, 241, 0.15);
+  }
+
+  /* ===== HERO ===== */
+  header.hero{padding:90px 0 70px;position:relative;overflow:hidden; border-bottom:1px solid var(--line);}
+  header.hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 80% 10%, rgba(63,198,241,0.12), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(255,60,95,0.10), transparent 50%);
+    pointer-events:none;
+  }
+  header.hero .wrap{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:center;position:relative;z-index:2;}
+  @media (max-width:860px){ header.hero .wrap{grid-template-columns:1fr;} }
   
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent);
+    letter-spacing:.12em; text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:8px; height:8px; border-radius:50%; background:var(--accent2); box-shadow:0 0 0 4px rgba(255,60,95,.15);}
 
-    <style>
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid var(--green);
-        line-height: 1.8;
-      }
-      /* RICH UX CLASSES */
-      .info-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 24px;
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
-        margin-bottom: 25px;
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-      .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        border-color: var(--green);
-      }
-      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
-      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
-      
-      .hl-box {
-        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-        border-left: 4px solid var(--green);
-        padding: 24px 30px;
-        border-radius: 0 8px 8px 0;
-        margin: 25px 0;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      }
+  h1.title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:64px;
+    line-height:1.06;
+    font-weight:800;
+    color:var(--ink);
+    text-shadow: 0 0 30px rgba(63, 198, 241, 0.3);
+    letter-spacing:1px;
+  }
+  @media (max-width:540px){ h1.title{font-size:42px;} }
+  h1.title span{color:var(--cyan); text-shadow:0 0 20px rgba(63,198,241,0.4);}
+  h1.title em{font-style:normal; color:var(--cyan); text-shadow:0 0 20px rgba(63,198,241,0.4);}
+  .subtitle{font-size:16.5px;color:var(--ink-soft);margin-top:18px;max-width:520px;line-height:1.65;font-weight:300;}
+  
+  .hero-meta{display:flex;gap:28px;margin-top:32px;flex-wrap:wrap;}
+  .hero-meta div span{display:block; color:var(--ink-soft); font-size:11px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px;}
+  .hero-meta div strong{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:26px;color:var(--cyan);letter-spacing:1px;}
 
-      .app-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
-        margin: 25px 0;
-      }
-      .app-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 22px;
-        border-radius: 8px;
-        transition: all 0.3s;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .app-card:hover {
-        border-color: var(--green);
-        background: rgba(255,255,255,0.03);
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-      }
-      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
-      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
-      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+  .warning-strip{
+    margin-top:36px; max-width:680px; padding:14px 18px; border:1px solid rgba(255,60,95,.35);
+    background:rgba(255,60,95,.06); border-radius:12px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#ffb0bc;
+    display:flex; gap:10px; align-items:flex-start;
+  }
 
-      .feature-list {
-        list-style: none !important;
-        padding: 0 !important;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin: 25px 0 !important;
-      }
-      .feature-list li {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 18px;
-        border-radius: 8px;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        transition: transform 0.2s;
-      }
-      .feature-list li:hover {
-        transform: scale(1.02);
-        border-color: var(--green);
-      }
-      .feature-list li::before { display: none !important; }
-      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
-      .fl-text { display: flex; flex-direction: column; gap: 6px; }
-      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
-      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+  /* grid stage overridden to display logo and pulse animation */
+  .grid-stage{display:flex;justify-content:center;align-items:center;height:280px;position:relative;}
+  .pulse-ring{
+    position:absolute;border-radius:50%;border:2px solid var(--cyan);
+    width:240px;height:240px;opacity:0;
+    animation:pulse 2.8s ease-out infinite;
+  }
+  .pulse-ring.r2{animation-delay:.9s;}
+  .pulse-ring.r3{animation-delay:1.8s;}
+  @keyframes pulse{
+    0%{ width:200px;height:200px;opacity:.55;}
+    100%{ width:440px;height:440px;opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){ .pulse-ring{animation:none;display:none;} }
+  .cloud-icon{width:280px;height:280px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 35px rgba(63, 198, 241, 0.55)); transition: transform 0.3s ease;}
+  .cloud-icon:hover{transform: scale(1.05);}
 
-      @media (max-width: 768px) {
-        .feature-list { grid-template-columns: 1fr; }
-        .info-card { flex-direction: column; }
-      }
-    
-      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
-      .app-card {
-        position: relative;
-        overflow: hidden;
-        min-height: 160px;
-        display: block;
-        padding: 0;
-      }
-      .ac-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .ac-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
+  p.body-text{max-width:680px; color:var(--ink-soft); margin-bottom:18px; font-size:15.5px;}
+  p.body-text strong{color:var(--ink); font-weight:600;}
 
-      .feature-list li {
-        position: relative;
-        overflow: hidden;
-        min-height: 120px;
-        display: block;
-        padding: 0;
-        text-align: center;
-      }
-      .fl-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .fl-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .fl-front .fl-icon { margin-bottom: 10px; }
-      .fl-front strong { margin-bottom: 0; }
+  /* ---------- TIMELINE ---------- */
+  .timeline-scroll{overflow-x:auto; padding-bottom:18px; margin:0 -28px; padding-left:28px; padding-right:28px;}
+  .timeline-svg-holder{
+    min-width:1000px;
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .timeline-svg-holder svg text {
+    fill: var(--ink) !important;
+  }
+  .timeline-svg-holder svg g[fill="#141417"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#15171f"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#12151a"] {
+    fill: var(--card) !important;
+  }
 
-    </style>
+  /* ---------- DIAGRAM PANEL ---------- */
+  .diagram-panel{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:30px; margin-top:10px; overflow-x:auto;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .diagram-panel text {
+    fill: var(--ink) !important;
+  }
+  .diagram-panel g[fill="#141417"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#15171f"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#12151a"] {
+    fill: var(--card) !important;
+  }
+  .diagram-caption{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-soft);
+    margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);
+  }
+
+  /* ---------- CARDS GRID ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; background:transparent; border:none;}
+  .grid .card{padding:26px; background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-md); backdrop-filter:blur(10px);}
+  .card h3{font-family:'JetBrains Mono',monospace; font-size:13.5px; color:var(--accent); margin-bottom:9px; display:flex; align-items:center; gap:8px;}
+  .card p{font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
+  @media(max-width:760px){.grid{grid-template-columns:1fr;} }
+
+  /* ---------- STATS ---------- */
+  .stats-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; background:transparent; border:none; margin-top:40px;}
+  .stat{background:var(--card); padding:24px 20px; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-md); backdrop-filter:blur(10px);}
+  .stat strong{display:block; font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--accent); font-weight:700;}
+  .stat span{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em;}
+  @media(max-width:760px){.stats-row{grid-template-columns:repeat(2,1fr);} }
+
+  /* ---------- USE CASES ---------- */
+  .usecase{
+    display:grid; grid-template-columns:46px 1fr; gap:20px;
+    padding:22px 0; border-bottom:1px solid var(--line);
+  }
+  .usecase:last-child{border-bottom:none;}
+  .usecase .num{font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:13px; padding-top:4px;}
+  .usecase h4{font-size:16.5px; margin-bottom:6px; font-weight:600; font-family:'DM Sans',sans-serif;}
+  .usecase p{color:var(--ink-soft); font-size:14.5px; max-width:600px;}
+
+  /* ---------- RESOURCES / LEARN ---------- */
+  .resource-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;}
+  .resource{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:18px 20px; transition:border-color .15s, transform .15s;
+    box-shadow:var(--shadow-sm); backdrop-filter:blur(10px);
+  }
+  .resource:hover{border-color:var(--accent); transform: translateY(-2px);}
+  .resource .rtype{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;}
+  .resource a{font-weight:600; color:var(--ink); font-size:14.5px; text-decoration:none;}
+  .resource a:hover{color:var(--accent);}
+  .resource p{font-size:13px; color:var(--ink-soft); margin-top:6px; line-height:1.5;}
+  @media(max-width:760px){.resource-list{grid-template-columns:1fr;} }
+
+  /* ---------- REFERENCES ---------- */
+  .ref-list{list-style:none; counter-reset:ref; max-width:760px;}
+  .ref-list li{
+    counter-increment:ref; position:relative; padding-left:38px;
+    padding-bottom:16px; margin-bottom:16px; border-bottom:1px solid var(--line);
+    font-size:14.5px; color:var(--ink-soft);
+  }
+  .ref-list li::before{
+    content:counter(ref); position:absolute; left:0; top:0;
+    font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:13px;
+    border:1px solid var(--line); width:24px; height:24px; border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--card);
+  }
+  .ref-list a{font-weight:500; color:var(--ink); text-decoration:none;}
+  .ref-list a:hover{color:var(--accent);}
+
+  footer{
+    padding:40px 0 50px;border-top:1px solid var(--line);margin-top:30px;
+    background:rgba(6, 13, 22, 0.6);
+  }
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer p{font-size:12px;color:var(--ink-soft);margin:0;}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: width .15s, height .15s, background .15s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(63, 198, 241, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: width .25s, height .25s, border-color .25s;
+  }
+  .cursor-big #cursor { width: 18px; height: 18px; background: var(--accent); }
+  .cursor-big #cursor-ring { width: 56px; height: 56px; border-color: var(--accent); }
+
+  /* ─── SCROLL PROGRESS ─── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--cyan), var(--accent2));
+    z-index: 10000;
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  /* ─── PARTICLE CANVAS ─── */
+  #particles-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ─── MENU TOGGLE ─── */
+  #menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2001;
+    padding: 10px;
+  }
+  #menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #menu-toggle span:nth-child(2) { width: 18px; align-self: flex-end; }
+  #menu-toggle:hover span:nth-child(2) { width: 28px; }
+
+  #menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 28px; }
+  #menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  #menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 28px; }
+
+  @media (max-width: 720px) {
+    #menu-toggle { display: flex; }
+  }
+
+  /* ─── MOBILE MENU ─── */
+  #mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #mobile-menu.active { transform: translateX(0); }
+  .mm-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: center;
+    width: 100%;
+  }
+  .mm-content a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  #mobile-menu.active .mm-content a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #mobile-menu.active .mm-content a:nth-child(1) { transition-delay: 0.1s; }
+  #mobile-menu.active .mm-content a:nth-child(2) { transition-delay: 0.2s; }
+  #mobile-menu.active .mm-content a:nth-child(3) { transition-delay: 0.3s; }
+  #mobile-menu.active .mm-content a:nth-child(4) { transition-delay: 0.4s; }
+  #mobile-menu.active .mm-content a:nth-child(5) { transition-delay: 0.5s; }
+  #mobile-menu.active .mm-content a:nth-child(6) { transition-delay: 0.6s; }
+
+  .mm-content a:hover { color: var(--accent); transform: scale(1.05); letter-spacing: 10px; }
+
+  /* ─── CLI TERMINAL ─── */
+  #terminal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    padding: 40px;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    text-align: left;
+  }
+  #terminal-overlay.active { display: flex; }
+
+  .term-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+  }
+  #term-output {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .term-line { display: block; }
+  .term-line.cmd { color: var(--cyan); }
+  .term-line.cmd::before { content: "> "; }
+  .term-line.res { color: var(--ink-soft); }
+  .term-line.error { color: var(--accent2); }
+
+  .term-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 20px;
+    border: 1px solid var(--line);
+  }
+  .term-prompt { color: var(--cyan); font-weight: bold; }
+  #term-input {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+  }
+  .term-hint {
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    opacity: 0.5;
+  }
+
+  /* CLI TRIGGER BUTTON */
+  .cli-trigger {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9995;
+    width: 64px; height: 64px;
+    background: rgba(63, 198, 241, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(63, 198, 241, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    cursor: pointer;
+    box-shadow: 
+      inset 0 0 20px rgba(63, 198, 241, 0.05),
+      0 0 30px rgba(63, 198, 241, 0.2);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cli-trigger::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(from 0deg, transparent, var(--accent), transparent, var(--accent2), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: cliRotate 4s linear infinite;
+  }
+
+  @keyframes cliRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .cli-trigger span {
+    filter: drop-shadow(0 0 15px var(--accent));
+    animation: cliFloat 3s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes cliFloat {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.1) translateY(-5px); }
+  }
+
+  .cli-trigger:hover { 
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(63, 198, 241, 0.08);
+    box-shadow: 
+      inset 0 0 30px rgba(63, 198, 241, 0.1),
+      0 0 50px rgba(63, 198, 241, 0.4);
+  }
+  .cli-trigger:hover::before {
+    animation-duration: 1.5s;
+  }
+
+  /* ─── HUD SCANNER FRAME ─── */
+  .hud-frame {
+    position: fixed;
+    inset: 16px;
+    pointer-events: none;
+    z-index: 9998;
+    transition: inset 0.3s;
+  }
+
+  .hud-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(63, 198, 241, 0.08);
+    box-shadow: inset 0 0 20px rgba(63, 198, 241, 0.03);
+    pointer-events: none;
+  }
+
+  .hud-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--accent);
+    transition: border-color 0.3s;
+  }
+
+  .hud-corner.top-left {
+    top: 0; left: 0;
+    border-right: none; border-bottom: none;
+  }
+
+  .hud-corner.top-right {
+    top: 0; right: 0;
+    border-left: none; border-bottom: none;
+  }
+
+  .hud-corner.bottom-left {
+    bottom: 0; left: 0;
+    border-right: none; border-top: none;
+  }
+
+  .hud-corner.bottom-right {
+    bottom: 0; right: 0;
+    border-left: none; border-top: none;
+  }
+
+  .hud-tag {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--accent-soft);
+    position: absolute;
+    white-space: nowrap;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .top-left .hud-tag { top: -14px; left: 0; }
+  .top-right .hud-tag { top: -14px; right: 0; text-align: right; }
+  .bottom-left .hud-tag { bottom: -14px; left: 0; }
+  .bottom-right .hud-tag { bottom: -14px; right: 0; text-align: right; }
+
+  @media (max-width: 768px) {
+    .hud-frame {
+      inset: 8px;
+    }
+    .hud-tag {
+      display: none;
+    }
+  }
+</style>
+<script>window.TECH_THEME_COLOR = '#ff6b4a';</script>
 </head>
 <body>
 
@@ -244,95 +661,29 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── SMART NAV ─── -->
-<div class="smart-nav">
-  <nav id="navbar">
+<!-- HUD VIEWPORT FRAME -->
+<div class="hud-frame">
+  <div class="hud-corner top-left"><span class="hud-tag">SYS_ACTIVE</span></div>
+  <div class="hud-corner top-right"><span class="hud-tag">USCS_OS v1.0.4</span></div>
+  <div class="hud-corner bottom-left"><span class="hud-tag">GRID_SEC_X9</span></div>
+  <div class="hud-corner bottom-right"><span class="hud-tag">E-WALL_HUD</span></div>
+</div>
+
+<nav id="navbar">
+  <div class="inner">
     <a href="../index.html#home" class="nav-logo">USCS<span class="accent"> E-WALL</span></a>
-    <div class="nav-links">
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#wall">The Wall</a>
-      <a href="../index.html#materials">Materials</a>
-      <a href="../index.html#impact">Impact</a>
-      <a href="../index.html#creators">Team</a>
-    </div>
+    <ul>
+      <li><a href="#history">History</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#usecases">Use cases</a></li>
+      <li><a href="#learn">Learn</a></li>
+      <li><a href="#refs">References</a></li>
+    </ul>
     <button id="menu-toggle" aria-label="Toggle Menu">
       <span></span><span></span><span></span>
     </button>
-  </nav>
-
-  <div class="nav-ticker">
-    <div class="nav-ticker-track">
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-    </div>
   </div>
-</div>
+</nav>
 
 <!-- MOBILE MENU OVERLAY -->
 <div id="mobile-menu">
@@ -345,308 +696,271 @@
   </div>
 </div>
 
-<!-- ─── SUBPAGE HERO ─── -->
-<section class="page-hero section-z">
-  <div class="hero-orb o1"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content-wrap" style="display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; flex-wrap: wrap; margin-top: 20px;">
-    <div class="reveal in d1" style="background: rgba(230,81,0,.12); border: 1px solid #e6510040; padding: 30px; border-radius: 28px; box-shadow: 0 15px 40px rgba(230,81,0,.12); display: flex; align-items: center; justify-content: center;">
-      <img src="../icon/firewall.png" style="width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 20px #e65100);" class="tech-hero-img">
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-      <div class="hero-eyebrow reveal in d2" style="border-color: #e6510040; background: rgba(230,81,0,.12); color: #e65100; margin-bottom: 15px;">
-        <span class="pulse" style="background: #e65100; animation: none; box-shadow: 0 0 10px #e65100;"></span>
-        DOCUMENTATION ARCHIVE
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">network security · access control · since 1988</div>
+      <h1 class="title">The checkpoint deciding what gets <span>in</span>, and what gets <span>turned away</span>.</h1>
+      <p class="subtitle">A firewall is a security system — hardware, software, or both — that monitors and controls network traffic based on a defined set of rules. It's the most foundational layer of network defense in existence. This page covers where it came from, how it actually decides what to block, where it's used today, and where to learn it properly.</p>
+      <div class="hero-meta">
+        
+      <div><span>First concept paper</span><strong>1988, DEC</strong></div>
+      <div><span>First commercial product</span><strong>DEC SEAL, 1991–92</strong></div>
+      <div><span>Stateful inspection</span><strong>Check Point, 1993</strong></div>
+      <div><span>Next-gen firewall era</span><strong>Palo Alto Networks, 2007</strong></div>
+    
       </div>
-      <h1 class="reveal in d3" style="margin-bottom: 0; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1; letter-spacing: 2px; text-shadow: 0 0 30px rgba(230,81,0,.12);">
-        <span style="color: #fff;">Firewall</span>
-      </h1>
-      <p class="hero-tech-desc reveal in d4" style="margin-top: 15px; margin-bottom: 0; font-size: 1rem; color: var(--text2); max-width: 400px; font-weight: 300; line-height: 1.6; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 15px;">Network security system that monitors and controls traffic.</p>
+      
+    </div>
+    <div class="grid-stage">
+      <div class="pulse-ring r1"></div>
+      <div class="pulse-ring r2"></div>
+      <div class="pulse-ring r3"></div>
+      <img src="../icon/firewall.png" class="cloud-icon" alt="Firewall Logo">
+    </div>
+  </div>
+</header>
+
+<!-- ================= HISTORY ================= -->
+<section id="history" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">01 / origin</span>
+      <h2>From a research paper to the front line of every network</h2>
+    </div>
+    <p class="lede">The term "firewall" was borrowed from construction — a literal wall built to stop fire from spreading between rooms. Network engineers needed the same idea: stop a threat in one part of a network from spreading into another.</p>
+
+    <p class="body-text">The earliest formal description of network packet filtering was published by <strong>Digital Equipment Corporation (DEC)</strong> in <strong>1988</strong>. By around 1991–92, DEC turned the idea into the first real commercial product, <strong>DEC SEAL</strong>. These early systems inspected only the basic envelope of a packet — its source and destination addresses and port numbers — to decide whether to let it pass. This approach, now called <strong>static packet filtering</strong>, treated every single packet as a brand-new, isolated decision, with no memory of the connection it belonged to.</p>
+
+    <p class="body-text">That changed in <strong>December 1993</strong>, when Israeli company <strong>Check Point Software Technologies</strong>, founded by <strong>Gil Shwed</strong>, released <strong>FireWall-1</strong> — the first commercially available <strong>stateful inspection</strong> firewall. Instead of evaluating each packet in isolation, it tracked the state of entire connections, dramatically improving both security and performance. The same year, <strong>Trusted Information Systems</strong> released the <strong>Firewall Toolkit (FWTK)</strong>, the first open-source firewall, pushing inspection further up to the application layer.</p>
+
+    <p class="body-text">For over a decade, stateful inspection remained the industry standard, with competitors refining the same core model. The next real leap came in <strong>July 2007</strong>, when <strong>Palo Alto Networks</strong> introduced the concept of the <strong>Next-Generation Firewall (NGFW)</strong> — combining traditional filtering with deep packet inspection, intrusion prevention, and application-aware controls in a single device, which remains the dominant architecture in enterprise security today.</p>
+
+    <div class="timeline-scroll">
+      <div class="timeline-svg-holder">
+        <svg width="1040" height="240" viewBox="0 0 1040 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline of firewall history from 1988 to 2007">
+          <line x1="40" y1="120" x2="1000" y2="120" stroke="#242a32" stroke-width="2"/>
+          <g font-family="IBM Plex Mono, monospace">
+            <!-- 1988 -->
+            <circle cx="80" cy="120" r="8" fill="#ff7a45" stroke="#0a0c10" stroke-width="3"/>
+            <line x1="80" y1="120" x2="80" y2="74" stroke="#242a32" stroke-width="1.5"/>
+            <text x="80" y="62" fill="#e8edf3" font-size="12.5" text-anchor="middle" font-weight="700">1988</text>
+            <text x="80" y="150" fill="#e8edf3" font-size="12" text-anchor="middle" font-weight="600">DEC paper</text>
+            <text x="80" y="163" fill="#8893a1" font-size="10.5" text-anchor="middle">first packet-filtering concept</text>
+
+            <!-- 1991-92 -->
+            <circle cx="280" cy="120" r="6" fill="#4dd0e1"/>
+            <line x1="280" y1="120" x2="280" y2="166" stroke="#242a32" stroke-width="1.5"/>
+            <text x="280" y="62" fill="#8893a1" font-size="11" text-anchor="middle">1991–92</text>
+            <text x="280" y="182" fill="#e8edf3" font-size="11.5" text-anchor="middle" font-weight="600">DEC SEAL</text>
+            <text x="280" y="195" fill="#8893a1" font-size="10.5" text-anchor="middle">first commercial product</text>
+
+            <!-- 1993 FireWall-1 -->
+            <circle cx="500" cy="120" r="9" fill="#ff7a45" stroke="#0a0c10" stroke-width="3"/>
+            <line x1="500" y1="120" x2="500" y2="74" stroke="#242a32" stroke-width="1.5"/>
+            <text x="500" y="62" fill="#e8edf3" font-size="13" text-anchor="middle" font-weight="700">Dec 1993</text>
+            <text x="500" y="150" fill="#e8edf3" font-size="12" text-anchor="middle" font-weight="700">Check Point FireWall-1</text>
+            <text x="500" y="163" fill="#8893a1" font-size="10.5" text-anchor="middle">stateful inspection invented</text>
+
+            <!-- 1993 FWTK -->
+            <circle cx="680" cy="120" r="6" fill="#4dd0e1"/>
+            <line x1="680" y1="120" x2="680" y2="166" stroke="#242a32" stroke-width="1.5"/>
+            <text x="680" y="62" fill="#8893a1" font-size="11" text-anchor="middle">1993</text>
+            <text x="680" y="182" fill="#e8edf3" font-size="11.5" text-anchor="middle" font-weight="600">FWTK released</text>
+            <text x="680" y="195" fill="#8893a1" font-size="10.5" text-anchor="middle">first open-source firewall</text>
+
+            <!-- 2000s app layer -->
+            <circle cx="850" cy="120" r="6" fill="#4dd0e1"/>
+            <line x1="850" y1="120" x2="850" y2="74" stroke="#242a32" stroke-width="1.5"/>
+            <text x="850" y="62" fill="#8893a1" font-size="11" text-anchor="middle">1990s–2000s</text>
+            <text x="850" y="150" fill="#e8edf3" font-size="12" text-anchor="middle" font-weight="600">Proxy &amp; app-layer</text>
+            <text x="850" y="163" fill="#8893a1" font-size="10.5" text-anchor="middle">firewalls mature</text>
+
+            <!-- 2007 NGFW -->
+            <circle cx="970" cy="120" r="9" fill="#ff7a45" stroke="#0a0c10" stroke-width="3"/>
+            <line x1="970" y1="120" x2="970" y2="166" stroke="#242a32" stroke-width="1.5"/>
+            <text x="970" y="62" fill="#8893a1" font-size="11" text-anchor="middle">Jul 2007</text>
+            <text x="970" y="182" fill="#e8edf3" font-size="12.5" text-anchor="middle" font-weight="700">Palo Alto NGFW</text>
+            <text x="970" y="195" fill="#8893a1" font-size="10.5" text-anchor="middle">modern era begins</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><strong>1988</strong><span>First concept published</span></div>
+      <div class="stat"><strong>1993</strong><span>Stateful inspection born</span></div>
+      <div class="stat"><strong>5</strong><span>Recognized generations</span></div>
+      <div class="stat"><strong>L3–L7</strong><span>OSI layers covered today</span></div>
     </div>
   </div>
 </section>
 
-<div class="subpage-container section-z" style="position: relative; overflow: hidden;">
-<div class="tech-watermark" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-family: var(--font-disp); font-size: clamp(8rem, 20vw, 25rem); color: #e65100; opacity: 0.03; pointer-events: none; z-index: -1; white-space: nowrap; user-select: none;">Firewall</div>
-  
-  <!-- SIDEBAR NAVIGATION -->
-  <aside class="sidebar">
-    <span class="sidebar-h">CONTENTS</span>
-    <ul class="sidebar-links">
-      <li><a href="#history">History</a></li>
-      <li><a href="#why">Why Use This?</a></li>
-      <li><a href="#applications">Applications</a></li>
-      <li><a href="#facts">Key Facts</a></li>
-      <li><a href="#learn">Resources</a></li>
-    </ul>
-  </aside>
-
-  <!-- CONTENT ARTICLES -->
-  <main class="content-section">
-
-    <section id="history">
-      <h2>History</h2>
-      <div class="info-card">
-        <div class="ic-icon">🕰️</div>
-        <div class="ic-content">
-          <p>The concept of firewalls in networking emerged in the late 1980s. The first paper on firewall technology was published by Jeff Mogul at DEC in 1988. The first commercial firewall products were released around 1991 by DEC and Check Point. Stateful inspection was introduced by Check Point in 1994, revolutionizing how firewalls track connection states. Next-Generation Firewalls (NGFW) emerged in the 2000s, adding deep packet inspection, IDS/IPS, and application-layer awareness.</p>
-        </div>
-      </div>
-    </section>
-
-    
-
-    <section id="why">
-      <h2>Why We Use Firewall</h2>
-      <div class="hl-box">
-        Firewalls are the first line of defense in network security. They enforce security policies by allowing legitimate traffic while blocking unauthorized access, malware communication, and intrusion attempts. Modern NGFWs go beyond simple port/protocol filtering to inspect application content, detect anomalies, and integrate with threat intelligence feeds.
-      </div>
-    </section>
-
-    <section id="applications">
-      <h2>Applications &amp; Use Cases</h2>
-      <div class="app-grid">
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">⚙️</span>
-            <span class="ac-title">Perimeter defense for...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Perimeter defense for enterprise networks</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🔌</span>
-            <span class="ac-title">Home router built-in...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Home router built-in firewalls (NAT + basic filtering)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🗄️</span>
-            <span class="ac-title">Cloud security groups...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Cloud security groups and network ACLs (AWS, Azure)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🐍</span>
-            <span class="ac-title">Web Application Firewalls...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Web Application Firewalls (WAF) protecting web apps from OWASP Top 10</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🚀</span>
-            <span class="ac-title">Industrial control system...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Industrial control system (ICS/SCADA) network isolation</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🛠️</span>
-            <span class="ac-title">Zero Trust Network...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Zero Trust Network Access (ZTNA) enforcement</span>
-          </div>
-        </div>
-        
-      </div>
-    </section>
-
-    <section id="facts">
-      <h2>Key Facts &amp; Features</h2>
-      <ul class="feature-list">
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🧠</span>
-            <strong>Packet filtering</strong>
-          </div>
-          <div class="fl-back">
-            <span>allows/blocks by IP, port, protocol</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🎯</span>
-            <strong>Stateful inspection</strong>
-          </div>
-          <div class="fl-back">
-            <span>tracks active connections and their state</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚡</span>
-            <strong>Deep Packet Inspection (DPI)</strong>
-          </div>
-          <div class="fl-back">
-            <span>reads application-layer data</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚠️</span>
-            <strong>Popular software firewalls</strong>
-          </div>
-          <div class="fl-back">
-            <span>iptables/nftables, pfSense, UFW, Windows Defender Firewall</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">📌</span>
-            <strong>Next-Gen vendors</strong>
-          </div>
-          <div class="fl-back">
-            <span>Palo Alto, Fortinet, Cisco ASA, Check Point</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">💡</span>
-            <strong>WAF providers</strong>
-          </div>
-          <div class="fl-back">
-            <span>Cloudflare, AWS WAF, Imperva</span>
-          </div>
-        </li>
-        
-      </ul>
-    </section>
-
-    <section id="learn">
-      <h2>Where to Learn</h2>
-
-      <h3>Online Courses</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Firewall%20Cisco%20Networking%20Academy', '_blank')" style="cursor: pointer;" title="Go to Cisco Networking Academy">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>Cisco Networking Academy</strong>
-          </div>
-          <div class="fl-back">
-            <span>Intro to Cybersecurity (free)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Firewall%20Udemy', '_blank')" style="cursor: pointer;" title="Go to Udemy">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>Udemy</strong>
-          </div>
-          <div class="fl-back">
-            <span>CompTIA Security+ Complete Course</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Firewall%20Coursera', '_blank')" style="cursor: pointer;" title="Go to Coursera">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>Coursera</strong>
-          </div>
-          <div class="fl-back">
-            <span>Network Security & Database Vulnerabilities (IBM)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Firewall%20Professor%20Messer', '_blank')" style="cursor: pointer;" title="Go to Professor Messer">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📙</span>
-            <strong>Professor Messer</strong>
-          </div>
-          <div class="fl-back">
-            <span>CompTIA Security+ Study Guide (free)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-
-      <h3>Books &amp; References</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Firewall%20'Network%20Security%20Essentials'', '_blank')" style="cursor: pointer;" title="Go to 'Network Security Essentials'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>'Network Security Essentials'</strong>
-          </div>
-          <div class="fl-back">
-            <span>William Stallings</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Firewall%20'CompTIA%20Security%2B%20Study%20Guide'', '_blank')" style="cursor: pointer;" title="Go to 'CompTIA Security+ Study Guide'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>'CompTIA Security+ Study Guide'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Mike Chapple & David Seidl</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Firewall%20'Firewalls%20and%20Internet%20Security'', '_blank')" style="cursor: pointer;" title="Go to 'Firewalls and Internet Security'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>'Firewalls and Internet Security'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Cheswick, Bellovin & Rubin</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-    </section>
-  </main>
-</div>
-
-<!-- ─── FOOTER ─── -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <span class="f-brand-name">USCS<span class="a"> E-WALL</span></span>
-      <p>An e-waste art installation by <strong>USCS (Uttaranchal School of Computing Sciences)</strong>, celebrating the IT field through creative reuse of technology.</p>
+<!-- ================= HOW IT WORKS ================= -->
+<section id="how" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">02 / mechanics</span>
+      <h2>How a firewall actually decides: allow or deny</h2>
     </div>
-    <div>
-      <div class="f-col-h">Navigate</div>
-      <ul class="f-lnks">
-        <li><a href="../index.html#about">About Project</a></li>
-        <li><a href="../index.html#wall">Interactive Wall</a></li>
-        <li><a href="../index.html#materials">Raw Materials</a></li>
-        <li><a href="../index.html#impact">Our Impact</a></li>
-        <li><a href="../index.html#creators">The Team</a></li>
-      </ul>
+    <p class="lede">Different firewall types inspect traffic at different depths — the deeper the inspection, the more context the firewall has, at the cost of more processing.</p>
+
+    <div class="diagram-panel">
+      <svg width="100%" height="360" viewBox="0 0 940 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of firewall traffic flow and inspection layers">
+        <g font-family="Inter">
+          <!-- incoming traffic -->
+          <text x="40" y="50" fill="#8893a1" font-family="IBM Plex Mono" font-size="11">INCOMING TRAFFIC</text>
+          <circle cx="60" cy="90" r="8" fill="#4dd0e1"/>
+          <circle cx="60" cy="130" r="8" fill="#ff7a45"/>
+          <circle cx="60" cy="170" r="8" fill="#4dd0e1"/>
+
+          <line x1="75" y1="90" x2="160" y2="90" stroke="#4dd0e1" stroke-width="2"/>
+          <line x1="75" y1="130" x2="160" y2="130" stroke="#ff7a45" stroke-width="2"/>
+          <line x1="75" y1="170" x2="160" y2="170" stroke="#4dd0e1" stroke-width="2"/>
+
+          <!-- firewall block -->
+          <rect x="170" y="55" width="170" height="150" rx="10" fill="#14181d" stroke="#ff7a45" stroke-width="2"/>
+          <text x="255" y="80" fill="#ff7a45" font-family="IBM Plex Mono" font-size="12" text-anchor="middle" font-weight="700">FIREWALL</text>
+          <text x="255" y="98" fill="#8893a1" font-size="10.5" text-anchor="middle">checks rule table</text>
+          <line x1="190" y1="115" x2="320" y2="115" stroke="#242a32"/>
+          <text x="255" y="135" fill="#c3c9d3" font-size="11" text-anchor="middle">IP · port · protocol</text>
+          <text x="255" y="152" fill="#c3c9d3" font-size="11" text-anchor="middle">connection state</text>
+          <text x="255" y="169" fill="#c3c9d3" font-size="11" text-anchor="middle">app signature (L7)</text>
+          <text x="255" y="190" fill="#5fd97a" font-size="10.5" text-anchor="middle" font-family="IBM Plex Mono">rule match → ALLOW</text>
+
+          <!-- allowed path -->
+          <line x1="340" y1="90" x2="430" y2="90" stroke="#5fd97a" stroke-width="2"/>
+          <polygon points="430,85 440,90 430,95" fill="#5fd97a"/>
+          <circle cx="460" cy="90" r="8" fill="#5fd97a"/>
+          <text x="490" y="95" fill="#5fd97a" font-family="IBM Plex Mono" font-size="11">→ internal network</text>
+
+          <line x1="340" y1="170" x2="430" y2="170" stroke="#5fd97a" stroke-width="2"/>
+          <polygon points="430,165 440,170 430,175" fill="#5fd97a"/>
+          <circle cx="460" cy="170" r="8" fill="#5fd97a"/>
+          <text x="490" y="175" fill="#5fd97a" font-family="IBM Plex Mono" font-size="11">→ internal network</text>
+
+          <!-- blocked path -->
+          <line x1="255" y1="205" x2="255" y2="250" stroke="#ff7a45" stroke-width="2" stroke-dasharray="4,3"/>
+          <text x="255" y="270" fill="#ff7a45" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="700">✕ DROPPED</text>
+          <text x="255" y="286" fill="#8893a1" font-size="10.5" text-anchor="middle">no matching rule / explicit deny</text>
+
+          <!-- generation legend -->
+          <rect x="600" y="55" width="320" height="220" rx="10" fill="#0f1216" stroke="#242a32" stroke-dasharray="3,3"/>
+          <text x="620" y="80" fill="#4dd0e1" font-family="IBM Plex Mono" font-size="11" font-weight="700">INSPECTION DEPTH BY TYPE</text>
+          <text x="620" y="105" fill="#e8edf3" font-size="12" font-weight="600">Packet filter (Gen 1)</text>
+          <text x="620" y="120" fill="#8893a1" font-size="10.5">Layer 3–4 · IP &amp; port only</text>
+          <text x="620" y="145" fill="#e8edf3" font-size="12" font-weight="600">Stateful inspection (Gen 2)</text>
+          <text x="620" y="160" fill="#8893a1" font-size="10.5">Layer 3–4 · tracks connection state</text>
+          <text x="620" y="185" fill="#e8edf3" font-size="12" font-weight="600">Proxy / application (Gen 3)</text>
+          <text x="620" y="200" fill="#8893a1" font-size="10.5">Layer 7 · full content inspection</text>
+          <text x="620" y="225" fill="#e8edf3" font-size="12" font-weight="600">Next-Gen Firewall (Gen 4–5)</text>
+          <text x="620" y="240" fill="#8893a1" font-size="10.5">Layer 3–7 · IPS, app-awareness, threat intel</text>
+        </g>
+      </svg>
+      <p class="diagram-caption">Every packet hits the rule table first. A match against an "allow" rule lets it through to the protected network; anything unmatched, or matching a "deny" rule, gets dropped before it ever reaches internal systems.</p>
+    </div>
+
+    <div class="grid" style="margin-top:50px;">
+      <div class="card"><h3>◆ Rule / ACL</h3><p>A defined condition — source, destination, port, protocol — paired with an allow or deny action.</p></div>
+      <div class="card"><h3>◆ Stateful inspection</h3><p>Tracks the full lifecycle of a connection so only legitimate, expected return traffic is automatically allowed back in.</p></div>
+      <div class="card"><h3>◆ DMZ (demilitarized zone)</h3><p>A buffer network segment, isolated by firewalls on both sides, where public-facing servers live separately from internal systems.</p></div>
+      <div class="card"><h3>◆ Default deny</h3><p>The security best practice of blocking everything by default and only explicitly allowing known-safe traffic.</p></div>
+      <div class="card"><h3>◆ Deep packet inspection (DPI)</h3><p>Examining the actual content of packets, not just headers, to catch threats hidden inside otherwise normal-looking traffic.</p></div>
+      <div class="card"><h3>◆ NGFW</h3><p>Combines traditional filtering with intrusion prevention, application identification, and threat intelligence in one system.</p></div>
     </div>
   </div>
-  <div class="footer-btm">
-    <span class="f-copy">© 2026 USCS E-WALL PROJECT — BUILT FROM DISCARDED TECH</span>
-    <span class="f-status"><span class="f-dot"></span>INSTALLATION LIVE</span>
+</section>
+
+<!-- ================= USE CASES ================= -->
+<section id="usecases" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">03 / applications</span>
+      <h2>Where firewalls are standing guard right now</h2>
+    </div>
+    <p class="lede">Firewalls exist at nearly every boundary a network can have — between you and the internet, between departments, even between individual applications.</p>
+
+    <div class="usecase"><div class="num">01</div><div><h4>Home and small office routers</h4><p>Nearly every consumer router includes a basic stateful firewall, silently filtering unsolicited inbound traffic by default.</p></div></div>
+    <div class="usecase"><div class="num">02</div><div><h4>Enterprise network perimeters</h4><p>Organizations deploy NGFWs at the boundary between their internal network and the public internet as the first line of defense.</p></div></div>
+    <div class="usecase"><div class="num">03</div><div><h4>Cloud infrastructure</h4><p>Cloud platforms offer software-defined firewalls (security groups, network ACLs) to control traffic between virtual machines and services.</p></div></div>
+    <div class="usecase"><div class="num">04</div><div><h4>Data center segmentation</h4><p>Internal firewalls separate sensitive zones (databases, payment systems) so a breach in one segment can't easily spread to another.</p></div></div>
+    <div class="usecase"><div class="num">05</div><div><h4>Personal device protection</h4><p>Operating systems like Windows and macOS ship with built-in host-based firewalls controlling which apps can send or receive traffic.</p></div></div>
+    <div class="usecase"><div class="num">06</div><div><h4>Web application firewalls (WAF)</h4><p>A specialized firewall type that filters HTTP traffic specifically, blocking attacks like SQL injection before they reach a web app.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= LEARN MORE ================= -->
+<section id="learn" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">04 / go deeper</span>
+      <h2>Free, well-regarded places to actually learn it</h2>
+    </div>
+    <p class="lede">From conceptual networking basics through to configuring real, production-grade firewall rules.</p>
+
+    <div class="resource-list">
+      <div class="resource">
+        <div class="rtype">Course · Free</div>
+        <a href="https://www.netacad.com/courses/networking" target="_blank" rel="noopener">Cisco Networking Academy — Networking Basics</a>
+        <p>Free official Cisco course covering core networking concepts that firewalls are built on top of.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">University course · Free</div>
+        <a href="https://www.coursera.org/learn/network-security-database-vulnerabilities" target="_blank" rel="noopener">University of Colorado — Network Security (Coursera)</a>
+        <p>Covers firewall architectures, VPNs, and intrusion detection as part of a structured security curriculum.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Hands-on / Free tool</div>
+        <a href="https://www.pfsense.org/" target="_blank" rel="noopener">pfSense Documentation</a>
+        <p>A free, open-source firewall platform — its official docs are a practical way to learn real rule configuration.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Reference</div>
+        <a href="https://www.cisa.gov/resources-tools/resources/understanding-firewalls-home-and-small-office-use" target="_blank" rel="noopener">CISA — Understanding Firewalls</a>
+        <p>A clear, official US government guide to how firewalls work and how to use them safely.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Practice platform</div>
+        <a href="https://www.netfilter.org/documentation/" target="_blank" rel="noopener">Netfilter / iptables Documentation</a>
+        <p>The official docs for Linux's built-in firewall framework — ideal hands-on practice for rule writing.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Certification path</div>
+        <a href="https://www.comptia.org/certifications/security" target="_blank" rel="noopener">CompTIA Security+</a>
+        <p>An industry-standard entry certification that covers firewall concepts as part of broader network security.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REFERENCES ================= -->
+<section id="refs" style="border-bottom:none;" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">05 / sources</span>
+      <h2>References</h2>
+    </div>
+    <ul class="ref-list">
+      <li><a href="https://community.checkpoint.com/t5/Check-Point-for-Beginners/Brief-History-of-Check-Point-Firewalls/ba-p/87842" target="_blank" rel="noopener">Brief History of Check Point Firewalls — Check Point CheckMates</a>. Background on DEC's 1988 paper, DEC SEAL, and the rise of stateful inspection.</li>
+      <li><a href="https://www.checkpoint.com/cyber-hub/network-security/what-is-firewall/" target="_blank" rel="noopener">What Is a Firewall? — Check Point Software</a>. Generational breakdown of firewall technology from packet filtering to modern NGFWs.</li>
+      <li><a href="https://www.computerweekly.com/news/2240159432/The-history-of-the-Next-Generation-Firewall" target="_blank" rel="noopener">The History of the Next-Generation Firewall — Computer Weekly</a>. Details on the Firewall Toolkit (FWTK) and the evolution of application-layer firewalls.</li>
+      <li><a href="https://www.enterprisestorageforum.com/security/stateful-inspection-firewall/" target="_blank" rel="noopener">What Is a Stateful Inspection Firewall? — Enterprise Storage Forum</a>. Explanation of how stateful inspection works and its origins at Check Point.</li>
+      <li><a href="https://www.firemon.com/blog/a-practical-history-of-the-firewall-part-1-early-days/" target="_blank" rel="noopener">A Practical History of the Firewall — FireMon</a>. Comparison of early stateful inspection versus proxy-based firewall architectures.</li>
+      <li><a href="https://www.cisa.gov/resources-tools/resources/understanding-firewalls-home-and-small-office-use" target="_blank" rel="noopener">Understanding Firewalls — CISA</a>. Official US government reference on firewall fundamentals and safe use.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="gap: 12px; display: flex; align-items: center; flex-wrap: wrap;">
+      <a href="../index.html#home" class="nav-logo" style="font-size: 1.2rem; letter-spacing: 2px;">USCS<span class="accent"> E-WALL</span></a>
+      <span style="opacity: 0.3;">|</span>
+      <span style="font-size: 12.5px; color: var(--ink-soft);">Educational overview — not an official page.</span>
+    </div>
+    <p>Sources cited above · Page last assembled June 2026</p>
   </div>
 </footer>
-
 
 <!-- ─── CLI TERMINAL OVERLAY ─── -->
 <div id="terminal-overlay">
@@ -666,8 +980,14 @@
 
 <button class="cli-trigger" id="cli-open"><span>🤖</span></button>
 
-
 <script src="../data.js"></script>
 <script src="../main.js"></script>
+<script>
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+
 </body>
 </html>

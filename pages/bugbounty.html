@@ -1,236 +1,653 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bug Bounty — USCS E-WALL</title>
-  <link rel="stylesheet" href="../styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bug Bounty — Getting Paid to Break Things, Legally</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
-  <!-- TECH THEME OVERRIDE -->
-  <script>window.TECH_THEME_COLOR = '#ff4d4d';</script>
-  <style>
-    :root {
-      --green: #ff4d4d !important;
-      --cyan: #ff4d4d !important;
-      --aura-color: #ff4d4d !important;
-      --aura-glow: rgba(255,77,77,.12) !important;
+  :root{
+    --bg: #02050a;
+    --card: rgba(6, 13, 22, 0.95);
+    --ink: #ffffff;
+    --ink-soft: #a0b8d0;
+    --line: rgba(63, 198, 241, 0.18);
+    --accent: #ff4d4d;
+    --accent2: #ffb84d;
+    --cyan: #ff4d4d;
+    --teal: #ffb84d;
+    --green: #ff4d4d;
+    --green2: #ff4d4d;
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.5);
+    --shadow-md: 0 10px 35px rgba(0,0,0,0.8);
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: linear-gradient(rgba(2, 5, 10, 0.92), rgba(2, 5, 10, 0.92)), url('../img/bg.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color:var(--ink);
+    font-family:'DM Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    position: relative;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Website Premium Scanlines & Noise overlays */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.5;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+    pointer-events: none;
+    z-index: 9989;
+  }
+
+  h1,h2,.display{
+    font-family:'Bebas Neue',sans-serif;
+    margin:0;
+    letter-spacing:0.04em;
+  }
+  h3{
+    font-family:'JetBrains Mono',monospace;
+    margin:0;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--cyan); transition: color 0.2s ease;}
+  a:hover{color: var(--accent2); text-decoration: none;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0; border-bottom:1px solid var(--line);}
+  .lede{font-size:18px;color:var(--ink-soft);line-height:1.65;max-width:640px;font-weight:300; margin-bottom:40px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(2, 5, 10, 0.88);
+    backdrop-filter:blur(20px) saturate(1.5);
+    border-bottom:1px solid var(--line);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  }
+  nav .inner{
+    max-width:1080px;margin:0 auto;padding:14px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-logo .accent {
+    color: var(--teal);
+  }
+  @media(max-width: 480px) {
+    .nav-logo {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
     }
-    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #ff4d4d !important; }
-    .content-section hr { background: linear-gradient(90deg, #ff4d4d, transparent) !important; }
-    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #ff4d4d !important; }
-    #scroll-progress { background: #ff4d4d !important; box-shadow: 0 0 10px #ff4d4d !important; }
-    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(255,77,77,.12) !important; }
-    .nav-ticker-item.active { border-bottom: 1px solid #ff4d4d !important; }
-    .btn-primary { background: #ff4d4d !important; }
-    .btn-primary:hover { box-shadow: 0 0 30px rgba(255,77,77,.12) !important; }
-    .hero-eyebrow .pulse { background: #ff4d4d !important; box-shadow: 0 0 10px #ff4d4d !important; }
-  </style>
+  }
+  @media(max-width: 360px) {
+    .nav-logo {
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+  }
+  nav ul{list-style:none;display:flex;gap:26px;margin:0;padding:0;}
+  nav ul a{
+    color:var(--ink);text-decoration:none;font-size:14px;font-weight:500;
+    opacity:0.75;transition:opacity .15s, color .15s;
+  }
+  nav ul a:hover{opacity:1;color:var(--cyan);}
+  @media (max-width:720px){ nav ul{display:none;} }
 
-    <style>
-      .content-section h2 {
-        display: inline-block;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #ff4d4d40;
-        position: relative;
-        text-shadow: 0 0 20px rgba(255,77,77,.12);
-      }
-      .content-section h2::before {
-        content: '>>';
-        font-family: var(--font-mono);
-        color: #ff4d4d;
-        margin-right: 12px;
-        font-size: 1.5rem;
-        opacity: 0.7;
-        text-shadow: 0 0 10px #ff4d4d80;
-      }
-      .content-section ul li {
-        position: relative;
-        padding-left: 20px;
-        list-style: none;
-      }
-      .content-section ul li::before {
-        content: '◈';
-        position: absolute;
-        left: 0;
-        top: 2px;
-        color: #ff4d4d;
-        font-size: 0.8rem;
-        opacity: 0.8;
-      }
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid #ff4d4d30;
-      }
-    </style>
+  /* ===== SECTION TAG ===== */
+  .section-head{display:flex; align-items:baseline; gap:16px; margin-bottom:46px; flex-wrap:wrap;}
+  .section-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--card);color:var(--ink);
+    padding:6px 14px 6px 10px;border-radius:20px;
+    border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  }
+
+  h2{font-size:38px;font-weight:800;color:var(--ink);letter-spacing:1px;text-shadow:0 0 20px rgba(255,255,255,0.05);}
+  @media (max-width:540px){ h2{font-size:28px;} }
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(63, 198, 241, 0.3);
+    box-shadow:0 12px 30px rgba(63, 198, 241, 0.15);
+  }
+
+  /* ===== HERO ===== */
+  header.hero{padding:90px 0 70px;position:relative;overflow:hidden; border-bottom:1px solid var(--line);}
+  header.hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 80% 10%, rgba(63,198,241,0.12), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(255,60,95,0.10), transparent 50%);
+    pointer-events:none;
+  }
+  header.hero .wrap{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:center;position:relative;z-index:2;}
+  @media (max-width:860px){ header.hero .wrap{grid-template-columns:1fr;} }
   
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent);
+    letter-spacing:.12em; text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:8px; height:8px; border-radius:50%; background:var(--accent2); box-shadow:0 0 0 4px rgba(255,60,95,.15);}
 
-    <style>
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid var(--green);
-        line-height: 1.8;
-      }
-      /* RICH UX CLASSES */
-      .info-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 24px;
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
-        margin-bottom: 25px;
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-      .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        border-color: var(--green);
-      }
-      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
-      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
-      
-      .hl-box {
-        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-        border-left: 4px solid var(--green);
-        padding: 24px 30px;
-        border-radius: 0 8px 8px 0;
-        margin: 25px 0;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      }
+  h1.title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:64px;
+    line-height:1.06;
+    font-weight:800;
+    color:var(--ink);
+    text-shadow: 0 0 30px rgba(63, 198, 241, 0.3);
+    letter-spacing:1px;
+  }
+  @media (max-width:540px){ h1.title{font-size:42px;} }
+  h1.title span{color:var(--cyan); text-shadow:0 0 20px rgba(63,198,241,0.4);}
+  h1.title em{font-style:normal; color:var(--cyan); text-shadow:0 0 20px rgba(63,198,241,0.4);}
+  .subtitle{font-size:16.5px;color:var(--ink-soft);margin-top:18px;max-width:520px;line-height:1.65;font-weight:300;}
+  
+  .hero-meta{display:flex;gap:28px;margin-top:32px;flex-wrap:wrap;}
+  .hero-meta div span{display:block; color:var(--ink-soft); font-size:11px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px;}
+  .hero-meta div strong{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:26px;color:var(--cyan);letter-spacing:1px;}
 
-      .app-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
-        margin: 25px 0;
-      }
-      .app-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 22px;
-        border-radius: 8px;
-        transition: all 0.3s;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .app-card:hover {
-        border-color: var(--green);
-        background: rgba(255,255,255,0.03);
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-      }
-      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
-      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
-      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+  .warning-strip{
+    margin-top:36px; max-width:680px; padding:14px 18px; border:1px solid rgba(255,60,95,.35);
+    background:rgba(255,60,95,.06); border-radius:12px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#ffb0bc;
+    display:flex; gap:10px; align-items:flex-start;
+  }
 
-      .feature-list {
-        list-style: none !important;
-        padding: 0 !important;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin: 25px 0 !important;
-      }
-      .feature-list li {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 18px;
-        border-radius: 8px;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        transition: transform 0.2s;
-      }
-      .feature-list li:hover {
-        transform: scale(1.02);
-        border-color: var(--green);
-      }
-      .feature-list li::before { display: none !important; }
-      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
-      .fl-text { display: flex; flex-direction: column; gap: 6px; }
-      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
-      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+  /* grid stage overridden to display logo and pulse animation */
+  .grid-stage{display:flex;justify-content:center;align-items:center;height:280px;position:relative;}
+  .pulse-ring{
+    position:absolute;border-radius:50%;border:2px solid var(--cyan);
+    width:240px;height:240px;opacity:0;
+    animation:pulse 2.8s ease-out infinite;
+  }
+  .pulse-ring.r2{animation-delay:.9s;}
+  .pulse-ring.r3{animation-delay:1.8s;}
+  @keyframes pulse{
+    0%{ width:200px;height:200px;opacity:.55;}
+    100%{ width:440px;height:440px;opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){ .pulse-ring{animation:none;display:none;} }
+  .cloud-icon{width:280px;height:280px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 35px rgba(63, 198, 241, 0.55)); transition: transform 0.3s ease;}
+  .cloud-icon:hover{transform: scale(1.05);}
 
-      @media (max-width: 768px) {
-        .feature-list { grid-template-columns: 1fr; }
-        .info-card { flex-direction: column; }
-      }
-    
-      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
-      .app-card {
-        position: relative;
-        overflow: hidden;
-        min-height: 160px;
-        display: block;
-        padding: 0;
-      }
-      .ac-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .ac-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
+  p.body-text{max-width:680px; color:var(--ink-soft); margin-bottom:18px; font-size:15.5px;}
+  p.body-text strong{color:var(--ink); font-weight:600;}
 
-      .feature-list li {
-        position: relative;
-        overflow: hidden;
-        min-height: 120px;
-        display: block;
-        padding: 0;
-        text-align: center;
-      }
-      .fl-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .fl-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .fl-front .fl-icon { margin-bottom: 10px; }
-      .fl-front strong { margin-bottom: 0; }
+  /* ---------- TIMELINE ---------- */
+  .timeline-scroll{overflow-x:auto; padding-bottom:18px; margin:0 -28px; padding-left:28px; padding-right:28px;}
+  .timeline-svg-holder{
+    min-width:1000px;
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .timeline-svg-holder svg text {
+    fill: var(--ink) !important;
+  }
+  .timeline-svg-holder svg g[fill="#141417"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#15171f"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#12151a"] {
+    fill: var(--card) !important;
+  }
 
-    </style>
+  /* ---------- DIAGRAM PANEL ---------- */
+  .diagram-panel{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:30px; margin-top:10px; overflow-x:auto;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .diagram-panel text {
+    fill: var(--ink) !important;
+  }
+  .diagram-panel g[fill="#141417"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#15171f"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#12151a"] {
+    fill: var(--card) !important;
+  }
+  .diagram-caption{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-soft);
+    margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);
+  }
+
+  /* ---------- CARDS GRID ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; background:transparent; border:none;}
+  .grid .card{padding:26px; background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-md); backdrop-filter:blur(10px);}
+  .card h3{font-family:'JetBrains Mono',monospace; font-size:13.5px; color:var(--accent); margin-bottom:9px; display:flex; align-items:center; gap:8px;}
+  .card p{font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
+  @media(max-width:760px){.grid{grid-template-columns:1fr;} }
+
+  /* ---------- STATS ---------- */
+  .stats-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; background:transparent; border:none; margin-top:40px;}
+  .stat{background:var(--card); padding:24px 20px; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-md); backdrop-filter:blur(10px);}
+  .stat strong{display:block; font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--accent); font-weight:700;}
+  .stat span{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em;}
+  @media(max-width:760px){.stats-row{grid-template-columns:repeat(2,1fr);} }
+
+  /* ---------- USE CASES ---------- */
+  .usecase{
+    display:grid; grid-template-columns:46px 1fr; gap:20px;
+    padding:22px 0; border-bottom:1px solid var(--line);
+  }
+  .usecase:last-child{border-bottom:none;}
+  .usecase .num{font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:13px; padding-top:4px;}
+  .usecase h4{font-size:16.5px; margin-bottom:6px; font-weight:600; font-family:'DM Sans',sans-serif;}
+  .usecase p{color:var(--ink-soft); font-size:14.5px; max-width:600px;}
+
+  /* ---------- RESOURCES / LEARN ---------- */
+  .resource-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;}
+  .resource{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:18px 20px; transition:border-color .15s, transform .15s;
+    box-shadow:var(--shadow-sm); backdrop-filter:blur(10px);
+  }
+  .resource:hover{border-color:var(--accent); transform: translateY(-2px);}
+  .resource .rtype{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;}
+  .resource a{font-weight:600; color:var(--ink); font-size:14.5px; text-decoration:none;}
+  .resource a:hover{color:var(--accent);}
+  .resource p{font-size:13px; color:var(--ink-soft); margin-top:6px; line-height:1.5;}
+  @media(max-width:760px){.resource-list{grid-template-columns:1fr;} }
+
+  /* ---------- REFERENCES ---------- */
+  .ref-list{list-style:none; counter-reset:ref; max-width:760px;}
+  .ref-list li{
+    counter-increment:ref; position:relative; padding-left:38px;
+    padding-bottom:16px; margin-bottom:16px; border-bottom:1px solid var(--line);
+    font-size:14.5px; color:var(--ink-soft);
+  }
+  .ref-list li::before{
+    content:counter(ref); position:absolute; left:0; top:0;
+    font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:13px;
+    border:1px solid var(--line); width:24px; height:24px; border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--card);
+  }
+  .ref-list a{font-weight:500; color:var(--ink); text-decoration:none;}
+  .ref-list a:hover{color:var(--accent);}
+
+  footer{
+    padding:40px 0 50px;border-top:1px solid var(--line);margin-top:30px;
+    background:rgba(6, 13, 22, 0.6);
+  }
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer p{font-size:12px;color:var(--ink-soft);margin:0;}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: width .15s, height .15s, background .15s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(63, 198, 241, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: width .25s, height .25s, border-color .25s;
+  }
+  .cursor-big #cursor { width: 18px; height: 18px; background: var(--accent); }
+  .cursor-big #cursor-ring { width: 56px; height: 56px; border-color: var(--accent); }
+
+  /* ─── SCROLL PROGRESS ─── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--cyan), var(--accent2));
+    z-index: 10000;
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  /* ─── PARTICLE CANVAS ─── */
+  #particles-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ─── MENU TOGGLE ─── */
+  #menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2001;
+    padding: 10px;
+  }
+  #menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #menu-toggle span:nth-child(2) { width: 18px; align-self: flex-end; }
+  #menu-toggle:hover span:nth-child(2) { width: 28px; }
+
+  #menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 28px; }
+  #menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  #menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 28px; }
+
+  @media (max-width: 720px) {
+    #menu-toggle { display: flex; }
+  }
+
+  /* ─── MOBILE MENU ─── */
+  #mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #mobile-menu.active { transform: translateX(0); }
+  .mm-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: center;
+    width: 100%;
+  }
+  .mm-content a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  #mobile-menu.active .mm-content a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #mobile-menu.active .mm-content a:nth-child(1) { transition-delay: 0.1s; }
+  #mobile-menu.active .mm-content a:nth-child(2) { transition-delay: 0.2s; }
+  #mobile-menu.active .mm-content a:nth-child(3) { transition-delay: 0.3s; }
+  #mobile-menu.active .mm-content a:nth-child(4) { transition-delay: 0.4s; }
+  #mobile-menu.active .mm-content a:nth-child(5) { transition-delay: 0.5s; }
+  #mobile-menu.active .mm-content a:nth-child(6) { transition-delay: 0.6s; }
+
+  .mm-content a:hover { color: var(--accent); transform: scale(1.05); letter-spacing: 10px; }
+
+  /* ─── CLI TERMINAL ─── */
+  #terminal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    padding: 40px;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    text-align: left;
+  }
+  #terminal-overlay.active { display: flex; }
+
+  .term-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+  }
+  #term-output {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .term-line { display: block; }
+  .term-line.cmd { color: var(--cyan); }
+  .term-line.cmd::before { content: "> "; }
+  .term-line.res { color: var(--ink-soft); }
+  .term-line.error { color: var(--accent2); }
+
+  .term-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 20px;
+    border: 1px solid var(--line);
+  }
+  .term-prompt { color: var(--cyan); font-weight: bold; }
+  #term-input {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+  }
+  .term-hint {
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    opacity: 0.5;
+  }
+
+  /* CLI TRIGGER BUTTON */
+  .cli-trigger {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9995;
+    width: 64px; height: 64px;
+    background: rgba(63, 198, 241, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(63, 198, 241, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    cursor: pointer;
+    box-shadow: 
+      inset 0 0 20px rgba(63, 198, 241, 0.05),
+      0 0 30px rgba(63, 198, 241, 0.2);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cli-trigger::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(from 0deg, transparent, var(--accent), transparent, var(--accent2), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: cliRotate 4s linear infinite;
+  }
+
+  @keyframes cliRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .cli-trigger span {
+    filter: drop-shadow(0 0 15px var(--accent));
+    animation: cliFloat 3s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes cliFloat {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.1) translateY(-5px); }
+  }
+
+  .cli-trigger:hover { 
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(63, 198, 241, 0.08);
+    box-shadow: 
+      inset 0 0 30px rgba(63, 198, 241, 0.1),
+      0 0 50px rgba(63, 198, 241, 0.4);
+  }
+  .cli-trigger:hover::before {
+    animation-duration: 1.5s;
+  }
+
+  /* ─── HUD SCANNER FRAME ─── */
+  .hud-frame {
+    position: fixed;
+    inset: 16px;
+    pointer-events: none;
+    z-index: 9998;
+    transition: inset 0.3s;
+  }
+
+  .hud-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(63, 198, 241, 0.08);
+    box-shadow: inset 0 0 20px rgba(63, 198, 241, 0.03);
+    pointer-events: none;
+  }
+
+  .hud-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--accent);
+    transition: border-color 0.3s;
+  }
+
+  .hud-corner.top-left {
+    top: 0; left: 0;
+    border-right: none; border-bottom: none;
+  }
+
+  .hud-corner.top-right {
+    top: 0; right: 0;
+    border-left: none; border-bottom: none;
+  }
+
+  .hud-corner.bottom-left {
+    bottom: 0; left: 0;
+    border-right: none; border-top: none;
+  }
+
+  .hud-corner.bottom-right {
+    bottom: 0; right: 0;
+    border-left: none; border-top: none;
+  }
+
+  .hud-tag {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--accent-soft);
+    position: absolute;
+    white-space: nowrap;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .top-left .hud-tag { top: -14px; left: 0; }
+  .top-right .hud-tag { top: -14px; right: 0; text-align: right; }
+  .bottom-left .hud-tag { bottom: -14px; left: 0; }
+  .bottom-right .hud-tag { bottom: -14px; right: 0; text-align: right; }
+
+  @media (max-width: 768px) {
+    .hud-frame {
+      inset: 8px;
+    }
+    .hud-tag {
+      display: none;
+    }
+  }
+</style>
+<script>window.TECH_THEME_COLOR = '#ff4d4d';</script>
 </head>
 <body>
 
@@ -244,95 +661,29 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── SMART NAV ─── -->
-<div class="smart-nav">
-  <nav id="navbar">
+<!-- HUD VIEWPORT FRAME -->
+<div class="hud-frame">
+  <div class="hud-corner top-left"><span class="hud-tag">SYS_ACTIVE</span></div>
+  <div class="hud-corner top-right"><span class="hud-tag">USCS_OS v1.0.4</span></div>
+  <div class="hud-corner bottom-left"><span class="hud-tag">GRID_SEC_X9</span></div>
+  <div class="hud-corner bottom-right"><span class="hud-tag">E-WALL_HUD</span></div>
+</div>
+
+<nav id="navbar">
+  <div class="inner">
     <a href="../index.html#home" class="nav-logo">USCS<span class="accent"> E-WALL</span></a>
-    <div class="nav-links">
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#wall">The Wall</a>
-      <a href="../index.html#materials">Materials</a>
-      <a href="../index.html#impact">Impact</a>
-      <a href="../index.html#creators">Team</a>
-    </div>
+    <ul>
+      <li><a href="#history">History</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#usecases">Use cases</a></li>
+      <li><a href="#learn">Learn</a></li>
+      <li><a href="#refs">References</a></li>
+    </ul>
     <button id="menu-toggle" aria-label="Toggle Menu">
       <span></span><span></span><span></span>
     </button>
-  </nav>
-
-  <div class="nav-ticker">
-    <div class="nav-ticker-track">
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-    </div>
   </div>
-</div>
+</nav>
 
 <!-- MOBILE MENU OVERLAY -->
 <div id="mobile-menu">
@@ -345,308 +696,276 @@
   </div>
 </div>
 
-<!-- ─── SUBPAGE HERO ─── -->
-<section class="page-hero section-z">
-  <div class="hero-orb o1"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content-wrap" style="display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; flex-wrap: wrap; margin-top: 20px;">
-    <div class="reveal in d1" style="background: rgba(255,77,77,.12); border: 1px solid #ff4d4d40; padding: 30px; border-radius: 28px; box-shadow: 0 15px 40px rgba(255,77,77,.12); display: flex; align-items: center; justify-content: center;">
-      <img src="../icon/bugbounty.png" style="width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 20px #ff4d4d);" class="tech-hero-img">
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-      <div class="hero-eyebrow reveal in d2" style="border-color: #ff4d4d40; background: rgba(255,77,77,.12); color: #ff4d4d; margin-bottom: 15px;">
-        <span class="pulse" style="background: #ff4d4d; animation: none; box-shadow: 0 0 10px #ff4d4d;"></span>
-        DOCUMENTATION ARCHIVE
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">crowdsourced security · responsible disclosure · since 1995</div>
+      <h1 class="title">Companies <span>pay you</span> to find their security flaws first.</h1>
+      <p class="subtitle">A bug bounty program rewards independent security researchers — "ethical hackers" — for finding and responsibly reporting vulnerabilities, instead of those flaws being found (and exploited) by someone with worse intentions. This page covers where the idea came from, how a report actually moves through the system, where it's used today, and where to learn it properly.</p>
+      <div class="hero-meta">
+        
+      <div><span>First program</span><strong>Netscape, 1995</strong></div>
+      <div><span>Largest platforms</span><strong>HackerOne, Bugcrowd</strong></div>
+      <div><span>Govt. milestone</span><strong>Hack the Pentagon, 2016</strong></div>
+      <div><span>Core principle</span><strong>Responsible disclosure</strong></div>
+    
       </div>
-      <h1 class="reveal in d3" style="margin-bottom: 0; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1; letter-spacing: 2px; text-shadow: 0 0 30px rgba(255,77,77,.12);">
-        <span style="color: #fff;">Bug Bounty</span>
-      </h1>
-      <p class="hero-tech-desc reveal in d4" style="margin-top: 15px; margin-bottom: 0; font-size: 1rem; color: var(--text2); max-width: 400px; font-weight: 300; line-height: 1.6; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 15px;">Rewards offered by companies for finding software vulnerabilities.</p>
+      
+    </div>
+    <div class="grid-stage">
+      <div class="pulse-ring r1"></div>
+      <div class="pulse-ring r2"></div>
+      <div class="pulse-ring r3"></div>
+      <img src="../icon/bugbounty.png" class="cloud-icon" alt="Bugbounty Logo">
+    </div>
+  </div>
+</header>
+
+<!-- ================= HISTORY ================= -->
+<section id="history" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">01 / origin</span>
+      <h2>From a Volkswagen Beetle to billion-dollar platforms</h2>
+    </div>
+    <p class="lede">Paying outsiders to break things is older than computing itself — bug bounties just applied a very old idea to a very new problem.</p>
+
+    <p class="body-text">The concept predates software entirely: in <strong>1851</strong>, locksmith <strong>Alfred Charles Hobbs</strong> was paid handsomely to pick one of the era's strongest locks, publicly proving it could be beaten. In computing terms, the earliest known example came in <strong>1983</strong>, when Hunter & Ready advertised "Get a bug if you find a bug" — rewarding bugs found in its VRTX operating system with an actual <strong>Volkswagen Beetle</strong>.</p>
+
+    <p class="body-text">The first true <em>bug bounty program</em>, in the modern sense, launched on <strong>October 10, 1995</strong>: <strong>Netscape</strong> offered cash rewards (up to $1,000) for security flaws found in the beta of Netscape Navigator 2.0. The idea was championed internally by support engineer <strong>Jarrett Ridlinghafer</strong>, who is credited with coining the term "bug bounty" itself. Strangely, the idea didn't immediately spread — it took <strong>seven years</strong> before another major program appeared, when security firm <strong>iDefense</strong> launched its Vulnerability Contributor Program in 2002.</p>
+
+    <p class="body-text"><strong>Mozilla</strong> launched its own program in 2004, and <strong>Google</strong> and <strong>Facebook</strong> followed in the years after, each running self-managed programs. The model truly scaled once dedicated platforms emerged to handle the logistics: <strong>HackerOne</strong> and <strong>Bugcrowd</strong>, both founded in 2012, made it possible for any company — not just tech giants with their own security teams — to run a bounty program. The model reached government in <strong>April 2016</strong>, when the US Department of Defense launched "<strong>Hack the Pentagon</strong>," resolving 138 unique vulnerabilities and proving the approach could work even for highly sensitive systems.</p>
+
+    <div class="timeline-scroll">
+      <div class="timeline-svg-holder">
+        <svg width="1040" height="240" viewBox="0 0 1040 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline of bug bounty history from 1983 to 2016">
+          <line x1="40" y1="120" x2="1000" y2="120" stroke="#262836" stroke-width="2"/>
+          <g font-family="IBM Plex Mono, monospace">
+            <!-- 1983 -->
+            <circle cx="70" cy="120" r="6" fill="#ffc94d"/>
+            <line x1="70" y1="120" x2="70" y2="74" stroke="#262836" stroke-width="1.5"/>
+            <text x="70" y="62" fill="#eaecf3" font-size="12" text-anchor="middle" font-weight="600">1983</text>
+            <text x="70" y="150" fill="#8c8fa3" font-size="10.5" text-anchor="middle">Hunter &amp; Ready</text>
+            <text x="70" y="163" fill="#8c8fa3" font-size="10.5" text-anchor="middle">offers a VW Beetle</text>
+
+            <!-- 1995 Netscape -->
+            <circle cx="240" cy="120" r="9" fill="#ff5d5d" stroke="#0a0b10" stroke-width="3"/>
+            <line x1="240" y1="120" x2="240" y2="74" stroke="#262836" stroke-width="1.5"/>
+            <text x="240" y="62" fill="#eaecf3" font-size="13" text-anchor="middle" font-weight="700">Oct 1995</text>
+            <text x="240" y="150" fill="#eaecf3" font-size="12" text-anchor="middle" font-weight="700">Netscape "Bugs Bounty"</text>
+            <text x="240" y="163" fill="#8c8fa3" font-size="10.5" text-anchor="middle">first modern program</text>
+
+            <!-- 2002 iDefense -->
+            <circle cx="440" cy="120" r="6" fill="#4fd1c5"/>
+            <line x1="440" y1="120" x2="440" y2="166" stroke="#262836" stroke-width="1.5"/>
+            <text x="440" y="62" fill="#8c8fa3" font-size="11" text-anchor="middle">2002</text>
+            <text x="440" y="182" fill="#eaecf3" font-size="11.5" text-anchor="middle" font-weight="600">iDefense launches</text>
+            <text x="440" y="195" fill="#8c8fa3" font-size="10.5" text-anchor="middle">middleman model</text>
+
+            <!-- 2004 Mozilla -->
+            <circle cx="590" cy="120" r="6" fill="#4fd1c5"/>
+            <line x1="590" y1="120" x2="590" y2="74" stroke="#262836" stroke-width="1.5"/>
+            <text x="590" y="62" fill="#8c8fa3" font-size="11" text-anchor="middle">2004</text>
+            <text x="590" y="150" fill="#eaecf3" font-size="12" text-anchor="middle" font-weight="600">Mozilla program</text>
+            <text x="590" y="163" fill="#8c8fa3" font-size="10.5" text-anchor="middle">$500 per bug</text>
+
+            <!-- 2012 platforms -->
+            <circle cx="800" cy="120" r="9" fill="#ff5d5d" stroke="#0a0b10" stroke-width="3"/>
+            <line x1="800" y1="120" x2="800" y2="166" stroke="#262836" stroke-width="1.5"/>
+            <text x="800" y="62" fill="#8c8fa3" font-size="11" text-anchor="middle">2012</text>
+            <text x="800" y="182" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="700">HackerOne &amp; Bugcrowd</text>
+            <text x="800" y="195" fill="#8c8fa3" font-size="10.5" text-anchor="middle">platforms founded</text>
+
+            <!-- 2016 Hack the Pentagon -->
+            <circle cx="960" cy="120" r="7" fill="#ffc94d"/>
+            <line x1="960" y1="120" x2="960" y2="74" stroke="#262836" stroke-width="1.5"/>
+            <text x="960" y="62" fill="#eaecf3" font-size="12" text-anchor="middle" font-weight="600">Apr 2016</text>
+            <text x="960" y="150" fill="#eaecf3" font-size="12" text-anchor="middle" font-weight="600">Hack the Pentagon</text>
+            <text x="960" y="163" fill="#8c8fa3" font-size="10.5" text-anchor="middle">US DoD's first program</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><strong>1995</strong><span>First modern program</span></div>
+      <div class="stat"><strong>600+</strong><span>Public programs (by 2016)</span></div>
+      <div class="stat"><strong>138</strong><span>Bugs fixed by Hack the Pentagon</span></div>
+      <div class="stat"><strong>50–70%</strong><span>Reports typically invalid*</span></div>
     </div>
   </div>
 </section>
 
-<div class="subpage-container section-z" style="position: relative; overflow: hidden;">
-<div class="tech-watermark" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-family: var(--font-disp); font-size: clamp(8rem, 20vw, 25rem); color: #ff4d4d; opacity: 0.03; pointer-events: none; z-index: -1; white-space: nowrap; user-select: none;">Bug Bounty</div>
-  
-  <!-- SIDEBAR NAVIGATION -->
-  <aside class="sidebar">
-    <span class="sidebar-h">CONTENTS</span>
-    <ul class="sidebar-links">
-      <li><a href="#history">History</a></li>
-      <li><a href="#why">Why Use This?</a></li>
-      <li><a href="#applications">Applications</a></li>
-      <li><a href="#facts">Key Facts</a></li>
-      <li><a href="#learn">Resources</a></li>
-    </ul>
-  </aside>
-
-  <!-- CONTENT ARTICLES -->
-  <main class="content-section">
-
-    <section id="history">
-      <h2>History</h2>
-      <div class="info-card">
-        <div class="ic-icon">🕰️</div>
-        <div class="ic-content">
-          <p>Bug bounty programs have roots in Netscape's 1995 program offering $1,000 for Netscape Navigator 2.0 bugs. The modern era began when Mozilla launched a formal program in 2004. HackerOne and Bugcrowd, the two largest bug bounty platforms, were both founded in 2012. In 2014 the US Department of Defense launched 'Hack the Pentagon' — the first federal bug bounty. Google, Apple, Microsoft, and Meta all run programs paying millions annually.</p>
-        </div>
-      </div>
-    </section>
-
-    
-
-    <section id="why">
-      <h2>Why We Use Bug Bounty</h2>
-      <div class="hl-box">
-        Bug bounty programs create a legal and financial framework for ethical hackers to find and report vulnerabilities before malicious actors do. They are cost-effective for organizations (only pay for valid findings) and provide career income and recognition for security researchers. Platforms like HackerOne have paid over $300 million to hackers cumulatively.
-      </div>
-    </section>
-
-    <section id="applications">
-      <h2>Applications &amp; Use Cases</h2>
-      <div class="app-grid">
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">⚙️</span>
-            <span class="ac-title">Web application vulnerability...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Web application vulnerability research (XSS, SQLi, IDOR, SSRF)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🔌</span>
-            <span class="ac-title">API security testing</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">API security testing</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🗄️</span>
-            <span class="ac-title">Mobile application security assessments</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Mobile application security assessments</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🐍</span>
-            <span class="ac-title">Network-level vulnerability disclosure</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Network-level vulnerability disclosure</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🚀</span>
-            <span class="ac-title">Authentication bypass and...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Authentication bypass and privilege escalation research</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🛠️</span>
-            <span class="ac-title">Earning income as...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Earning income as a freelance security researcher</span>
-          </div>
-        </div>
-        
-      </div>
-    </section>
-
-    <section id="facts">
-      <h2>Key Facts &amp; Features</h2>
-      <ul class="feature-list">
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🧠</span>
-            <strong>HackerOne, Bugcrowd, Intigriti,</strong>
-          </div>
-          <div class="fl-back">
-            <span>HackerOne, Bugcrowd, Intigriti, and Synack are major platforms</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🎯</span>
-            <strong>Scope defines what</strong>
-          </div>
-          <div class="fl-back">
-            <span>Scope defines what is and isn't allowed to test</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚡</span>
-            <strong>Responsible disclosure requires</strong>
-          </div>
-          <div class="fl-back">
-            <span>Responsible disclosure requires notifying the vendor before publishing</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚠️</span>
-            <strong>Google pays up</strong>
-          </div>
-          <div class="fl-back">
-            <span>Google pays up to $31,337 per finding via Google VRP</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">📌</span>
-            <strong>CVE (Common Vulnerabilities</strong>
-          </div>
-          <div class="fl-back">
-            <span>CVE (Common Vulnerabilities and Exposures) system tracks published vulnerabilities</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">💡</span>
-            <strong>Top hackers earn</strong>
-          </div>
-          <div class="fl-back">
-            <span>Top hackers earn $500,000+ per year through bug bounties</span>
-          </div>
-        </li>
-        
-      </ul>
-    </section>
-
-    <section id="learn">
-      <h2>Where to Learn</h2>
-
-      <h3>Online Courses</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Bug%20Bounty%20HackerOne%20Hacker101%20(free%20training', '_blank')" style="cursor: pointer;" title="Go to HackerOne Hacker101 (free training">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>HackerOne Hacker101 (free training</strong>
-          </div>
-          <div class="fl-back">
-            <span>HackerOne Hacker101 (free training at hacker101.com)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Bug%20Bounty%20TryHackMe', '_blank')" style="cursor: pointer;" title="Go to TryHackMe">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>TryHackMe</strong>
-          </div>
-          <div class="fl-back">
-            <span>Bug Bounty Hunter learning path</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Bug%20Bounty%20PortSwigger%20Web%20Security%20Academy', '_blank')" style="cursor: pointer;" title="Go to PortSwigger Web Security Academy">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>PortSwigger Web Security Academy</strong>
-          </div>
-          <div class="fl-back">
-            <span>PortSwigger Web Security Academy (free, covers OWASP Top 10)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Bug%20Bounty%20TCM%20Security', '_blank')" style="cursor: pointer;" title="Go to TCM Security">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📙</span>
-            <strong>TCM Security</strong>
-          </div>
-          <div class="fl-back">
-            <span>Practical Bug Bounty course</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-
-      <h3>Books &amp; References</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Bug%20Bounty%20'Bug%20Bounty%20Bootcamp'', '_blank')" style="cursor: pointer;" title="Go to 'Bug Bounty Bootcamp'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>'Bug Bounty Bootcamp'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Vickie Li</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Bug%20Bounty%20'The%20Web%20Application%20Hacker's%20Handbook'', '_blank')" style="cursor: pointer;" title="Go to 'The Web Application Hacker's Handbook'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>'The Web Application Hacker's Handbook'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Stuttard & Pinto</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Bug%20Bounty%20'Real-World%20Bug%20Hunting'', '_blank')" style="cursor: pointer;" title="Go to 'Real-World Bug Hunting'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>'Real-World Bug Hunting'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Peter Yaworski (free chapter previews online)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-    </section>
-  </main>
-</div>
-
-<!-- ─── FOOTER ─── -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <span class="f-brand-name">USCS<span class="a"> E-WALL</span></span>
-      <p>An e-waste art installation by <strong>USCS (Uttaranchal School of Computing Sciences)</strong>, celebrating the IT field through creative reuse of technology.</p>
+<!-- ================= HOW IT WORKS ================= -->
+<section id="how" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">02 / mechanics</span>
+      <h2>How a single bug report actually flows</h2>
     </div>
-    <div>
-      <div class="f-col-h">Navigate</div>
-      <ul class="f-lnks">
-        <li><a href="../index.html#about">About Project</a></li>
-        <li><a href="../index.html#wall">Interactive Wall</a></li>
-        <li><a href="../index.html#materials">Raw Materials</a></li>
-        <li><a href="../index.html#impact">Our Impact</a></li>
-        <li><a href="../index.html#creators">The Team</a></li>
-      </ul>
+    <p class="lede">From the moment a researcher spots something suspicious to the moment they get paid, every report moves through a fairly standard pipeline.</p>
+
+    <div class="diagram-panel">
+      <svg width="100%" height="320" viewBox="0 0 940 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of the bug bounty report lifecycle">
+        <g font-family="Inter">
+          <!-- 1 -->
+          <rect x="20" y="40" width="150" height="95" rx="8" fill="#14151d" stroke="#4fd1c5" stroke-width="1.5"/>
+          <text x="95" y="65" fill="#4fd1c5" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">01 RESEARCH</text>
+          <text x="95" y="88" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">Hacker probes</text>
+          <text x="95" y="103" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">in-scope target</text>
+          <text x="95" y="122" fill="#8c8fa3" font-size="10.5" text-anchor="middle">within program rules</text>
+
+          <line x1="170" y1="87" x2="200" y2="87" stroke="#262836" stroke-width="2"/>
+          <polygon points="200,82 210,87 200,92" fill="#262836"/>
+
+          <!-- 2 -->
+          <rect x="210" y="40" width="150" height="95" rx="8" fill="#14151d" stroke="#4fd1c5" stroke-width="1.5"/>
+          <text x="285" y="65" fill="#4fd1c5" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">02 REPORT</text>
+          <text x="285" y="88" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">Submit via</text>
+          <text x="285" y="103" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">platform</text>
+          <text x="285" y="122" fill="#8c8fa3" font-size="10.5" text-anchor="middle">proof-of-concept included</text>
+
+          <line x1="360" y1="87" x2="390" y2="87" stroke="#262836" stroke-width="2"/>
+          <polygon points="390,82 400,87 390,92" fill="#262836"/>
+
+          <!-- 3 -->
+          <rect x="400" y="40" width="150" height="95" rx="8" fill="#14151d" stroke="#ffc94d" stroke-width="1.5"/>
+          <text x="475" y="65" fill="#ffc94d" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">03 TRIAGE</text>
+          <text x="475" y="88" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">Validated &amp;</text>
+          <text x="475" y="103" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">severity-scored</text>
+          <text x="475" y="122" fill="#8c8fa3" font-size="10.5" text-anchor="middle">CVSS-style rating</text>
+
+          <line x1="550" y1="87" x2="580" y2="87" stroke="#262836" stroke-width="2"/>
+          <polygon points="580,82 590,87 580,92" fill="#262836"/>
+
+          <!-- 4 -->
+          <rect x="590" y="40" width="150" height="95" rx="8" fill="#14151d" stroke="#ff5d5d" stroke-width="1.5"/>
+          <text x="665" y="65" fill="#ff5d5d" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">04 FIX</text>
+          <text x="665" y="88" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">Vendor patches</text>
+          <text x="665" y="103" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">the vulnerability</text>
+          <text x="665" y="122" fill="#8c8fa3" font-size="10.5" text-anchor="middle">~90-day disclosure window</text>
+
+          <line x1="740" y1="87" x2="770" y2="87" stroke="#262836" stroke-width="2"/>
+          <polygon points="770,82 780,87 770,92" fill="#262836"/>
+
+          <!-- 5 -->
+          <rect x="780" y="40" width="140" height="95" rx="8" fill="#14151d" stroke="#ffc94d" stroke-width="1.5"/>
+          <text x="850" y="65" fill="#ffc94d" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">05 REWARD</text>
+          <text x="850" y="88" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">Researcher</text>
+          <text x="850" y="103" fill="#eaecf3" font-size="12.5" text-anchor="middle" font-weight="600">gets paid</text>
+          <text x="850" y="122" fill="#8c8fa3" font-size="10.5" text-anchor="middle">+ public credit, optional</text>
+
+          <!-- disclosure note box -->
+          <rect x="210" y="190" width="520" height="70" rx="8" fill="#0f1016" stroke="#262836" stroke-dasharray="3,3"/>
+          <text x="230" y="213" fill="#ff5d5d" font-family="IBM Plex Mono" font-size="11" font-weight="600">RESPONSIBLE DISCLOSURE</text>
+          <text x="230" y="232" fill="#c5c8d6" font-size="12">The researcher agrees not to publicly reveal the bug</text>
+          <text x="230" y="249" fill="#c5c8d6" font-size="12">until the vendor has had a fair window to fix it.</text>
+        </g>
+      </svg>
+      <p class="diagram-caption">The reward usually scales with severity — a minor information leak might earn $50–$500, while a critical remote code execution bug on a major platform can pay out five or six figures.</p>
+    </div>
+
+    <div class="grid" style="margin-top:50px;">
+      <div class="card"><h3>◆ Scope</h3><p>The exact set of domains, apps, or systems a program allows researchers to test — testing outside scope is unauthorized and often illegal.</p></div>
+      <div class="card"><h3>◆ Severity rating</h3><p>Bugs are typically scored using frameworks like CVSS, which determines how large the payout will be.</p></div>
+      <div class="card"><h3>◆ Triage</h3><p>A platform or internal team validates a report is real, not a duplicate, and accurately scoped before it reaches the vendor.</p></div>
+      <div class="card"><h3>◆ Proof of concept (PoC)</h3><p>A minimal, working demonstration that proves the vulnerability is real and exploitable, not just theoretical.</p></div>
+      <div class="card"><h3>◆ Safe harbor</h3><p>Legal language in a program's policy that protects good-faith researchers from prosecution for testing within scope.</p></div>
+      <div class="card"><h3>◆ Vulnerability Disclosure Program (VDP)</h3><p>A non-paid sibling to bounty programs — accepting reports and offering recognition, but no cash reward.</p></div>
     </div>
   </div>
-  <div class="footer-btm">
-    <span class="f-copy">© 2026 USCS E-WALL PROJECT — BUILT FROM DISCARDED TECH</span>
-    <span class="f-status"><span class="f-dot"></span>INSTALLATION LIVE</span>
+</section>
+
+<!-- ================= USE CASES ================= -->
+<section id="usecases" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">03 / applications</span>
+      <h2>Who runs (and benefits from) bug bounties</h2>
+    </div>
+    <p class="lede">What started as a browser-vendor experiment now spans nearly every industry that ships software.</p>
+
+    <div class="usecase"><div class="num">01</div><div><h4>Big tech companies</h4><p>Google, Microsoft, Meta, and Apple all run large bounty programs, often paying six figures for the most critical vulnerabilities.</p></div></div>
+    <div class="usecase"><div class="num">02</div><div><h4>Governments</h4><p>Following "Hack the Pentagon," the US military expanded into "Hack the Army" and "Hack the Air Force," and other governments have followed.</p></div></div>
+    <div class="usecase"><div class="num">03</div><div><h4>Startups and SaaS companies</h4><p>Platforms like HackerOne and Bugcrowd let small teams run a credible security program without building an in-house red team.</p></div></div>
+    <div class="usecase"><div class="num">04</div><div><h4>Cryptocurrency and Web3 projects</h4><p>Smart contract bugs can mean instant, irreversible loss of funds, making bounties (sometimes worth millions) a near-universal practice in crypto.</p></div></div>
+    <div class="usecase"><div class="num">05</div><div><h4>Independent security researchers</h4><p>Many full-time bug hunters earn a living entirely from bounties — some make multiples of a typical local engineering salary.</p></div></div>
+    <div class="usecase"><div class="num">06</div><div><h4>Career entry point</h4><p>Bug bounty platforms double as a public portfolio, helping researchers land security jobs by demonstrating real, validated findings.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= LEARN MORE ================= -->
+<section id="learn" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">04 / go deeper</span>
+      <h2>Free, well-regarded places to actually learn it</h2>
+    </div>
+    <p class="lede">Always practice only inside scoped, legal programs or dedicated training labs — never test systems you don't have explicit permission to test.</p>
+
+    <div class="resource-list">
+      <div class="resource">
+        <div class="rtype">Course · Free</div>
+        <a href="https://www.hackerone.com/hacker101" target="_blank" rel="noopener">HackerOne — Hacker101</a>
+        <p>Free official video course covering web vulnerability classes, plus access to legal practice targets (CTFs).</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Practice platform</div>
+        <a href="https://portswigger.net/web-security" target="_blank" rel="noopener">PortSwigger — Web Security Academy</a>
+        <p>The most widely recommended free, hands-on resource for learning web app vulnerability classes in depth.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">University course · Free</div>
+        <a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">OWASP Top Ten</a>
+        <p>The standard reference for the most critical and common web application security risks researchers target.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">University course</div>
+        <a href="https://www.coursera.org/specializations/software-security" target="_blank" rel="noopener">University of Maryland — Software Security (Coursera)</a>
+        <p>A structured academic course on identifying and exploiting common software vulnerabilities.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Practice platform</div>
+        <a href="https://www.hackthebox.com/" target="_blank" rel="noopener">Hack The Box</a>
+        <p>Realistic, legal vulnerable machines to practice exploitation techniques end-to-end.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Community / methodology</div>
+        <a href="https://www.bugcrowd.com/resources/" target="_blank" rel="noopener">Bugcrowd University & Resources</a>
+        <p>Free guides, webinars, and methodology write-ups maintained directly by one of the largest bounty platforms.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REFERENCES ================= -->
+<section id="refs" style="border-bottom:none;" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">05 / sources</span>
+      <h2>References</h2>
+    </div>
+    <ul class="ref-list">
+      <li><a href="https://en.wikipedia.org/wiki/Bug_bounty_program" target="_blank" rel="noopener">Bug Bounty Program — Wikipedia</a>. Background on the 1851 lock-picking precedent, the 1983 VRTX bounty, and program statistics.</li>
+      <li><a href="https://www.cobalt.io/blog/the-history-of-bug-bounty-programs" target="_blank" rel="noopener">The History of Bug Bounty Programs — Cobalt</a>. Details on iDefense's 2002 program and Mozilla's 2004 launch.</li>
+      <li><a href="https://www.darkreading.com/vulnerabilities-threats/the-bug-bounty-model-21-years-counting" target="_blank" rel="noopener">The Bug Bounty Model: 21 Years & Counting — Dark Reading</a>. Industry-perspective retrospective from Bugcrowd's VP of Researcher Growth.</li>
+      <li><a href="https://www.techspot.com/trivia/171-what-first-bug-bounty-program-offered-major-tech/" target="_blank" rel="noopener">What Was the First Bug Bounty Program? — TechSpot</a>. Detail on Jarrett Ridlinghafer's role at Netscape in coining the term.</li>
+      <li><a href="https://medium.com/threat-intel/bug-bounty-programs-a-quick-guide-9b349dbf4c99" target="_blank" rel="noopener">Bug Bounty Programs: A Quick Guide — Threat Intel</a>. Coverage of the Hack the Pentagon program's results and outcomes.</li>
+      <li><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">OWASP Top Ten</a>. The standard industry reference for common web vulnerability classes researchers learn to find.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="gap: 12px; display: flex; align-items: center; flex-wrap: wrap;">
+      <a href="../index.html#home" class="nav-logo" style="font-size: 1.2rem; letter-spacing: 2px;">USCS<span class="accent"> E-WALL</span></a>
+      <span style="opacity: 0.3;">|</span>
+      <span style="font-size: 12.5px; color: var(--ink-soft);">Educational overview — not an official page.</span>
+    </div>
+    <p>Sources cited above · Page last assembled June 2026</p>
   </div>
 </footer>
-
 
 <!-- ─── CLI TERMINAL OVERLAY ─── -->
 <div id="terminal-overlay">
@@ -666,8 +985,14 @@
 
 <button class="cli-trigger" id="cli-open"><span>🤖</span></button>
 
-
 <script src="../data.js"></script>
 <script src="../main.js"></script>
+<script>
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+
 </body>
 </html>

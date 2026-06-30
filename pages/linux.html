@@ -1,236 +1,653 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Linux — USCS E-WALL</title>
-  <link rel="stylesheet" href="../styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux — The Kernel That Ate the World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
-  <!-- TECH THEME OVERRIDE -->
-  <script>window.TECH_THEME_COLOR = '#fcc624';</script>
-  <style>
-    :root {
-      --green: #fcc624 !important;
-      --cyan: #fcc624 !important;
-      --aura-color: #fcc624 !important;
-      --aura-glow: rgba(252,198,36,.12) !important;
+  :root{
+    --bg: #02050a;
+    --card: rgba(6, 13, 22, 0.95);
+    --ink: #ffffff;
+    --ink-soft: #a0b8d0;
+    --line: rgba(63, 198, 241, 0.18);
+    --accent: #ffd260;
+    --accent2: #58a6ff;
+    --cyan: #58a6ff;
+    --teal: #58a6ff;
+    --green: #58a6ff;
+    --green2: #ffd260;
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.5);
+    --shadow-md: 0 10px 35px rgba(0,0,0,0.8);
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: linear-gradient(rgba(2, 5, 10, 0.92), rgba(2, 5, 10, 0.92)), url('../img/bg.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color:var(--ink);
+    font-family:'DM Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    position: relative;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Website Premium Scanlines & Noise overlays */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.5;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+    pointer-events: none;
+    z-index: 9989;
+  }
+
+  h1,h2,.display{
+    font-family:'Bebas Neue',sans-serif;
+    margin:0;
+    letter-spacing:0.04em;
+  }
+  h3{
+    font-family:'JetBrains Mono',monospace;
+    margin:0;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--cyan); transition: color 0.2s ease;}
+  a:hover{color: var(--accent2); text-decoration: none;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0; border-bottom:1px solid var(--line);}
+  .lede{font-size:18px;color:var(--ink-soft);line-height:1.65;max-width:640px;font-weight:300; margin-bottom:40px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(2, 5, 10, 0.88);
+    backdrop-filter:blur(20px) saturate(1.5);
+    border-bottom:1px solid var(--line);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  }
+  nav .inner{
+    max-width:1080px;margin:0 auto;padding:14px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-logo .accent {
+    color: var(--teal);
+  }
+  @media(max-width: 480px) {
+    .nav-logo {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
     }
-    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #fcc624 !important; }
-    .content-section hr { background: linear-gradient(90deg, #fcc624, transparent) !important; }
-    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #fcc624 !important; }
-    #scroll-progress { background: #fcc624 !important; box-shadow: 0 0 10px #fcc624 !important; }
-    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(252,198,36,.12) !important; }
-    .nav-ticker-item.active { border-bottom: 1px solid #fcc624 !important; }
-    .btn-primary { background: #fcc624 !important; }
-    .btn-primary:hover { box-shadow: 0 0 30px rgba(252,198,36,.12) !important; }
-    .hero-eyebrow .pulse { background: #fcc624 !important; box-shadow: 0 0 10px #fcc624 !important; }
-  </style>
+  }
+  @media(max-width: 360px) {
+    .nav-logo {
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+  }
+  nav ul{list-style:none;display:flex;gap:26px;margin:0;padding:0;}
+  nav ul a{
+    color:var(--ink);text-decoration:none;font-size:14px;font-weight:500;
+    opacity:0.75;transition:opacity .15s, color .15s;
+  }
+  nav ul a:hover{opacity:1;color:var(--cyan);}
+  @media (max-width:720px){ nav ul{display:none;} }
 
-    <style>
-      .content-section h2 {
-        display: inline-block;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #fcc62440;
-        position: relative;
-        text-shadow: 0 0 20px rgba(252,198,36,.12);
-      }
-      .content-section h2::before {
-        content: '>>';
-        font-family: var(--font-mono);
-        color: #fcc624;
-        margin-right: 12px;
-        font-size: 1.5rem;
-        opacity: 0.7;
-        text-shadow: 0 0 10px #fcc62480;
-      }
-      .content-section ul li {
-        position: relative;
-        padding-left: 20px;
-        list-style: none;
-      }
-      .content-section ul li::before {
-        content: '◈';
-        position: absolute;
-        left: 0;
-        top: 2px;
-        color: #fcc624;
-        font-size: 0.8rem;
-        opacity: 0.8;
-      }
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid #fcc62430;
-      }
-    </style>
+  /* ===== SECTION TAG ===== */
+  .section-head{display:flex; align-items:baseline; gap:16px; margin-bottom:46px; flex-wrap:wrap;}
+  .section-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--card);color:var(--ink);
+    padding:6px 14px 6px 10px;border-radius:20px;
+    border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;
+  }
+
+  h2{font-size:38px;font-weight:800;color:var(--ink);letter-spacing:1px;text-shadow:0 0 20px rgba(255,255,255,0.05);}
+  @media (max-width:540px){ h2{font-size:28px;} }
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(63, 198, 241, 0.3);
+    box-shadow:0 12px 30px rgba(63, 198, 241, 0.15);
+  }
+
+  /* ===== HERO ===== */
+  header.hero{padding:90px 0 70px;position:relative;overflow:hidden; border-bottom:1px solid var(--line);}
+  header.hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 80% 10%, rgba(63,198,241,0.12), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(255,60,95,0.10), transparent 50%);
+    pointer-events:none;
+  }
+  header.hero .wrap{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:center;position:relative;z-index:2;}
+  @media (max-width:860px){ header.hero .wrap{grid-template-columns:1fr;} }
   
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--accent);
+    letter-spacing:.12em; text-transform:uppercase; margin-bottom:18px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:8px; height:8px; border-radius:50%; background:var(--accent2); box-shadow:0 0 0 4px rgba(255,60,95,.15);}
 
-    <style>
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid var(--green);
-        line-height: 1.8;
-      }
-      /* RICH UX CLASSES */
-      .info-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 24px;
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
-        margin-bottom: 25px;
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-      .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        border-color: var(--green);
-      }
-      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
-      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
-      
-      .hl-box {
-        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-        border-left: 4px solid var(--green);
-        padding: 24px 30px;
-        border-radius: 0 8px 8px 0;
-        margin: 25px 0;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      }
+  h1.title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:64px;
+    line-height:1.06;
+    font-weight:800;
+    color:var(--ink);
+    text-shadow: 0 0 30px rgba(63, 198, 241, 0.3);
+    letter-spacing:1px;
+  }
+  @media (max-width:540px){ h1.title{font-size:42px;} }
+  h1.title span{color:var(--cyan); text-shadow:0 0 20px rgba(63,198,241,0.4);}
+  h1.title em{font-style:normal; color:var(--cyan); text-shadow:0 0 20px rgba(63,198,241,0.4);}
+  .subtitle{font-size:16.5px;color:var(--ink-soft);margin-top:18px;max-width:520px;line-height:1.65;font-weight:300;}
+  
+  .hero-meta{display:flex;gap:28px;margin-top:32px;flex-wrap:wrap;}
+  .hero-meta div span{display:block; color:var(--ink-soft); font-size:11px; text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px;}
+  .hero-meta div strong{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:26px;color:var(--cyan);letter-spacing:1px;}
 
-      .app-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
-        margin: 25px 0;
-      }
-      .app-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 22px;
-        border-radius: 8px;
-        transition: all 0.3s;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .app-card:hover {
-        border-color: var(--green);
-        background: rgba(255,255,255,0.03);
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-      }
-      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
-      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
-      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+  .warning-strip{
+    margin-top:36px; max-width:680px; padding:14px 18px; border:1px solid rgba(255,60,95,.35);
+    background:rgba(255,60,95,.06); border-radius:12px; font-family:'JetBrains Mono',monospace; font-size:12.5px; color:#ffb0bc;
+    display:flex; gap:10px; align-items:flex-start;
+  }
 
-      .feature-list {
-        list-style: none !important;
-        padding: 0 !important;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin: 25px 0 !important;
-      }
-      .feature-list li {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 18px;
-        border-radius: 8px;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        transition: transform 0.2s;
-      }
-      .feature-list li:hover {
-        transform: scale(1.02);
-        border-color: var(--green);
-      }
-      .feature-list li::before { display: none !important; }
-      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
-      .fl-text { display: flex; flex-direction: column; gap: 6px; }
-      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
-      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+  /* grid stage overridden to display logo and pulse animation */
+  .grid-stage{display:flex;justify-content:center;align-items:center;height:280px;position:relative;}
+  .pulse-ring{
+    position:absolute;border-radius:50%;border:2px solid var(--cyan);
+    width:240px;height:240px;opacity:0;
+    animation:pulse 2.8s ease-out infinite;
+  }
+  .pulse-ring.r2{animation-delay:.9s;}
+  .pulse-ring.r3{animation-delay:1.8s;}
+  @keyframes pulse{
+    0%{ width:200px;height:200px;opacity:.55;}
+    100%{ width:440px;height:440px;opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){ .pulse-ring{animation:none;display:none;} }
+  .cloud-icon{width:280px;height:280px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 35px rgba(63, 198, 241, 0.55)); transition: transform 0.3s ease;}
+  .cloud-icon:hover{transform: scale(1.05);}
 
-      @media (max-width: 768px) {
-        .feature-list { grid-template-columns: 1fr; }
-        .info-card { flex-direction: column; }
-      }
-    
-      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
-      .app-card {
-        position: relative;
-        overflow: hidden;
-        min-height: 160px;
-        display: block;
-        padding: 0;
-      }
-      .ac-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .ac-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
+  p.body-text{max-width:680px; color:var(--ink-soft); margin-bottom:18px; font-size:15.5px;}
+  p.body-text strong{color:var(--ink); font-weight:600;}
 
-      .feature-list li {
-        position: relative;
-        overflow: hidden;
-        min-height: 120px;
-        display: block;
-        padding: 0;
-        text-align: center;
-      }
-      .fl-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .fl-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .fl-front .fl-icon { margin-bottom: 10px; }
-      .fl-front strong { margin-bottom: 0; }
+  /* ---------- TIMELINE ---------- */
+  .timeline-scroll{overflow-x:auto; padding-bottom:18px; margin:0 -28px; padding-left:28px; padding-right:28px;}
+  .timeline-svg-holder{
+    min-width:1000px;
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .timeline-svg-holder svg text {
+    fill: var(--ink) !important;
+  }
+  .timeline-svg-holder svg g[fill="#141417"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#15171f"] {
+    fill: var(--card) !important;
+  }
+  .timeline-svg-holder svg g[fill="#12151a"] {
+    fill: var(--card) !important;
+  }
 
-    </style>
+  /* ---------- DIAGRAM PANEL ---------- */
+  .diagram-panel{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:30px; margin-top:10px; overflow-x:auto;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .diagram-panel text {
+    fill: var(--ink) !important;
+  }
+  .diagram-panel g[fill="#141417"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#15171f"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel g[fill="#12151a"] {
+    fill: var(--card) !important;
+  }
+  .diagram-caption{
+    font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-soft);
+    margin-top:14px; padding-top:14px; border-top:1px dashed var(--line);
+  }
+
+  /* ---------- CARDS GRID ---------- */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; background:transparent; border:none;}
+  .grid .card{padding:26px; background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-md); backdrop-filter:blur(10px);}
+  .card h3{font-family:'JetBrains Mono',monospace; font-size:13.5px; color:var(--accent); margin-bottom:9px; display:flex; align-items:center; gap:8px;}
+  .card p{font-size:13.5px; color:var(--ink-soft); line-height:1.55;}
+  @media(max-width:760px){.grid{grid-template-columns:1fr;} }
+
+  /* ---------- STATS ---------- */
+  .stats-row{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; background:transparent; border:none; margin-top:40px;}
+  .stat{background:var(--card); padding:24px 20px; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow-md); backdrop-filter:blur(10px);}
+  .stat strong{display:block; font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--accent); font-weight:700;}
+  .stat span{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em;}
+  @media(max-width:760px){.stats-row{grid-template-columns:repeat(2,1fr);} }
+
+  /* ---------- USE CASES ---------- */
+  .usecase{
+    display:grid; grid-template-columns:46px 1fr; gap:20px;
+    padding:22px 0; border-bottom:1px solid var(--line);
+  }
+  .usecase:last-child{border-bottom:none;}
+  .usecase .num{font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:13px; padding-top:4px;}
+  .usecase h4{font-size:16.5px; margin-bottom:6px; font-weight:600; font-family:'DM Sans',sans-serif;}
+  .usecase p{color:var(--ink-soft); font-size:14.5px; max-width:600px;}
+
+  /* ---------- RESOURCES / LEARN ---------- */
+  .resource-list{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;}
+  .resource{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:18px 20px; transition:border-color .15s, transform .15s;
+    box-shadow:var(--shadow-sm); backdrop-filter:blur(10px);
+  }
+  .resource:hover{border-color:var(--accent); transform: translateY(-2px);}
+  .resource .rtype{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:.07em; margin-bottom:6px;}
+  .resource a{font-weight:600; color:var(--ink); font-size:14.5px; text-decoration:none;}
+  .resource a:hover{color:var(--accent);}
+  .resource p{font-size:13px; color:var(--ink-soft); margin-top:6px; line-height:1.5;}
+  @media(max-width:760px){.resource-list{grid-template-columns:1fr;} }
+
+  /* ---------- REFERENCES ---------- */
+  .ref-list{list-style:none; counter-reset:ref; max-width:760px;}
+  .ref-list li{
+    counter-increment:ref; position:relative; padding-left:38px;
+    padding-bottom:16px; margin-bottom:16px; border-bottom:1px solid var(--line);
+    font-size:14.5px; color:var(--ink-soft);
+  }
+  .ref-list li::before{
+    content:counter(ref); position:absolute; left:0; top:0;
+    font-family:'JetBrains Mono',monospace; color:var(--accent); font-size:13px;
+    border:1px solid var(--line); width:24px; height:24px; border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--card);
+  }
+  .ref-list a{font-weight:500; color:var(--ink); text-decoration:none;}
+  .ref-list a:hover{color:var(--accent);}
+
+  footer{
+    padding:40px 0 50px;border-top:1px solid var(--line);margin-top:30px;
+    background:rgba(6, 13, 22, 0.6);
+  }
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer p{font-size:12px;color:var(--ink-soft);margin:0;}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: width .15s, height .15s, background .15s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(63, 198, 241, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: width .25s, height .25s, border-color .25s;
+  }
+  .cursor-big #cursor { width: 18px; height: 18px; background: var(--accent); }
+  .cursor-big #cursor-ring { width: 56px; height: 56px; border-color: var(--accent); }
+
+  /* ─── SCROLL PROGRESS ─── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--cyan), var(--accent2));
+    z-index: 10000;
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  /* ─── PARTICLE CANVAS ─── */
+  #particles-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ─── MENU TOGGLE ─── */
+  #menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2001;
+    padding: 10px;
+  }
+  #menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #menu-toggle span:nth-child(2) { width: 18px; align-self: flex-end; }
+  #menu-toggle:hover span:nth-child(2) { width: 28px; }
+
+  #menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 28px; }
+  #menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  #menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 28px; }
+
+  @media (max-width: 720px) {
+    #menu-toggle { display: flex; }
+  }
+
+  /* ─── MOBILE MENU ─── */
+  #mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #mobile-menu.active { transform: translateX(0); }
+  .mm-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: center;
+    width: 100%;
+  }
+  .mm-content a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  #mobile-menu.active .mm-content a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #mobile-menu.active .mm-content a:nth-child(1) { transition-delay: 0.1s; }
+  #mobile-menu.active .mm-content a:nth-child(2) { transition-delay: 0.2s; }
+  #mobile-menu.active .mm-content a:nth-child(3) { transition-delay: 0.3s; }
+  #mobile-menu.active .mm-content a:nth-child(4) { transition-delay: 0.4s; }
+  #mobile-menu.active .mm-content a:nth-child(5) { transition-delay: 0.5s; }
+  #mobile-menu.active .mm-content a:nth-child(6) { transition-delay: 0.6s; }
+
+  .mm-content a:hover { color: var(--accent); transform: scale(1.05); letter-spacing: 10px; }
+
+  /* ─── CLI TERMINAL ─── */
+  #terminal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    padding: 40px;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    text-align: left;
+  }
+  #terminal-overlay.active { display: flex; }
+
+  .term-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+  }
+  #term-output {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .term-line { display: block; }
+  .term-line.cmd { color: var(--cyan); }
+  .term-line.cmd::before { content: "> "; }
+  .term-line.res { color: var(--ink-soft); }
+  .term-line.error { color: var(--accent2); }
+
+  .term-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 20px;
+    border: 1px solid var(--line);
+  }
+  .term-prompt { color: var(--cyan); font-weight: bold; }
+  #term-input {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+  }
+  .term-hint {
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    opacity: 0.5;
+  }
+
+  /* CLI TRIGGER BUTTON */
+  .cli-trigger {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9995;
+    width: 64px; height: 64px;
+    background: rgba(63, 198, 241, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(63, 198, 241, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    cursor: pointer;
+    box-shadow: 
+      inset 0 0 20px rgba(63, 198, 241, 0.05),
+      0 0 30px rgba(63, 198, 241, 0.2);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cli-trigger::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(from 0deg, transparent, var(--accent), transparent, var(--accent2), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: cliRotate 4s linear infinite;
+  }
+
+  @keyframes cliRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .cli-trigger span {
+    filter: drop-shadow(0 0 15px var(--accent));
+    animation: cliFloat 3s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes cliFloat {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.1) translateY(-5px); }
+  }
+
+  .cli-trigger:hover { 
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(63, 198, 241, 0.08);
+    box-shadow: 
+      inset 0 0 30px rgba(63, 198, 241, 0.1),
+      0 0 50px rgba(63, 198, 241, 0.4);
+  }
+  .cli-trigger:hover::before {
+    animation-duration: 1.5s;
+  }
+
+  /* ─── HUD SCANNER FRAME ─── */
+  .hud-frame {
+    position: fixed;
+    inset: 16px;
+    pointer-events: none;
+    z-index: 9998;
+    transition: inset 0.3s;
+  }
+
+  .hud-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(63, 198, 241, 0.08);
+    box-shadow: inset 0 0 20px rgba(63, 198, 241, 0.03);
+    pointer-events: none;
+  }
+
+  .hud-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--accent);
+    transition: border-color 0.3s;
+  }
+
+  .hud-corner.top-left {
+    top: 0; left: 0;
+    border-right: none; border-bottom: none;
+  }
+
+  .hud-corner.top-right {
+    top: 0; right: 0;
+    border-left: none; border-bottom: none;
+  }
+
+  .hud-corner.bottom-left {
+    bottom: 0; left: 0;
+    border-right: none; border-top: none;
+  }
+
+  .hud-corner.bottom-right {
+    bottom: 0; right: 0;
+    border-left: none; border-top: none;
+  }
+
+  .hud-tag {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--accent-soft);
+    position: absolute;
+    white-space: nowrap;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .top-left .hud-tag { top: -14px; left: 0; }
+  .top-right .hud-tag { top: -14px; right: 0; text-align: right; }
+  .bottom-left .hud-tag { bottom: -14px; left: 0; }
+  .bottom-right .hud-tag { bottom: -14px; right: 0; text-align: right; }
+
+  @media (max-width: 768px) {
+    .hud-frame {
+      inset: 8px;
+    }
+    .hud-tag {
+      display: none;
+    }
+  }
+</style>
+<script>window.TECH_THEME_COLOR = '#58a6ff';</script>
 </head>
 <body>
 
@@ -244,95 +661,29 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── SMART NAV ─── -->
-<div class="smart-nav">
-  <nav id="navbar">
+<!-- HUD VIEWPORT FRAME -->
+<div class="hud-frame">
+  <div class="hud-corner top-left"><span class="hud-tag">SYS_ACTIVE</span></div>
+  <div class="hud-corner top-right"><span class="hud-tag">USCS_OS v1.0.4</span></div>
+  <div class="hud-corner bottom-left"><span class="hud-tag">GRID_SEC_X9</span></div>
+  <div class="hud-corner bottom-right"><span class="hud-tag">E-WALL_HUD</span></div>
+</div>
+
+<nav id="navbar">
+  <div class="inner">
     <a href="../index.html#home" class="nav-logo">USCS<span class="accent"> E-WALL</span></a>
-    <div class="nav-links">
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#wall">The Wall</a>
-      <a href="../index.html#materials">Materials</a>
-      <a href="../index.html#impact">Impact</a>
-      <a href="../index.html#creators">Team</a>
-    </div>
+    <ul>
+      <li><a href="#history">History</a></li>
+      <li><a href="#how">Architecture</a></li>
+      <li><a href="#usecases">Use cases</a></li>
+      <li><a href="#learn">Learn</a></li>
+      <li><a href="#refs">References</a></li>
+    </ul>
     <button id="menu-toggle" aria-label="Toggle Menu">
       <span></span><span></span><span></span>
     </button>
-  </nav>
-
-  <div class="nav-ticker">
-    <div class="nav-ticker-track">
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-    </div>
   </div>
-</div>
+</nav>
 
 <!-- MOBILE MENU OVERLAY -->
 <div id="mobile-menu">
@@ -345,308 +696,257 @@
   </div>
 </div>
 
-<!-- ─── SUBPAGE HERO ─── -->
-<section class="page-hero section-z">
-  <div class="hero-orb o1"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content-wrap" style="display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; flex-wrap: wrap; margin-top: 20px;">
-    <div class="reveal in d1" style="background: rgba(252,198,36,.12); border: 1px solid #fcc62440; padding: 30px; border-radius: 28px; box-shadow: 0 15px 40px rgba(252,198,36,.12); display: flex; align-items: center; justify-content: center;">
-      <img src="../icon/linux.png" style="width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 20px #fcc624);" class="tech-hero-img">
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-      <div class="hero-eyebrow reveal in d2" style="border-color: #fcc62440; background: rgba(252,198,36,.12); color: #fcc624; margin-bottom: 15px;">
-        <span class="pulse" style="background: #fcc624; animation: none; box-shadow: 0 0 10px #fcc624;"></span>
-        DOCUMENTATION ARCHIVE
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">free & open source · unix-like · est. 1991</div>
+      <h1 class="title">A Finnish student's <span>"hobby"</span> now runs most of the internet.</h1>
+      <p class="subtitle">Linux is a free, open-source kernel originally written by Linus Torvalds — today, paired with GNU tools and packaged into hundreds of distributions, it powers servers, smartphones, supercomputers, and embedded devices worldwide. This page covers where it came from, how it's structured, what it's used for, and where to learn it properly.</p>
+      <div class="hero-meta">
+        
+      <div><span>First announced</span><strong>Aug 25, 1991</strong></div>
+      <div><span>Created by</span><strong>Linus Torvalds</strong></div>
+      <div><span>License</span><strong>GNU GPL v2</strong></div>
+      <div><span>Version 1.0</span><strong>March 1994</strong></div>
+    
       </div>
-      <h1 class="reveal in d3" style="margin-bottom: 0; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1; letter-spacing: 2px; text-shadow: 0 0 30px rgba(252,198,36,.12);">
-        <span style="color: #fff;">Linux</span>
-      </h1>
-      <p class="hero-tech-desc reveal in d4" style="margin-top: 15px; margin-bottom: 0; font-size: 1rem; color: var(--text2); max-width: 400px; font-weight: 300; line-height: 1.6; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 15px;">The open-source kernel powering servers, mobile, and desktop.</p>
+      
+    </div>
+    <div class="grid-stage">
+      <div class="pulse-ring r1"></div>
+      <div class="pulse-ring r2"></div>
+      <div class="pulse-ring r3"></div>
+      <img src="../icon/linux.png" class="cloud-icon" alt="Linux Logo">
+    </div>
+  </div>
+</header>
+
+<!-- ================= HISTORY ================= -->
+<section id="history" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">01 / origin</span>
+      <h2>"Just a hobby, won't be big and professional"</h2>
+    </div>
+    <p class="lede">That's the literal line Linus Torvalds used to announce Linux. It's one of the most famously wrong sentences in software history.</p>
+
+    <p class="body-text">In 1991, <strong>Linus Torvalds</strong> was a computer science student at the University of Helsinki, frustrated with the licensing limits of MINIX, a small Unix-like teaching OS. On <strong>August 25, 1991</strong>, he posted to the comp.os.minix newsgroup announcing a free operating system kernel he was building for his own 386 PC — explicitly calling it <em>"just a hobby, won't be big and professional like GNU."</em> Version 0.01 followed on September 17, 1991.</p>
+
+    <p class="body-text">A kernel alone isn't a usable operating system — it needs compilers, shells, and utilities around it. That's where <strong>Richard Stallman's GNU Project</strong> came in: by 1991 GNU had built almost an entire free Unix-like system, but its own kernel (Hurd) wasn't ready. Pairing the GNU tools with Torvalds' kernel created a complete, usable operating system — which is why some communities prefer the name <strong>GNU/Linux</strong>.</p>
+
+    <p class="body-text">In 1992, the kernel was relicensed under the <strong>GNU General Public License</strong> — a decision Torvalds himself has called the best he ever made, since it guaranteed Linux would stay free and openly modifiable forever. That same year, the first <strong>distributions</strong> (complete, installable packages of the kernel plus software) began to appear. <strong>Slackware</strong> launched in 1993 and is still maintained today; <strong>Debian</strong> followed later that year. <strong>Linux 1.0</strong> shipped in March 1994 with roughly 176,000 lines of code. A decade later, <strong>Ubuntu</strong> (2004) made Linux dramatically more approachable for non-technical desktop users, and Google's <strong>Android</strong>, built on the Linux kernel, went on to become the most-used operating system on Earth by device count.</p>
+
+    <div class="timeline-scroll">
+      <div class="timeline-svg-holder">
+        <svg width="1040" height="240" viewBox="0 0 1040 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline of Linux history from 1991 to 2008">
+          <line x1="40" y1="120" x2="1000" y2="120" stroke="#262b26" stroke-width="2"/>
+          <g font-family="IBM Plex Mono, monospace">
+            <!-- Aug 1991 -->
+            <circle cx="70" cy="120" r="8" fill="#ffcc33" stroke="#0c0e0c" stroke-width="3"/>
+            <line x1="70" y1="120" x2="70" y2="74" stroke="#262b26" stroke-width="1.5"/>
+            <text x="70" y="62" fill="#e8ece8" font-size="12.5" text-anchor="middle" font-weight="700">Aug 1991</text>
+            <text x="70" y="150" fill="#e8ece8" font-size="12" text-anchor="middle" font-weight="600">Newsgroup post</text>
+            <text x="70" y="163" fill="#8d968d" font-size="10.5" text-anchor="middle">"just a hobby"</text>
+
+            <!-- Sep 1991 -->
+            <circle cx="220" cy="120" r="6" fill="#5fd97a"/>
+            <line x1="220" y1="120" x2="220" y2="166" stroke="#262b26" stroke-width="1.5"/>
+            <text x="220" y="62" fill="#8d968d" font-size="11" text-anchor="middle">Sep 1991</text>
+            <text x="220" y="182" fill="#e8ece8" font-size="11.5" text-anchor="middle" font-weight="600">v0.01 released</text>
+
+            <!-- 1992 GPL -->
+            <circle cx="400" cy="120" r="7" fill="#ffcc33"/>
+            <line x1="400" y1="120" x2="400" y2="74" stroke="#262b26" stroke-width="1.5"/>
+            <text x="400" y="62" fill="#e8ece8" font-size="12" text-anchor="middle" font-weight="600">1992</text>
+            <text x="400" y="150" fill="#e8ece8" font-size="12" text-anchor="middle" font-weight="600">Relicensed GPL</text>
+            <text x="400" y="163" fill="#8d968d" font-size="10.5" text-anchor="middle">first distros appear</text>
+
+            <!-- 1993 Slackware/Debian -->
+            <circle cx="560" cy="120" r="6" fill="#5fd97a"/>
+            <line x1="560" y1="120" x2="560" y2="166" stroke="#262b26" stroke-width="1.5"/>
+            <text x="560" y="62" fill="#8d968d" font-size="11" text-anchor="middle">1993</text>
+            <text x="560" y="182" fill="#e8ece8" font-size="11.5" text-anchor="middle" font-weight="600">Slackware & Debian</text>
+
+            <!-- 1994 v1.0 -->
+            <circle cx="700" cy="120" r="8" fill="#ffcc33" stroke="#0c0e0c" stroke-width="3"/>
+            <line x1="700" y1="120" x2="700" y2="74" stroke="#262b26" stroke-width="1.5"/>
+            <text x="700" y="62" fill="#e8ece8" font-size="12.5" text-anchor="middle" font-weight="700">Mar 1994</text>
+            <text x="700" y="150" fill="#e8ece8" font-size="12" text-anchor="middle" font-weight="600">Linux 1.0</text>
+            <text x="700" y="163" fill="#8d968d" font-size="10.5" text-anchor="middle">Red Hat & SUSE launch</text>
+
+            <!-- 2004 Ubuntu -->
+            <circle cx="850" cy="120" r="6" fill="#5fd97a"/>
+            <line x1="850" y1="120" x2="850" y2="166" stroke="#262b26" stroke-width="1.5"/>
+            <text x="850" y="62" fill="#8d968d" font-size="11" text-anchor="middle">2004</text>
+            <text x="850" y="182" fill="#e8ece8" font-size="11.5" text-anchor="middle" font-weight="600">Ubuntu launches</text>
+
+            <!-- 2008 Android -->
+            <circle cx="980" cy="120" r="7" fill="#ffcc33"/>
+            <line x1="980" y1="120" x2="980" y2="74" stroke="#262b26" stroke-width="1.5"/>
+            <text x="980" y="62" fill="#e8ece8" font-size="12" text-anchor="middle" font-weight="600">2008</text>
+            <text x="980" y="150" fill="#e8ece8" font-size="12" text-anchor="middle" font-weight="600">Android ships</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><strong>1991</strong><span>First announced</span></div>
+      <div class="stat"><strong>~1,000</strong><span>Active distributions</span></div>
+      <div class="stat"><strong>100%</strong><span>Of top 500 supercomputers</span></div>
+      <div class="stat"><strong>Billions</strong><span>Of Android devices</span></div>
     </div>
   </div>
 </section>
 
-<div class="subpage-container section-z" style="position: relative; overflow: hidden;">
-<div class="tech-watermark" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-family: var(--font-disp); font-size: clamp(8rem, 20vw, 25rem); color: #fcc624; opacity: 0.03; pointer-events: none; z-index: -1; white-space: nowrap; user-select: none;">Linux</div>
-  
-  <!-- SIDEBAR NAVIGATION -->
-  <aside class="sidebar">
-    <span class="sidebar-h">CONTENTS</span>
-    <ul class="sidebar-links">
-      <li><a href="#history">History</a></li>
-      <li><a href="#why">Why Use This?</a></li>
-      <li><a href="#applications">Applications</a></li>
-      <li><a href="#facts">Key Facts</a></li>
-      <li><a href="#learn">Resources</a></li>
-    </ul>
-  </aside>
-
-  <!-- CONTENT ARTICLES -->
-  <main class="content-section">
-
-    <section id="history">
-      <h2>History</h2>
-      <div class="info-card">
-        <div class="ic-icon">🕰️</div>
-        <div class="ic-content">
-          <p>Linux was created by Linus Torvalds, a Finnish computer science student, who announced it on August 25, 1991 in a Usenet post as 'just a hobby'. He released it under the GPL license in 1992. Richard Stallman's GNU project provided most of the userland tools, making 'GNU/Linux' a complete OS. Today Linux powers 96.3% of the world's top 1 million web servers, all 500 top supercomputers, and Android devices used by 3+ billion people.</p>
-        </div>
-      </div>
-    </section>
-
-    
-
-    <section id="why">
-      <h2>Why We Use Linux</h2>
-      <div class="hl-box">
-        Linux is free, open-source, secure, and endlessly customizable. Its kernel design gives unmatched performance for server workloads, and the package management systems of distributions like Ubuntu, Debian, and Red Hat make software deployment trivial. The command-line interface enables powerful automation via shell scripting.
-      </div>
-    </section>
-
-    <section id="applications">
-      <h2>Applications &amp; Use Cases</h2>
-      <div class="app-grid">
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">⚙️</span>
-            <span class="ac-title">Web servers (Nginx,...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Web servers (Nginx, Apache on Ubuntu/CentOS/Debian)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🔌</span>
-            <span class="ac-title">Cloud infrastructure (all...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Cloud infrastructure (all major cloud VMs run Linux)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🗄️</span>
-            <span class="ac-title">Android mobile OS...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Android mobile OS (Linux kernel)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🐍</span>
-            <span class="ac-title">Embedded systems</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">routers, TVs, cars, IoT devices</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🚀</span>
-            <span class="ac-title">Supercomputing and HPC clusters</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Supercomputing and HPC clusters</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🛠️</span>
-            <span class="ac-title">DevOps, Docker containers,...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">DevOps, Docker containers, and Kubernetes nodes</span>
-          </div>
-        </div>
-        
-      </div>
-    </section>
-
-    <section id="facts">
-      <h2>Key Facts &amp; Features</h2>
-      <ul class="feature-list">
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🧠</span>
-            <strong>Monolithic kernel with</strong>
-          </div>
-          <div class="fl-back">
-            <span>Monolithic kernel with loadable kernel modules (LKMs)</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🎯</span>
-            <strong>Everything is a file</strong>
-          </div>
-          <div class="fl-back">
-            <span>even hardware devices in /dev</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚡</span>
-            <strong>Multi-user, multi-tasking, with</strong>
-          </div>
-          <div class="fl-back">
-            <span>Multi-user, multi-tasking, with fine-grained permissions</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚠️</span>
-            <strong>Distributions</strong>
-          </div>
-          <div class="fl-back">
-            <span>Ubuntu, Debian, Fedora, Arch, CentOS, Kali, Alpine</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">📌</span>
-            <strong>Package managers</strong>
-          </div>
-          <div class="fl-back">
-            <span>apt, yum/dnf, pacman, snap, flatpak</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">💡</span>
-            <strong>systemd is the</strong>
-          </div>
-          <div class="fl-back">
-            <span>systemd is the standard init system in modern distributions</span>
-          </div>
-        </li>
-        
-      </ul>
-    </section>
-
-    <section id="learn">
-      <h2>Where to Learn</h2>
-
-      <h3>Online Courses</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Linux%20Linux%20Foundation', '_blank')" style="cursor: pointer;" title="Go to Linux Foundation">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>Linux Foundation</strong>
-          </div>
-          <div class="fl-back">
-            <span>Introduction to Linux (edX, free)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Linux%20Udemy', '_blank')" style="cursor: pointer;" title="Go to Udemy">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>Udemy</strong>
-          </div>
-          <div class="fl-back">
-            <span>Linux Mastery: Master the Linux Command Line – Ziyad Yehia</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Linux%20TryHackMe', '_blank')" style="cursor: pointer;" title="Go to TryHackMe">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>TryHackMe</strong>
-          </div>
-          <div class="fl-back">
-            <span>Linux Fundamentals (free)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Linux%20The%20Linux%20Command%20Line', '_blank')" style="cursor: pointer;" title="Go to The Linux Command Line">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📙</span>
-            <strong>The Linux Command Line</strong>
-          </div>
-          <div class="fl-back">
-            <span>The Linux Command Line (free at linuxcommand.org)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-
-      <h3>Books &amp; References</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Linux%20'The%20Linux%20Command%20Line'', '_blank')" style="cursor: pointer;" title="Go to 'The Linux Command Line'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>'The Linux Command Line'</strong>
-          </div>
-          <div class="fl-back">
-            <span>William Shotts (free online)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Linux%20'Linux%20Bible'', '_blank')" style="cursor: pointer;" title="Go to 'Linux Bible'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>'Linux Bible'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Christopher Negus</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Linux%20'How%20Linux%20Works'', '_blank')" style="cursor: pointer;" title="Go to 'How Linux Works'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>'How Linux Works'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Brian Ward</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-    </section>
-  </main>
-</div>
-
-<!-- ─── FOOTER ─── -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <span class="f-brand-name">USCS<span class="a"> E-WALL</span></span>
-      <p>An e-waste art installation by <strong>USCS (Uttaranchal School of Computing Sciences)</strong>, celebrating the IT field through creative reuse of technology.</p>
+<!-- ================= ARCHITECTURE ================= -->
+<section id="how" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">02 / architecture</span>
+      <h2>What "Linux" actually refers to</h2>
     </div>
-    <div>
-      <div class="f-col-h">Navigate</div>
-      <ul class="f-lnks">
-        <li><a href="../index.html#about">About Project</a></li>
-        <li><a href="../index.html#wall">Interactive Wall</a></li>
-        <li><a href="../index.html#materials">Raw Materials</a></li>
-        <li><a href="../index.html#impact">Our Impact</a></li>
-        <li><a href="../index.html#creators">The Team</a></li>
-      </ul>
+    <p class="lede">A common confusion: "Linux" technically names just the kernel — the core program managing hardware. Everything else is layered on top by a distribution.</p>
+
+    <div class="diagram-panel">
+      <svg width="100%" height="340" viewBox="0 0 940 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of Linux system architecture layers from hardware to applications">
+        <g font-family="Inter">
+          <!-- Hardware -->
+          <rect x="270" y="270" width="400" height="50" rx="6" fill="#141914" stroke="#262b26" stroke-width="1.5"/>
+          <text x="470" y="300" fill="#8d968d" font-family="IBM Plex Mono" font-size="12" text-anchor="middle">HARDWARE — CPU, memory, disk, network</text>
+
+          <!-- Kernel -->
+          <rect x="270" y="200" width="400" height="55" rx="6" fill="#141914" stroke="#ffcc33" stroke-width="2"/>
+          <text x="470" y="222" fill="#ffcc33" font-family="IBM Plex Mono" font-size="12" text-anchor="middle" font-weight="700">LINUX KERNEL</text>
+          <text x="470" y="240" fill="#c2c8c2" font-size="11" text-anchor="middle">process scheduling · memory · drivers · filesystems</text>
+
+          <!-- arrow up -->
+          <line x1="470" y1="270" x2="470" y2="255" stroke="#262b26" stroke-width="2"/>
+          <line x1="470" y1="200" x2="470" y2="185" stroke="#262b26" stroke-width="2"/>
+
+          <!-- GNU / system tools layer -->
+          <rect x="270" y="130" width="400" height="55" rx="6" fill="#141914" stroke="#5fd97a" stroke-width="2"/>
+          <text x="470" y="152" fill="#5fd97a" font-family="IBM Plex Mono" font-size="12" text-anchor="middle" font-weight="700">GNU / SYSTEM LAYER</text>
+          <text x="470" y="170" fill="#c2c8c2" font-size="11" text-anchor="middle">shell · compilers · core utilities · package manager</text>
+
+          <line x1="470" y1="130" x2="470" y2="115" stroke="#262b26" stroke-width="2"/>
+
+          <!-- Desktop / apps layer -->
+          <rect x="270" y="50" width="400" height="55" rx="6" fill="#141914" stroke="#e8ece8" stroke-width="1.5"/>
+          <text x="470" y="72" fill="#e8ece8" font-family="IBM Plex Mono" font-size="12" text-anchor="middle" font-weight="700">DESKTOP / APPLICATIONS</text>
+          <text x="470" y="90" fill="#c2c8c2" font-size="11" text-anchor="middle">GNOME, KDE · browsers, editors, servers</text>
+
+          <!-- side label: "= a distribution" -->
+          <line x1="700" y1="55" x2="730" y2="55" stroke="#5fd97a" stroke-width="1.5"/>
+          <line x1="730" y1="55" x2="730" y2="250" stroke="#5fd97a" stroke-width="1.5"/>
+          <line x1="700" y1="250" x2="730" y2="250" stroke="#5fd97a" stroke-width="1.5"/>
+          <text x="745" y="155" fill="#5fd97a" font-family="IBM Plex Mono" font-size="12" font-weight="700" transform="rotate(90 745 155)">= "a distribution"</text>
+        </g>
+      </svg>
+      <p class="diagram-caption">The kernel alone only talks to hardware. A distribution (Ubuntu, Fedora, Debian, Arch...) is the kernel plus GNU tools plus a package manager plus, usually, a desktop environment — bundled and configured into something installable.</p>
+    </div>
+
+    <div class="grid" style="margin-top:50px;">
+      <div class="card"><h3>⬡ Open source</h3><p>Source code is public and freely modifiable under the GPL — anyone can inspect, change, and redistribute it.</p></div>
+      <div class="card"><h3>⬡ Multi-user, multitasking</h3><p>Designed from the ground up for many users and processes running securely and simultaneously, like classic Unix.</p></div>
+      <div class="card"><h3>⬡ Package managers</h3><p>Tools like apt, dnf, and pacman install, update, and remove software along with their dependencies automatically.</p></div>
+      <div class="card"><h3>⬡ The shell</h3><p>A text command interface (commonly Bash) that lets users script and automate nearly anything the system can do.</p></div>
+      <div class="card"><h3>⬡ Filesystem hierarchy</h3><p>Everything — devices, configs, processes — appears as a file under a single unified tree starting at <code>/</code>.</p></div>
+      <div class="card"><h3>⬡ Permissions model</h3><p>A strict owner/group/permission system controls exactly who can read, write, or execute every file and resource.</p></div>
     </div>
   </div>
-  <div class="footer-btm">
-    <span class="f-copy">© 2026 USCS E-WALL PROJECT — BUILT FROM DISCARDED TECH</span>
-    <span class="f-status"><span class="f-dot"></span>INSTALLATION LIVE</span>
+</section>
+
+<!-- ================= USE CASES ================= -->
+<section id="usecases" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">03 / applications</span>
+      <h2>Where Linux is quietly running right now</h2>
+    </div>
+    <p class="lede">Linux rarely shows up as a "desktop OS" for most people — it shows up as the invisible foundation underneath almost everything else.</p>
+
+    <div class="usecase"><div class="num">01</div><div><h4>Web servers & cloud infrastructure</h4><p>The majority of the world's websites and virtually all major cloud platforms (AWS, Azure, GCP) run on Linux servers.</p></div></div>
+    <div class="usecase"><div class="num">02</div><div><h4>Mobile devices</h4><p>Android, built on the Linux kernel, is the most widely used operating system on the planet by number of active devices.</p></div></div>
+    <div class="usecase"><div class="num">03</div><div><h4>Supercomputing</h4><p>Linux runs on essentially all of the world's top 500 supercomputers, thanks to its scalability and low overhead.</p></div></div>
+    <div class="usecase"><div class="num">04</div><div><h4>Embedded & IoT systems</h4><p>Routers, smart TVs, cars, and industrial controllers commonly run stripped-down Linux builds for reliability and small footprint.</p></div></div>
+    <div class="usecase"><div class="num">05</div><div><h4>Software development</h4><p>Most developer tooling, containers (Docker), and CI/CD pipelines are built around and for Linux environments natively.</p></div></div>
+    <div class="usecase"><div class="num">06</div><div><h4>Desktop computing</h4><p>Distributions like Ubuntu, Linux Mint, and Fedora offer a free, customizable alternative to Windows and macOS for everyday use.</p></div></div>
+  </div>
+</section>
+
+<!-- ================= LEARN MORE ================= -->
+<section id="learn" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">04 / go deeper</span>
+      <h2>Free, official places to actually learn it</h2>
+    </div>
+    <p class="lede">From total beginner command-line basics to deep dives into kernel internals.</p>
+
+    <div class="resource-list">
+      <div class="resource">
+        <div class="rtype">Course · Free</div>
+        <a href="https://training.linuxfoundation.org/training/introduction-to-linux/" target="_blank" rel="noopener">Linux Foundation — Introduction to Linux (LFS101)</a>
+        <p>A free, official, self-paced course covering everything from the shell to system administration basics.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Interactive · Free</div>
+        <a href="https://linuxjourney.com/" target="_blank" rel="noopener">Linux Journey</a>
+        <p>A friendly, visual, browser-based path through the command line, permissions, and networking.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Documentation</div>
+        <a href="https://www.kernel.org/doc/html/latest/" target="_blank" rel="noopener">Kernel.org Documentation</a>
+        <p>Official documentation straight from the Linux kernel project for those who want to go deep.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Practice platform</div>
+        <a href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener">OverTheWire — Bandit</a>
+        <p>A hands-on wargame that teaches Linux command-line fundamentals through solving small puzzles via SSH.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Reference book · Free</div>
+        <a href="https://tldp.org/LDP/intro-linux/html/" target="_blank" rel="noopener">The Linux Documentation Project — Intro to Linux</a>
+        <p>A classic, thorough free guide covering installation, the shell, and system administration.</p>
+      </div>
+      <div class="resource">
+        <div class="rtype">Distro comparison</div>
+        <a href="https://distrowatch.com/" target="_blank" rel="noopener">DistroWatch</a>
+        <p>A directory and comparison tool for the hundreds of active Linux distributions, useful when choosing one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REFERENCES ================= -->
+<section id="refs" style="border-bottom:none;" class="reveal">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">05 / sources</span>
+      <h2>References</h2>
+    </div>
+    <ul class="ref-list">
+      <li><a href="https://en.wikipedia.org/wiki/History_of_Linux" target="_blank" rel="noopener">History of Linux — Wikipedia</a>. Full origin story, GPL relicensing, and the GNU/Linux naming background.</li>
+      <li><a href="https://en.wikipedia.org/wiki/Linux_kernel" target="_blank" rel="noopener">Linux Kernel — Wikipedia</a>. Technical details on the kernel's creation, structure, and licensing.</li>
+      <li><a href="https://www.britannica.com/technology/Linux" target="_blank" rel="noopener">Linux — Encyclopaedia Britannica</a>. Concise overview of Linux's creation and relationship to the GNU project.</li>
+      <li><a href="https://www.stackscale.com/blog/linux/" target="_blank" rel="noopener">Linux: From a Hobby to a Collaborative Tech Revolution — Stackscale</a>. Background on the Freax naming story and the Linux Foundation's formation.</li>
+      <li><a href="https://tuxcare.com/blog/linux-evolution/" target="_blank" rel="noopener">Linux Evolution: A Comprehensive Timeline — TuxCare</a>. Distribution timeline including Ubuntu's 2004 launch and Linux's supercomputing dominance.</li>
+      <li><a href="https://www.kernel.org/doc/html/latest/" target="_blank" rel="noopener">The Linux Kernel Documentation</a>. The official technical reference maintained by the kernel project itself.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="gap: 12px; display: flex; align-items: center; flex-wrap: wrap;">
+      <a href="../index.html#home" class="nav-logo" style="font-size: 1.2rem; letter-spacing: 2px;">USCS<span class="accent"> E-WALL</span></a>
+      <span style="opacity: 0.3;">|</span>
+      <span style="font-size: 12.5px; color: var(--ink-soft);">Educational overview — not an official page.</span>
+    </div>
+    <p>Sources cited above · Page last assembled June 2026</p>
   </div>
 </footer>
-
 
 <!-- ─── CLI TERMINAL OVERLAY ─── -->
 <div id="terminal-overlay">
@@ -666,8 +966,14 @@
 
 <button class="cli-trigger" id="cli-open"><span>🤖</span></button>
 
-
 <script src="../data.js"></script>
 <script src="../main.js"></script>
+<script>
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+
 </body>
 </html>

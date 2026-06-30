@@ -1,236 +1,665 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Docker — USCS E-WALL</title>
-  <link rel="stylesheet" href="../styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker — A Visual Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
-  <!-- TECH THEME OVERRIDE -->
-  <script>window.TECH_THEME_COLOR = '#2496ed';</script>
-  <style>
-    :root {
-      --green: #2496ed !important;
-      --cyan: #2496ed !important;
-      --aura-color: #2496ed !important;
-      --aura-glow: rgba(36,150,237,.12) !important;
+  :root{
+    --bg: #02050a;
+    --card: rgba(6, 13, 22, 0.95);
+    --ink: #ffffff;
+    --ink-soft: #a0b8d0;
+    --line: rgba(13, 183, 237, 0.18);
+    --blue: #1D63ED;
+    --blue-deep: #2496ED;
+    --cyan: #0DB7ED;
+    --teal: #0DB7ED;
+    --amber: #ffb84d;
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.5);
+    --shadow-md: 0 10px 35px rgba(0,0,0,0.8);
+    --green: #0DB7ED;
+    --green2: #2496ED;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: linear-gradient(rgba(2, 5, 10, 0.92), rgba(2, 5, 10, 0.92)), url('../img/bg.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color:var(--ink);
+    font-family:'DM Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    position: relative;
+  }
+
+  /* Website Premium Scanlines & Noise overlays */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.5;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+    pointer-events: none;
+    z-index: 9989;
+  }
+
+  h1,h2,.display{
+    font-family:'Bebas Neue',sans-serif;
+    margin:0;
+    letter-spacing:0.04em;
+  }
+  h3{
+    font-family:'JetBrains Mono',monospace;
+    margin:0;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--cyan); transition: color 0.2s ease;}
+  a:hover{color: var(--blue-deep);}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0;}
+  .lead{font-size:18px;color:var(--ink-soft);line-height:1.65;max-width:640px;font-weight:300;}
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(2, 5, 10, 0.88);
+    backdrop-filter:blur(20px) saturate(1.5);
+    border-bottom:1px solid var(--line);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  }
+  nav .inner{
+    max-width:1080px;margin:0 auto;padding:14px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-logo .accent {
+    color: var(--teal);
+  }
+  @media(max-width: 480px) {
+    .nav-logo {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
     }
-    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #2496ed !important; }
-    .content-section hr { background: linear-gradient(90deg, #2496ed, transparent) !important; }
-    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #2496ed !important; }
-    #scroll-progress { background: #2496ed !important; box-shadow: 0 0 10px #2496ed !important; }
-    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(36,150,237,.12) !important; }
-    .nav-ticker-item.active { border-bottom: 1px solid #2496ed !important; }
-    .btn-primary { background: #2496ed !important; }
-    .btn-primary:hover { box-shadow: 0 0 30px rgba(36,150,237,.12) !important; }
-    .hero-eyebrow .pulse { background: #2496ed !important; box-shadow: 0 0 10px #2496ed !important; }
-  </style>
+  }
+  @media(max-width: 360px) {
+    .nav-logo {
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+  }
+  nav ul{list-style:none;display:flex;gap:26px;margin:0;padding:0;}
+  nav ul a{
+    color:var(--ink);text-decoration:none;font-size:14px;font-weight:500;
+    opacity:0.75;transition:opacity .15s, color .15s;
+  }
+  nav ul a:hover{opacity:1;color:var(--cyan);}
+  @media (max-width:720px){ nav ul{display:none;} }
 
-    <style>
-      .content-section h2 {
-        display: inline-block;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #2496ed40;
-        position: relative;
-        text-shadow: 0 0 20px rgba(36,150,237,.12);
-      }
-      .content-section h2::before {
-        content: '>>';
-        font-family: var(--font-mono);
-        color: #2496ed;
-        margin-right: 12px;
-        font-size: 1.5rem;
-        opacity: 0.7;
-        text-shadow: 0 0 10px #2496ed80;
-      }
-      .content-section ul li {
-        position: relative;
-        padding-left: 20px;
-        list-style: none;
-      }
-      .content-section ul li::before {
-        content: '◈';
-        position: absolute;
-        left: 0;
-        top: 2px;
-        color: #2496ed;
-        font-size: 0.8rem;
-        opacity: 0.8;
-      }
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid #2496ed30;
-      }
-    </style>
-  
+  /* ===== TERMINAL TAG (section label) ===== */
+  .term-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--card);
+    padding:7px 14px;border-radius:6px;
+    margin-bottom:26px;
+    border:1px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--cyan);
+  }
+  .term-tag::before{content:"$";color:var(--ink-soft);}
 
-    <style>
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid var(--green);
-        line-height: 1.8;
-      }
-      /* RICH UX CLASSES */
-      .info-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 24px;
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
-        margin-bottom: 25px;
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-      .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        border-color: var(--green);
-      }
-      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
-      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
-      
-      .hl-box {
-        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-        border-left: 4px solid var(--green);
-        padding: 24px 30px;
-        border-radius: 0 8px 8px 0;
-        margin: 25px 0;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      }
+  h2.h-title{font-size:38px;font-weight:800;margin-bottom:14px;color:var(--ink);letter-spacing:1px;text-shadow:0 0 20px rgba(255,255,255,0.05);}
+  @media (max-width:540px){ h2.h-title{font-size:28px;} }
 
-      .app-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
-        margin: 25px 0;
-      }
-      .app-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 22px;
-        border-radius: 8px;
-        transition: all 0.3s;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .app-card:hover {
-        border-color: var(--green);
-        background: rgba(255,255,255,0.03);
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-      }
-      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
-      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
-      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(13, 183, 237, 0.3);
+    box-shadow:0 12px 30px rgba(13, 183, 237, 0.15);
+  }
 
-      .feature-list {
-        list-style: none !important;
-        padding: 0 !important;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin: 25px 0 !important;
-      }
-      .feature-list li {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 18px;
-        border-radius: 8px;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        transition: transform 0.2s;
-      }
-      .feature-list li:hover {
-        transform: scale(1.02);
-        border-color: var(--green);
-      }
-      .feature-list li::before { display: none !important; }
-      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
-      .fl-text { display: flex; flex-direction: column; gap: 6px; }
-      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
-      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+  /* ===== HERO ===== */
+  .hero{padding:90px 0 70px;position:relative;overflow:hidden;}
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 80% 10%, rgba(13,183,237,0.12), transparent 50%),
+      radial-gradient(circle at 10% 90%, rgba(29,99,237,0.10), transparent 50%);
+    pointer-events:none;
+  }
+  .hero .wrap{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;align-items:center;position:relative;z-index:2;}
+  @media (max-width:860px){ .hero .wrap{grid-template-columns:1fr;} }
+  .hero h1{
+    font-size:64px;
+    line-height:1.06;
+    font-weight:800;
+    color:var(--ink);
+    text-shadow: 0 0 30px rgba(13, 183, 237, 0.3);
+  }
+  @media (max-width:540px){ .hero h1{font-size:42px;} }
+  .hero h1 .accent{color:var(--cyan);}
+  .hero p.sub{font-size:16.5px;color:var(--ink-soft);margin-top:18px;max-width:520px;line-height:1.65;font-weight:300;}
+  .stat-row{display:flex;gap:26px;margin-top:32px;flex-wrap:wrap;}
+  .stat .num{font-family:'Bebas Neue',sans-serif;font-weight:700;font-size:32px;color:var(--cyan);letter-spacing:1px;}
+  .stat .label{font-size:12px;color:var(--ink-soft);margin-top:2px;}
 
-      @media (max-width: 768px) {
-        .feature-list { grid-template-columns: 1fr; }
-        .info-card { flex-direction: column; }
-      }
-    
-      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
-      .app-card {
-        position: relative;
-        overflow: hidden;
-        min-height: 160px;
-        display: block;
-        padding: 0;
-      }
-      .ac-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .ac-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
+  /* whale stage with pulse ring */
+  .whale-stage{display:flex;justify-content:center;align-items:center;height:280px;position:relative;}
+  .pulse-ring{
+    position:absolute;border-radius:50%;border:2px solid var(--cyan);
+    width:240px;height:240px;opacity:0;
+    animation:pulse 2.8s ease-out infinite;
+  }
+  .pulse-ring.r2{animation-delay:.9s;}
+  .pulse-ring.r3{animation-delay:1.8s;}
+  @keyframes pulse{
+    0%{ width:200px;height:200px;opacity:.55;}
+    100%{ width:440px;height:440px;opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){ .pulse-ring{animation:none;display:none;} }
+  .cloud-icon{width:280px;height:280px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 35px rgba(13, 183, 237, 0.55)); transition: transform 0.3s ease;}
+  .cloud-icon:hover{transform: scale(1.05);}
 
-      .feature-list li {
-        position: relative;
-        overflow: hidden;
-        min-height: 120px;
-        display: block;
-        padding: 0;
-        text-align: center;
-      }
-      .fl-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .fl-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .fl-front .fl-icon { margin-bottom: 10px; }
-      .fl-front strong { margin-bottom: 0; }
+  /* ===== ABOUT ===== */
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:46px;align-items:start;}
+  @media (max-width:860px){ .about-grid{grid-template-columns:1fr;} }
+  figcaption{font-size:12.5px;color:var(--ink-soft);margin-top:10px;line-height:1.5;}
 
-    </style>
+  .feature-list{list-style:none;margin:0;padding:0;display:grid;gap:13px;}
+  .feature-list li{
+    display:flex;gap:14px;align-items:flex-start;padding:15px 17px;
+  }
+  .feature-list .ic{
+    width:34px;height:34px;border-radius:8px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:15px;
+    background:var(--card);border:1px solid var(--line);
+  }
+  .feature-list li strong{font-size:14.5px;display:block;margin-bottom:3px;font-family:'DM Sans',sans-serif;color:var(--ink);}
+  .feature-list li p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.5;}
+
+  /* ===== VM vs CONTAINER DIAGRAM ===== */
+  .compare-stacks{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px;}
+  @media (max-width:700px){ .compare-stacks{grid-template-columns:1fr;} }
+  .stack-card{padding:24px;}
+  .stack-card h4{font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);margin-bottom:16px;text-align:center;font-weight:700;}
+  .stack-layer{
+    padding:10px 14px;margin-bottom:6px;border-radius:6px;font-size:12.5px;font-family:'JetBrains Mono',monospace;
+    text-align:center;
+  }
+
+  /* ===== TIMELINE ===== */
+  .timeline{position:relative;margin-top:54px;padding-left:6px;}
+  .timeline::before{
+    content:"";position:absolute;left:97px;top:6px;bottom:6px;width:2px;
+    background:linear-gradient(to bottom, var(--cyan), var(--blue));
+    opacity:0.4;
+  }
+  @media (max-width:640px){ .timeline::before{left:54px;} }
+  .t-row{display:grid;grid-template-columns:90px 26px 1fr;gap:0 18px;margin-bottom:28px;}
+  @media (max-width:640px){ .t-row{grid-template-columns:46px 22px 1fr;} }
+  .t-year{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:14px;color:var(--cyan);padding-top:14px;text-align:right;}
+  .t-node{display:flex;justify-content:center;padding-top:16px;}
+  .t-node .dot{width:13px;height:13px;border-radius:50%;border:3px solid var(--bg);box-shadow:0 0 0 2px var(--line);}
+  .t-card{padding:14px 18px;}
+  .t-card h4{margin:0 0 4px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14.5px;color:var(--ink);}
+  .t-card p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.55;}
+
+  /* ===== USE CASES ===== */
+  .case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px;}
+  @media (max-width:860px){ .case-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .case-grid{grid-template-columns:1fr;} }
+  .case{overflow:hidden;display:flex;flex-direction:column;}
+  .case .img-wrap{aspect-ratio:16/10;overflow:hidden;background:var(--bg);position:relative;}
+  .case .img-wrap svg{width:100%;height:100%;transition: transform 0.5s ease;}
+  .case:hover .img-wrap svg{transform:scale(1.05);}
+  .case .body{padding:15px 17px 19px;}
+  .case .body .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--cyan);}
+  .case .body h4{font-family:'DM Sans',sans-serif;font-size:15px;margin:6px 0 6px;color:var(--ink);font-weight:700;}
+  .case .body p{font-size:13px;color:var(--ink-soft);margin:0;line-height:1.55;}
+
+  /* ===== ECOSYSTEM / ARCHITECTURE DIAGRAM ===== */
+  .diagram-wrap{margin-top:46px;padding:28px;overflow-x:auto;}
+  /* Override SVG text inside labels for dark theme legibility */
+  .diagram-wrap g[fill="#232F3E"] {
+    fill: var(--ink) !important;
+  }
+  .diagram-wrap g[fill="#1A1A2E"] {
+    fill: var(--ink) !important;
+  }
+  .diagram-wrap text[fill="#1A1A2E"] {
+    fill: var(--ink) !important;
+  }
+
+  /* ===== WORKFLOW STEPS ===== */
+  .flow-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:46px;}
+  @media (max-width:860px){ .flow-steps{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:540px){ .flow-steps{grid-template-columns:1fr;} }
+  .flow-step{padding:18px 17px;position:relative;}
+  .flow-step .fnum{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);}
+  .flow-step h4{font-family:'DM Sans',sans-serif;font-size:14px;margin:8px 0 6px;color:var(--ink);font-weight:700;}
+  .flow-step p{font-size:12.5px;color:var(--ink-soft);margin:0;line-height:1.5;}
+  .flow-step code{font-size:11.5px;background:var(--bg);padding:2px 6px;border-radius:4px;color:var(--cyan);font-family:'JetBrains Mono',monospace;border:1px solid var(--line);}
+  @media (min-width:861px){
+    .flow-step:not(:last-child)::after{
+      content:"→";position:absolute;right:-21px;top:50%;transform:translateY(-50%);
+      color:var(--cyan);font-size:17px;font-weight:700;
+    }
+  }
+
+  /* ===== PRICING ===== */
+  .chart-card{padding:32px 34px;margin-top:46px;}
+  .plan-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:24px;}
+  @media (max-width:860px){ .plan-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:540px){ .plan-grid{grid-template-columns:1fr;} }
+  .plan-tier{
+    padding:20px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,0.03);
+    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+  .plan-tier:hover{
+    transform:translateY(-4px);
+    border-color:rgba(13, 183, 237, 0.3);
+    background:rgba(255,255,255,0.06);
+  }
+  .plan-tier.highlight{border-color:var(--cyan);background:linear-gradient(160deg, rgba(13,183,237,0.08), rgba(255,255,255,0.03));}
+  .plan-tier.highlight:hover{background:linear-gradient(160deg, rgba(13,183,237,0.12), rgba(255,255,255,0.06));}
+  .plan-tier .pname{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;}
+  .plan-tier .pprice{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--ink);margin:8px 0;font-weight:700;letter-spacing:1px;}
+  .plan-tier .pprice span{font-size:12px;color:var(--ink-soft);font-weight:400;font-family:'DM Sans',sans-serif;}
+  .plan-tier .pdesc{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+
+  /* ===== REFERENCES ===== */
+  .ref-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;margin-top:30px;}
+  .ref-item{
+    padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .ref-item .rtitle{font-weight:600;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--ink);}
+  .ref-item .rdesc{font-size:12.5px;color:var(--ink-soft);margin-top:3px;}
+  .ref-item a.go{
+    font-family:'JetBrains Mono',monospace;font-size:12px;text-decoration:none;
+    background:var(--bg);padding:7px 14px;border-radius:6px;white-space:nowrap;
+    border:1px solid var(--line);color:var(--cyan);
+    transition: all 0.2s ease;
+  }
+  .ref-item a.go:hover{background:var(--cyan);color:#04141F;border-color:var(--cyan);}
+  .course-strip{
+    margin-top:36px;border-radius:14px;
+    background:linear-gradient(120deg, var(--blue-deep), rgba(13, 183, 237, 0.4));
+    padding:30px 32px;color:#fff;border:1px solid var(--line);
+    box-shadow:var(--shadow-md);
+  }
+  .course-strip h3{font-family:'Bebas Neue',sans-serif;font-size:24px;color:#fff;margin-bottom:14px;letter-spacing:1px;}
+  .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:760px){ .course-grid{grid-template-columns:1fr;} }
+  .course-item{
+    background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+    border-radius:10px;padding:14px 16px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .course-item:hover{
+    transform:translateY(-2px);
+    background:rgba(255,255,255,0.12);
+  }
+  .course-item a{color:#fff;text-decoration:none;font-weight:600;font-size:13.5px;font-family:'DM Sans',sans-serif;}
+  .course-item p{color:rgba(255,255,255,0.8);font-size:12px;margin:6px 0 0;line-height:1.5;}
+
+  footer{padding:40px 0 50px;border-top:1px solid var(--line);margin-top:30px;background:rgba(6, 13, 22, 0.6);}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer p{font-size:12px;color:var(--ink-soft);margin:0;}
+
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: width .15s, height .15s, background .15s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(13, 183, 237, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: width .25s, height .25s, border-color .25s;
+  }
+  .cursor-big #cursor { width: 18px; height: 18px; background: var(--blue-deep); }
+  .cursor-big #cursor-ring { width: 56px; height: 56px; border-color: var(--blue-deep); }
+
+  /* ─── SCROLL PROGRESS ─── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--blue), var(--cyan), var(--blue-deep));
+    z-index: 10000;
+    box-shadow: 0 0 10px var(--cyan);
+  }
+
+  /* ─── PARTICLE CANVAS ─── */
+  #particles-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* ─── MENU TOGGLE ─── */
+  #menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2001;
+    padding: 10px;
+  }
+  #menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--blue-deep);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #menu-toggle span:nth-child(2) { width: 18px; align-self: flex-end; }
+  #menu-toggle:hover span:nth-child(2) { width: 28px; }
+
+  #menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 28px; }
+  #menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  #menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 28px; }
+
+  @media (max-width: 720px) {
+    #menu-toggle { display: flex; }
+  }
+
+  /* ─── MOBILE MENU ─── */
+  #mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #mobile-menu.active { transform: translateX(0); }
+  .mm-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: center;
+    width: 100%;
+  }
+  .mm-content a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  #mobile-menu.active .mm-content a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #mobile-menu.active .mm-content a:nth-child(1) { transition-delay: 0.1s; }
+  #mobile-menu.active .mm-content a:nth-child(2) { transition-delay: 0.2s; }
+  #mobile-menu.active .mm-content a:nth-child(3) { transition-delay: 0.3s; }
+  #mobile-menu.active .mm-content a:nth-child(4) { transition-delay: 0.4s; }
+  #mobile-menu.active .mm-content a:nth-child(5) { transition-delay: 0.5s; }
+  #mobile-menu.active .mm-content a:nth-child(6) { transition-delay: 0.6s; }
+
+  .mm-content a:hover { color: var(--blue-deep); transform: scale(1.05); letter-spacing: 10px; }
+
+  /* ─── CLI TERMINAL ─── */
+  #terminal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    padding: 40px;
+    font-family: var(--font-mono);
+    color: var(--blue-deep);
+    text-align: left;
+  }
+  #terminal-overlay.active { display: flex; }
+
+  .term-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+  }
+  #term-output {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .term-line { display: block; }
+  .term-line.cmd { color: var(--cyan); }
+  .term-line.cmd::before { content: "> "; }
+  .term-line.res { color: var(--ink-soft); }
+  .term-line.error { color: var(--amber); }
+
+  .term-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 20px;
+    border: 1px solid var(--line);
+  }
+  .term-prompt { color: var(--cyan); font-weight: bold; }
+  #term-input {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+  }
+  .term-hint {
+    font-size: 0.65rem;
+    color: var(--ink-soft);
+    margin-top: 10px;
+    opacity: 0.5;
+  }
+
+  /* CLI TRIGGER BUTTON */
+  .cli-trigger {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9995;
+    width: 64px; height: 64px;
+    background: rgba(13, 183, 237, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(13, 183, 237, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    cursor: pointer;
+    box-shadow: 
+      inset 0 0 20px rgba(13, 183, 237, 0.05),
+      0 0 30px rgba(13, 183, 237, 0.2);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cli-trigger::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(from 0deg, transparent, var(--blue), transparent, var(--cyan), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: cliRotate 4s linear infinite;
+  }
+
+  @keyframes cliRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .cli-trigger span {
+    filter: drop-shadow(0 0 15px var(--cyan));
+    animation: cliFloat 3s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes cliFloat {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.1) translateY(-5px); }
+  }
+
+  .cli-trigger:hover { 
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(13, 183, 237, 0.08);
+    box-shadow: 
+      inset 0 0 30px rgba(13, 183, 237, 0.1),
+      0 0 50px rgba(13, 183, 237, 0.4);
+  }
+  .cli-trigger:hover::before {
+    animation-duration: 1.5s;
+  }
+
+  /* ─── HUD SCANNER FRAME ─── */
+  .hud-frame {
+    position: fixed;
+    inset: 16px;
+    pointer-events: none;
+    z-index: 9998;
+    transition: inset 0.3s;
+  }
+
+  .hud-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(13, 183, 237, 0.08);
+    box-shadow: inset 0 0 20px rgba(13, 183, 237, 0.03);
+    pointer-events: none;
+  }
+
+  .hud-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--cyan);
+    transition: border-color 0.3s;
+  }
+
+  .hud-corner.top-left {
+    top: 0; left: 0;
+    border-right: none; border-bottom: none;
+  }
+
+  .hud-corner.top-right {
+    top: 0; right: 0;
+    border-left: none; border-bottom: none;
+  }
+
+  .hud-corner.bottom-left {
+    bottom: 0; left: 0;
+    border-right: none; border-top: none;
+  }
+
+  .hud-corner.bottom-right {
+    bottom: 0; right: 0;
+    border-left: none; border-top: none;
+  }
+
+  .hud-tag {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    color: var(--cyan);
+    position: absolute;
+    white-space: nowrap;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .top-left .hud-tag { top: -14px; left: 0; }
+  .top-right .hud-tag { top: -14px; right: 0; text-align: right; }
+  .bottom-left .hud-tag { bottom: -14px; left: 0; }
+  .bottom-right .hud-tag { bottom: -14px; right: 0; text-align: right; }
+
+  @media (max-width: 768px) {
+    .hud-frame {
+      inset: 8px;
+    }
+    .hud-tag {
+      display: none;
+    }
+  }
+</style>
+<script>window.TECH_THEME_COLOR = '#0DB7ED';</script>
 </head>
 <body>
 
@@ -244,95 +673,30 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── SMART NAV ─── -->
-<div class="smart-nav">
-  <nav id="navbar">
+<!-- HUD VIEWPORT FRAME -->
+<div class="hud-frame">
+  <div class="hud-corner top-left"><span class="hud-tag">SYS_ACTIVE</span></div>
+  <div class="hud-corner top-right"><span class="hud-tag">USCS_OS v1.0.4</span></div>
+  <div class="hud-corner bottom-left"><span class="hud-tag">GRID_SEC_X9</span></div>
+  <div class="hud-corner bottom-right"><span class="hud-tag">E-WALL_HUD</span></div>
+</div>
+
+<nav id="navbar">
+  <div class="inner">
     <a href="../index.html#home" class="nav-logo">USCS<span class="accent"> E-WALL</span></a>
-    <div class="nav-links">
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#wall">The Wall</a>
-      <a href="../index.html#materials">Materials</a>
-      <a href="../index.html#impact">Impact</a>
-      <a href="../index.html#creators">Team</a>
-    </div>
+    <ul>
+      <li><a href="#about">What is it</a></li>
+      <li><a href="#history">History</a></li>
+      <li><a href="#usecases">Use cases</a></li>
+      <li><a href="#workflow">Workflow</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#refs">Learn more</a></li>
+    </ul>
     <button id="menu-toggle" aria-label="Toggle Menu">
       <span></span><span></span><span></span>
     </button>
-  </nav>
-
-  <div class="nav-ticker">
-    <div class="nav-ticker-track">
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-    </div>
   </div>
-</div>
+</nav>
 
 <!-- MOBILE MENU OVERLAY -->
 <div id="mobile-menu">
@@ -345,308 +709,430 @@
   </div>
 </div>
 
-<!-- ─── SUBPAGE HERO ─── -->
-<section class="page-hero section-z">
-  <div class="hero-orb o1"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content-wrap" style="display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; flex-wrap: wrap; margin-top: 20px;">
-    <div class="reveal in d1" style="background: rgba(36,150,237,.12); border: 1px solid #2496ed40; padding: 30px; border-radius: 28px; box-shadow: 0 15px 40px rgba(36,150,237,.12); display: flex; align-items: center; justify-content: center;">
-      <img src="../icon/docker.png" style="width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 20px #2496ed);" class="tech-hero-img">
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-      <div class="hero-eyebrow reveal in d2" style="border-color: #2496ed40; background: rgba(36,150,237,.12); color: #2496ed; margin-bottom: 15px;">
-        <span class="pulse" style="background: #2496ed; animation: none; box-shadow: 0 0 10px #2496ed;"></span>
-        DOCUMENTATION ARCHIVE
+<!-- ===================== HERO ===================== -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <p class="term-tag" style="margin-bottom:18px;">docker run hello-world</p>
+      <h1>Build once.<br>Run <span class="accent">anywhere.</span><br>No "works on my machine."</h1>
+      <p class="sub">Docker packages an app with everything it needs to run — code, libraries, settings — into a portable container. The same container behaves identically on your laptop, a teammate's machine, or a production server. Here's the story, the mechanics, and why it became the default way software ships.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="num">2013</div><div class="label">Year released</div></div>
+        <div class="stat"><div class="num">20M+</div><div class="label">Developers using it</div></div>
+        <div class="stat"><div class="num">15M+</div><div class="label">Images on Docker Hub</div></div>
       </div>
-      <h1 class="reveal in d3" style="margin-bottom: 0; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1; letter-spacing: 2px; text-shadow: 0 0 30px rgba(36,150,237,.12);">
-        <span style="color: #fff;">Docker</span>
-      </h1>
-      <p class="hero-tech-desc reveal in d4" style="margin-top: 15px; margin-bottom: 0; font-size: 1rem; color: var(--text2); max-width: 400px; font-weight: 300; line-height: 1.6; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 15px;">Platform for developing, shipping, and running applications in containers.</p>
+    </div>
+    <div class="whale-stage">
+      <div class="pulse-ring r1"></div>
+      <div class="pulse-ring r2"></div>
+      <div class="pulse-ring r3"></div>
+      <img src="../icon/docker.png" class="cloud-icon" alt="Docker Logo">
+    </div>
+  </div>
+</header>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about">
+  <div class="wrap reveal">
+    <div class="term-tag">section --01 overview</div>
+    <h2 class="h-title">What exactly is Docker?</h2>
+    <p class="lead">Docker is a platform for packaging an application and everything it depends on into a single unit called a <strong>container</strong> — then running that container consistently anywhere Docker is installed.</p>
+
+    <div class="about-grid">
+      <figure>
+        <div class="card" style="padding:0;overflow:hidden;">
+          <svg viewBox="0 0 520 300" style="width:100%;display:block;">
+            <rect width="520" height="36" fill="#0F1F38"/>
+            <circle cx="20" cy="18" r="5" fill="#FF5F57"/>
+            <circle cx="38" cy="18" r="5" fill="#FFBD2E"/>
+            <circle cx="56" cy="18" r="5" fill="#28C840"/>
+            <text x="260" y="22" text-anchor="middle" font-family="JetBrains Mono" font-size="11" fill="#8DA0BC">terminal</text>
+
+            <g font-family="JetBrains Mono" font-size="12.5" fill="#E8EEF7">
+              <text x="18" y="60"><tspan fill="#2CB68C">$</tspan> docker build -t myapp .</text>
+              <text x="18" y="84" fill="#8DA0BC">[+] Building 4.2s (9/9) FINISHED</text>
+              <text x="18" y="106"><tspan fill="#2CB68C">$</tspan> docker run -p 3000:3000 myapp</text>
+              <text x="18" y="130" fill="#0DB7ED">Server listening on port 3000 ✓</text>
+              <text x="18" y="158"><tspan fill="#2CB68C">$</tspan> docker ps</text>
+            </g>
+            <rect x="18" y="172" width="484" height="26" rx="4" fill="#0A1628"/>
+            <text x="26" y="189" font-family="JetBrains Mono" font-size="10.5" fill="#8DA0BC">CONTAINER ID   IMAGE    STATUS         PORTS</text>
+            <rect x="18" y="200" width="484" height="26" rx="4" fill="#122236"/>
+            <text x="26" y="217" font-family="JetBrains Mono" font-size="10.5" fill="#E8EEF7">a3f9c2e1       myapp    Up 2 minutes   0.0.0.0:3000→3000</text>
+
+            <text x="18" y="258" font-family="JetBrains Mono" font-size="12.5" fill="#2CB68C">$</text>
+            <text x="32" y="258" font-family="JetBrains Mono" font-size="12.5" fill="#E8EEF7">█</text>
+          </svg>
+        </div>
+        <figcaption>The whole Docker workflow in three commands: build an image, run it as a container, and check it's alive.</figcaption>
+      </figure>
+
+      <ul class="feature-list">
+        <li class="card">
+          <div class="ic">📦</div>
+          <div><strong>Containers</strong><p>A lightweight, isolated unit that bundles code, runtime, libraries, and settings — built from an "image" and run as a live process.</p></div>
+        </li>
+        <li class="card">
+          <div class="ic">🧱</div>
+          <div><strong>Images</strong><p>A read-only blueprint for a container, built layer-by-layer from a Dockerfile and reused across every environment.</p></div>
+        </li>
+        <li class="card">
+          <div class="ic">🐳</div>
+          <div><strong>Docker Engine</strong><p>The core background service that builds images and runs containers on your machine, accessed via the <code class="mono" style="color:var(--cyan);font-size:12px;">docker</code> CLI.</p></div>
+        </li>
+        <li class="card">
+          <div class="ic">🗂️</div>
+          <div><strong>Docker Hub</strong><p>A public registry of pre-built images — databases, web servers, languages — ready to pull and run instantly.</p></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- VM vs Container -->
+    <p class="lead" style="margin-top:50px;">Why containers caught on instead of traditional virtual machines:</p>
+    <div class="compare-stacks">
+      <div class="stack-card card">
+        <h4>🖥️ Virtual machine</h4>
+        <div class="stack-layer" style="background:#1E3350;color:#8DA0BC;">App A</div>
+        <div class="stack-layer" style="background:#1E3350;color:#8DA0BC;">App B</div>
+        <div class="stack-layer" style="background:#0F1F38;color:#E8EEF7;">Guest OS (full copy)</div>
+        <div class="stack-layer" style="background:#0F1F38;color:#E8EEF7;">Guest OS (full copy)</div>
+        <div class="stack-layer" style="background:var(--amber);color:#1A1200;">Hypervisor</div>
+        <div class="stack-layer" style="background:#2D3B4F;color:#E8EEF7;">Host OS / Hardware</div>
+      </div>
+      <div class="stack-card card">
+        <h4>🐳 Docker containers</h4>
+        <div class="stack-layer" style="background:#1E3350;color:#8DA0BC;">App A</div>
+        <div class="stack-layer" style="background:#1E3350;color:#8DA0BC;">App B</div>
+        <div class="stack-layer" style="background:var(--cyan);color:#04141F;">Docker Engine</div>
+        <div class="stack-layer" style="background:#2D3B4F;color:#E8EEF7;">Host OS / Hardware</div>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:18px;font-size:14px;">Containers share the host's operating system kernel instead of each carrying a full copy of one — making them far lighter and faster to start than VMs.</p>
+  </div>
+</section>
+
+<!-- ===================== HISTORY ===================== -->
+<section id="history" style="background:var(--bg-raised);">
+  <div class="wrap reveal">
+    <div class="term-tag">section --02 history</div>
+    <h2 class="h-title">From a failed PaaS startup to global infrastructure</h2>
+    <p class="lead">Docker wasn't built to be a product — it was an internal tool that turned out to be more valuable than the company built around it.</p>
+
+    <div class="timeline">
+      <div class="t-row">
+        <div class="t-year">2008–10</div>
+        <div class="t-node"><div class="dot" style="background:var(--cyan);box-shadow:0 0 0 2px var(--bg-raised);"></div></div>
+        <div class="t-card card">
+          <h4>dotCloud is born</h4>
+          <p>Solomon Hykes, Kamel Founadi, and Sébastien Pahl found dotCloud in Paris, a Platform-as-a-Service startup. It joins Y Combinator's Summer 2010 batch and relocates to the Bay Area.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2013</div>
+        <div class="t-node"><div class="dot" style="background:var(--blue);box-shadow:0 0 0 2px var(--bg-raised);"></div></div>
+        <div class="t-card card">
+          <h4>Docker debuts at PyCon</h4>
+          <p>On March 15, 2013, Solomon Hykes demos Docker publicly for the first time, framing the problem as "shipping code to the server is hard." It's open-sourced within weeks, built on Linux containers (LXC).</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">Oct 2013</div>
+        <div class="t-node"><div class="dot" style="background:var(--green);box-shadow:0 0 0 2px var(--bg-raised);"></div></div>
+        <div class="t-card card">
+          <h4>dotCloud becomes Docker Inc.</h4>
+          <p>The company formally renames itself Docker, fully pivoting away from its original hosting business to focus on the container engine everyone wanted instead.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2014</div>
+        <div class="t-node"><div class="dot" style="background:var(--amber);box-shadow:0 0 0 2px var(--bg-raised);"></div></div>
+        <div class="t-card card">
+          <h4>libcontainer replaces LXC</h4>
+          <p>Version 0.9 swaps out LXC for Docker's own Go-based component, libcontainer, removing the external dependency. Microsoft and AWS both announce Docker support this year.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2015</div>
+        <div class="t-node"><div class="dot" style="background:var(--cyan);box-shadow:0 0 0 2px var(--bg-raised);"></div></div>
+        <div class="t-card card">
+          <h4>Unicorn status &amp; the OCI</h4>
+          <p>A $95M funding round values Docker at over $1 billion. Docker also donates its container format to found the Open Container Initiative, standardizing containers industry-wide.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2017</div>
+        <div class="t-node"><div class="dot" style="background:var(--blue);box-shadow:0 0 0 2px var(--bg-raised);"></div></div>
+        <div class="t-card card">
+          <h4>The Moby project</h4>
+          <p>Docker splits its open-source components into the Moby project for community R&amp;D, while "Docker" becomes the trademarked commercial product name.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2019</div>
+        <div class="t-node"><div class="dot" style="background:var(--green);box-shadow:0 0 0 2px var(--bg-raised);"></div></div>
+        <div class="t-card card">
+          <h4>Enterprise business sold, refocus on devs</h4>
+          <p>Docker sells its enterprise platform business to Mirantis and refocuses entirely on developer tools — Docker Desktop, Docker Hub, and the core developer workflow.</p>
+        </div>
+      </div>
+      <div class="t-row">
+        <div class="t-year">2024–26</div>
+        <div class="t-node"><div class="dot" style="background:var(--amber);box-shadow:0 0 0 2px var(--bg-raised);"></div></div>
+        <div class="t-card card">
+          <h4>Security &amp; AI-era tooling</h4>
+          <p>Docker unifies its subscriptions around Docker Desktop, Hub, Build Cloud, and Scout (vulnerability scanning), while hardened images and AI-assisted workflows become standard parts of the platform.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<div class="subpage-container section-z" style="position: relative; overflow: hidden;">
-<div class="tech-watermark" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-family: var(--font-disp); font-size: clamp(8rem, 20vw, 25rem); color: #2496ed; opacity: 0.03; pointer-events: none; z-index: -1; white-space: nowrap; user-select: none;">Docker</div>
-  
-  <!-- SIDEBAR NAVIGATION -->
-  <aside class="sidebar">
-    <span class="sidebar-h">CONTENTS</span>
-    <ul class="sidebar-links">
-      <li><a href="#history">History</a></li>
-      <li><a href="#why">Why Use This?</a></li>
-      <li><a href="#applications">Applications</a></li>
-      <li><a href="#facts">Key Facts</a></li>
-      <li><a href="#learn">Resources</a></li>
-    </ul>
-  </aside>
+<!-- ===================== USE CASES ===================== -->
+<section id="usecases">
+  <div class="wrap reveal">
+    <div class="term-tag">section --03 use-cases</div>
+    <h2 class="h-title">Who actually uses Docker, and for what</h2>
+    <p class="lead">Docker shows up at nearly every stage of the software lifecycle — not just production.</p>
 
-  <!-- CONTENT ARTICLES -->
-  <main class="content-section">
-
-    <section id="history">
-      <h2>History</h2>
-      <div class="info-card">
-        <div class="ic-icon">🕰️</div>
-        <div class="ic-content">
-          <p>Docker was created by Solomon Hykes and released as open source in March 2013 during a PyCon lightning talk. It popularized Linux container technology by wrapping it in a simple developer-friendly interface. By 2014 major cloud providers adopted it. Docker Inc. was founded to commercialize the platform, and the OCI (Open Container Initiative) was established in 2015 to standardize container formats industry-wide.</p>
+    <div class="case-grid">
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#0F1F38"/><circle cx="160" cy="78" r="38" fill="#122236"/><text x="160" y="92" text-anchor="middle" font-size="38">💻</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#1E3350"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#1E3350"/></svg></div>
+        <div class="body">
+          <div class="tag">Local dev</div>
+          <h4>Consistent dev environments</h4>
+          <p>"Works on my machine" stops being an excuse — every teammate runs the exact same container, regardless of OS.</p>
         </div>
       </div>
-    </section>
-
-    
-
-    <section id="why">
-      <h2>Why We Use Docker</h2>
-      <div class="hl-box">
-        Docker solves the 'it works on my machine' problem by packaging an application along with all its dependencies into a portable container. Containers are lightweight compared to VMs, start in seconds, and ensure identical behavior across development, staging, and production environments. This makes CI/CD pipelines faster and more reliable.
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#0F1F38"/><circle cx="160" cy="78" r="38" fill="#122236"/><text x="160" y="92" text-anchor="middle" font-size="38">🔁</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#1E3350"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#1E3350"/></svg></div>
+        <div class="body">
+          <div class="tag">CI/CD</div>
+          <h4>Automated build &amp; test pipelines</h4>
+          <p>CI systems spin up a clean container for every test run, then discard it — fast, reproducible, and isolated from other jobs.</p>
+        </div>
       </div>
-    </section>
-
-    <section id="applications">
-      <h2>Applications &amp; Use Cases</h2>
-      <div class="app-grid">
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">⚙️</span>
-            <span class="ac-title">Microservices architecture</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Microservices architecture</span>
-          </div>
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#0F1F38"/><circle cx="160" cy="78" r="38" fill="#122236"/><text x="160" y="92" text-anchor="middle" font-size="38">☁️</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#1E3350"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#1E3350"/></svg></div>
+        <div class="body">
+          <div class="tag">Deployment</div>
+          <h4>Cloud &amp; production hosting</h4>
+          <p>The same image tested locally ships straight to AWS, Azure, or a Kubernetes cluster — no rebuilding for "prod."</p>
         </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🔌</span>
-            <span class="ac-title">CI/CD pipeline containerization</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">CI/CD pipeline containerization</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🗄️</span>
-            <span class="ac-title">Isolated development environments</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Isolated development environments</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🐍</span>
-            <span class="ac-title">Cloud-native application deployment</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Cloud-native application deployment</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🚀</span>
-            <span class="ac-title">Scaling apps with...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Scaling apps with Docker Swarm or Kubernetes</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🛠️</span>
-            <span class="ac-title">Database and service isolation</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Database and service isolation</span>
-          </div>
-        </div>
-        
       </div>
-    </section>
-
-    <section id="facts">
-      <h2>Key Facts &amp; Features</h2>
-      <ul class="feature-list">
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🧠</span>
-            <strong>Uses layered UnionFS</strong>
-          </div>
-          <div class="fl-back">
-            <span>Uses layered UnionFS filesystem for efficient image storage</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🎯</span>
-            <strong>Docker Hub hosts</strong>
-          </div>
-          <div class="fl-back">
-            <span>Docker Hub hosts 100,000+ public container images</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚡</span>
-            <strong>Containers share the host OS kernel</strong>
-          </div>
-          <div class="fl-back">
-            <span>much lighter than VMs</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚠️</span>
-            <strong>Compose files define</strong>
-          </div>
-          <div class="fl-back">
-            <span>Compose files define multi-container apps in YAML</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">📌</span>
-            <strong>Supports Windows containers</strong>
-          </div>
-          <div class="fl-back">
-            <span>Supports Windows containers since Docker 1.12 (2016)</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">💡</span>
-            <strong>Docker Desktop available</strong>
-          </div>
-          <div class="fl-back">
-            <span>Docker Desktop available for Mac, Windows, and Linux</span>
-          </div>
-        </li>
-        
-      </ul>
-    </section>
-
-    <section id="learn">
-      <h2>Where to Learn</h2>
-
-      <h3>Online Courses</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Docker%20Docker%20Official%20Documentation%20(docs.docker.com)', '_blank')" style="cursor: pointer;" title="Go to Docker Official Documentation (docs.docker.com)">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>Docker Official Documentation (docs.docker.com)</strong>
-          </div>
-          <div class="fl-back">
-            <span>Docker Official Documentation (docs.docker.com)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Docker%20Udemy', '_blank')" style="cursor: pointer;" title="Go to Udemy">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>Udemy</strong>
-          </div>
-          <div class="fl-back">
-            <span>Docker & Kubernetes: The Practical Guide – Maximilian Schwarzmüller</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Docker%20Coursera', '_blank')" style="cursor: pointer;" title="Go to Coursera">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>Coursera</strong>
-          </div>
-          <div class="fl-back">
-            <span>Containerized Applications on AWS</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Docker%20Linux%20Foundation', '_blank')" style="cursor: pointer;" title="Go to Linux Foundation">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📙</span>
-            <strong>Linux Foundation</strong>
-          </div>
-          <div class="fl-back">
-            <span>Introduction to Containers (edX)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-
-      <h3>Books &amp; References</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Docker%20'Docker%20Deep%20Dive'', '_blank')" style="cursor: pointer;" title="Go to 'Docker Deep Dive'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>'Docker Deep Dive'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Nigel Poulton</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Docker%20'Docker%20in%20Action'', '_blank')" style="cursor: pointer;" title="Go to 'Docker in Action'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>'Docker in Action'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Jeff Nickoloff & Stephen Kuenzli</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Docker%20'The%20Docker%20Book'', '_blank')" style="cursor: pointer;" title="Go to 'The Docker Book'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>'The Docker Book'</strong>
-          </div>
-          <div class="fl-back">
-            <span>James Turnbull</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-    </section>
-  </main>
-</div>
-
-<!-- ─── FOOTER ─── -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <span class="f-brand-name">USCS<span class="a"> E-WALL</span></span>
-      <p>An e-waste art installation by <strong>USCS (Uttaranchal School of Computing Sciences)</strong>, celebrating the IT field through creative reuse of technology.</p>
-    </div>
-    <div>
-      <div class="f-col-h">Navigate</div>
-      <ul class="f-lnks">
-        <li><a href="../index.html#about">About Project</a></li>
-        <li><a href="../index.html#wall">Interactive Wall</a></li>
-        <li><a href="../index.html#materials">Raw Materials</a></li>
-        <li><a href="../index.html#impact">Our Impact</a></li>
-        <li><a href="../index.html#creators">The Team</a></li>
-      </ul>
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#0F1F38"/><circle cx="160" cy="78" r="38" fill="#122236"/><text x="160" y="92" text-anchor="middle" font-size="38">🧩</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#1E3350"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#1E3350"/></svg></div>
+        <div class="body">
+          <div class="tag">Microservices</div>
+          <h4>One container per service</h4>
+          <p>Each service in a larger app — auth, payments, search — runs in its own container, scaled and updated independently.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#0F1F38"/><circle cx="160" cy="78" r="38" fill="#122236"/><text x="160" y="92" text-anchor="middle" font-size="38">🎓</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#1E3350"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#1E3350"/></svg></div>
+        <div class="body">
+          <div class="tag">Learning</div>
+          <h4>Safe, disposable sandboxes</h4>
+          <p>Students try a new database or language by pulling an image — no risky installs on the host machine, deleted with one command.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap"><svg viewBox="0 0 320 200"><rect width="320" height="200" fill="#0F1F38"/><circle cx="160" cy="78" r="38" fill="#122236"/><text x="160" y="92" text-anchor="middle" font-size="38">🗄️</text><rect x="60" y="140" width="200" height="13" rx="6" fill="#1E3350"/><rect x="90" y="160" width="140" height="9" rx="4" fill="#1E3350"/></svg></div>
+        <div class="body">
+          <div class="tag">Databases</div>
+          <h4>Disposable local databases</h4>
+          <p>Spin up Postgres, MySQL, or Redis for testing in seconds, then throw the container away — zero local installation mess.</p>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="footer-btm">
-    <span class="f-copy">© 2026 USCS E-WALL PROJECT — BUILT FROM DISCARDED TECH</span>
-    <span class="f-status"><span class="f-dot"></span>INSTALLATION LIVE</span>
+</section>
+
+<!-- ===================== ARCHITECTURE DIAGRAM ===================== -->
+<section id="architecture" style="background:var(--bg-raised);">
+  <div class="wrap reveal">
+    <div class="term-tag">section --04 architecture</div>
+    <h2 class="h-title">How the pieces fit together</h2>
+    <p class="lead">A Dockerfile becomes an image, an image becomes a container, and containers are stored and shared through a registry.</p>
+
+    <div class="diagram-wrap card">
+      <svg viewBox="0 0 900 280" width="100%" style="min-width:680px;">
+        <g font-family="JetBrains Mono" font-size="13" fill="#E8EEF7">
+          <rect x="20" y="100" width="150" height="80" rx="10" fill="#0F1F38" stroke="#1E3350"/>
+          <text x="95" y="135" text-anchor="middle" font-size="22">📝</text>
+          <text x="95" y="158" text-anchor="middle">Dockerfile</text>
+          <text x="95" y="172" text-anchor="middle" font-size="10" fill="#8DA0BC">build instructions</text>
+
+          <path d="M170 140 L 235 140" stroke="#0DB7ED" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+          <text x="200" y="130" text-anchor="middle" font-size="10" fill="#8DA0BC">docker build</text>
+
+          <rect x="240" y="100" width="150" height="80" rx="10" fill="#0F1F38" stroke="#1E3350"/>
+          <text x="315" y="135" text-anchor="middle" font-size="22">🧱</text>
+          <text x="315" y="158" text-anchor="middle">Image</text>
+          <text x="315" y="172" text-anchor="middle" font-size="10" fill="#8DA0BC">read-only template</text>
+
+          <path d="M390 140 L 455 140" stroke="#0DB7ED" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+          <text x="420" y="130" text-anchor="middle" font-size="10" fill="#8DA0BC">docker run</text>
+
+          <rect x="460" y="100" width="150" height="80" rx="10" fill="#122236" stroke="#0DB7ED" stroke-width="1.5"/>
+          <text x="535" y="135" text-anchor="middle" font-size="22">📦</text>
+          <text x="535" y="158" text-anchor="middle">Container</text>
+          <text x="535" y="172" text-anchor="middle" font-size="10" fill="#8DA0BC">running process</text>
+
+          <path d="M240 80 C 200 50, 130 50, 95 95" stroke="#2CB68C" stroke-width="2" fill="none" marker-end="url(#arrow2)"/>
+          <text x="160" y="55" text-anchor="middle" font-size="10" fill="#8DA0BC">docker push</text>
+
+          <rect x="640" y="40" width="150" height="80" rx="10" fill="#0F1F38" stroke="#1E3350"/>
+          <text x="715" y="75" text-anchor="middle" font-size="22">🗂️</text>
+          <text x="715" y="98" text-anchor="middle">Docker Hub</text>
+          <text x="715" y="112" text-anchor="middle" font-size="10" fill="#8DA0BC">image registry</text>
+
+          <path d="M390 110 C 480 80, 580 70, 638 75" stroke="#2CB68C" stroke-width="2" fill="none" marker-end="url(#arrow2)"/>
+          <text x="500" y="75" text-anchor="middle" font-size="10" fill="#8DA0BC">docker pull</text>
+        </g>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#0DB7ED"/></marker>
+          <marker id="arrow2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#2CB68C"/></marker>
+        </defs>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WORKFLOW ===================== -->
+<section id="workflow">
+  <div class="wrap reveal">
+    <div class="term-tag">section --05 how-it-works</div>
+    <h2 class="h-title">A typical day with Docker</h2>
+    <p class="lead">The same four-command loop covers most day-to-day Docker usage.</p>
+
+    <div class="flow-steps">
+      <div class="flow-step card">
+        <div class="fnum">STEP 1</div>
+        <h4>Write a Dockerfile</h4>
+        <p>List the base image, dependencies, and startup command — <code>FROM node:20</code>, <code>COPY . .</code>, <code>CMD ["npm","start"]</code>.</p>
+      </div>
+      <div class="flow-step card">
+        <div class="fnum">STEP 2</div>
+        <h4>Build the image</h4>
+        <p>Run <code>docker build -t myapp .</code> to turn the Dockerfile into a reusable image, layer by layer.</p>
+      </div>
+      <div class="flow-step card">
+        <div class="fnum">STEP 3</div>
+        <h4>Run it as a container</h4>
+        <p><code>docker run myapp</code> starts a live, isolated process from that image — instantly, every time.</p>
+      </div>
+      <div class="flow-step card">
+        <div class="fnum">STEP 4</div>
+        <h4>Share via Docker Hub</h4>
+        <p><code>docker push</code> uploads the image so teammates or servers can <code>docker pull</code> the identical build.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PRICING ===================== -->
+<section id="pricing" style="background:var(--bg-raised);">
+  <div class="wrap reveal">
+    <div class="term-tag">section --06 pricing</div>
+    <h2 class="h-title">Free for learning, paid for teams</h2>
+    <p class="lead">Docker Desktop and Docker Engine are free to use — the paid tiers add team collaboration, security scanning, and commercial-use rights.</p>
+
+    <div class="chart-card card">
+      <div class="plan-grid">
+        <div class="plan-tier">
+          <div class="pname">Personal</div>
+          <div class="pprice">$0</div>
+          <div class="pdesc">Free for individuals, students, education, and small businesses. Docker Desktop, Engine, CLI, Compose, and 1 private Hub repo.</div>
+        </div>
+        <div class="plan-tier highlight">
+          <div class="pname">Pro</div>
+          <div class="pprice">$9<span>/mo</span></div>
+          <div class="pdesc">Unlimited private repos, unlimited Hub pulls, Docker Scout security scanning, and Build Cloud minutes.</div>
+        </div>
+        <div class="plan-tier">
+          <div class="pname">Team</div>
+          <div class="pprice">$15<span>/user/mo</span></div>
+          <div class="pdesc">Centralized billing, role-based access, audit logs, and shared Build Cloud minutes for collaborative teams.</div>
+        </div>
+        <div class="plan-tier">
+          <div class="pname">Business</div>
+          <div class="pprice">$24<span>/user/mo</span></div>
+          <div class="pdesc">SSO, SCIM provisioning, hardened Docker Desktop, and policy enforcement for larger organizations.</div>
+        </div>
+      </div>
+      <p class="chart-note" style="font-size:12px;color:var(--ink-soft);margin-top:18px;line-height:1.5;">Companies with 250+ employees or $10M+ annual revenue are required to use a paid tier for commercial Docker Desktop use. Prices shown are annual-billing rates and change over time — check Docker's official pricing page for current numbers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REFERENCES ===================== -->
+<section id="refs">
+  <div class="wrap reveal">
+    <div class="term-tag">section --07 learn-more</div>
+    <h2 class="h-title">References &amp; where to go deeper</h2>
+    <p class="lead">Primary sources used for the facts above, plus places to actually learn the tool hands-on.</p>
+
+    <ul class="ref-list">
+      <li class="ref-item card">
+        <div>
+          <div class="rtitle">Docker (software) — Wikipedia</div>
+          <div class="rdesc">Full technical history, architecture, and release timeline with citations.</div>
+        </div>
+        <a class="go" href="https://en.wikipedia.org/wiki/Docker_(software)" target="_blank" rel="noopener">en.wikipedia.org ↗</a>
+      </li>
+      <li class="ref-item card">
+        <div>
+          <div class="rtitle">Docker, Inc. — Wikipedia</div>
+          <div class="rdesc">The company's history from dotCloud through its pivot, funding, and Mirantis sale.</div>
+        </div>
+        <a class="go" href="https://en.wikipedia.org/wiki/Docker,_Inc." target="_blank" rel="noopener">en.wikipedia.org ↗</a>
+      </li>
+      <li class="ref-item card">
+        <div>
+          <div class="rtitle">Docker official documentation</div>
+          <div class="rdesc">The canonical guide for installing, building, and running containers.</div>
+        </div>
+        <a class="go" href="https://docs.docker.com/" target="_blank" rel="noopener">docs.docker.com ↗</a>
+      </li>
+      <li class="ref-item card">
+        <div>
+          <div class="rtitle">Docker — Official pricing</div>
+          <div class="rdesc">Live, current pricing for every subscription tier, direct from Docker.</div>
+        </div>
+        <a class="go" href="https://www.docker.com/pricing/" target="_blank" rel="noopener">docker.com ↗</a>
+      </li>
+    </ul>
+
+    <div class="course-strip">
+      <h3>📚 Free &amp; paid courses to actually learn Docker</h3>
+      <div class="course-grid">
+        <div class="course-item">
+          <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">Docker's official "Get Started" guide ↗</a>
+          <p>The free, hands-on walkthrough straight from Docker — build and run your first container.</p>
+        </div>
+        <div class="course-item">
+          <a href="https://www.coursera.org/courses?query=docker" target="_blank" rel="noopener">Coursera: Docker courses ↗</a>
+          <p>Structured beginner-to-advanced courses on containers, Compose, and orchestration.</p>
+        </div>
+        <div class="course-item">
+          <a href="https://www.udemy.com/topic/docker/" target="_blank" rel="noopener">Udemy: Docker topic hub ↗</a>
+          <p>A wide range of project-based courses, including Docker + Kubernetes bootcamps.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="gap: 12px; display: flex; align-items: center; flex-wrap: wrap;">
+      <a href="../index.html#home" class="nav-logo" style="font-size: 1.2rem; letter-spacing: 2px;">USCS<span class="accent"> E-WALL</span></a>
+      <span style="opacity: 0.3;">|</span>
+      <span style="font-size: 12.5px; color: var(--ink-soft);">Educational overview — not an official Docker page.</span>
+    </div>
+    <p>Sources cited above · Page last assembled June 2026</p>
   </div>
 </footer>
-
 
 <!-- ─── CLI TERMINAL OVERLAY ─── -->
 <div id="terminal-overlay">
@@ -666,8 +1152,14 @@
 
 <button class="cli-trigger" id="cli-open"><span>🤖</span></button>
 
-
 <script src="../data.js"></script>
 <script src="../main.js"></script>
+<script>
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+
 </body>
 </html>

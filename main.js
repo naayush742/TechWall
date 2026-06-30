@@ -213,56 +213,98 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 
 /* ─── WALL PREVIEW RENDERER ─── */
+const hotspotsData = [
+  { slug: 'aws', name: 'AWS', top: 17.5, left: 31.5, components: '40 CMOS batteries, grey IDE ribbon cables', fact: 'The AWS logo is formed by curved grey ribbon cables mapping the outline, filled with reflective CMOS battery coin cells for a metallic shimmer.', videoId: '3XFODda6YXo' },
+  { slug: 'docker', name: 'Docker', top: 27.6, left: 19.0, components: '8 SMPS cooling fans, 1 GPU core, capacitors', fact: 'The Docker whale is made from repurposed power supply fans forming the body and wheel hub, with bright blue capacitors representing the water spray.', videoId: 'rOTqEljQGpk' },
+  { slug: 'googledrive', name: 'Google Drive', top: 25.3, left: 29.2, components: '30 RAM sticks, colored wire strands, keycaps', fact: 'The Google Drive triangle represents synchronized cloud storage, constructed from straight memory module slots and colored wire lines.', videoId: 'w3jLJU7DT5E' },
+  { slug: 'mongodb', name: 'MongoDB', top: 30.4, left: 29.6, components: 'Green PCBs, small transistors, keyboard key caps', fact: 'MongoDB is depicted in green printed circuit board pieces, representing its document-based flexible database layout.', videoId: 'HXX8tQMRyS8' },
+  { slug: 'powerbi', name: 'Power BI', top: 36.4, left: 30.4, components: 'CPU heat sinks, yellow copper wire, keyboard keys', fact: 'Power BI represents database analytics and data visualization, constructed using yellow wiring and small heat sink blocks.', videoId: 'rOTqEljQGpk' },
+  { slug: 'mysql', name: 'MySQL', top: 41.9, left: 30.8, components: '3 HDD platters, IDE cables, small capacitors', fact: 'The MySQL dolphin is crafted from high-precision cut reflective hard drive platters that scatter light, creating an ocean-like wave effect.', videoId: 'HXX8tQMRyS8' },
+  { slug: 'vscode', name: 'VS Code', top: 55.2, left: 16.6, components: '25 RAM sticks, blue wire traces, USB ports', fact: 'The iconic VS Code ribbon is formed by aligning memory modules at precise overlapping angles, bordered by thick copper wire traces and USB port shells.', videoId: 'VqCgcpAypFQ' },
+  { slug: 'onedrive', name: 'One Drive', top: 62.6, left: 15.8, components: 'HDD plates, blue flat cables', fact: 'Spelled out using metallic hard drive disk components and sky-blue ribbon cables to match Microsoft Cloud style.', videoId: '3XFODda6YXo' },
+  { slug: 'github', name: 'GitHub', top: 64.0, left: 21.7, components: '2 keyboards, 12 computer mouse casings, green PCBs', fact: 'The GitHub logo uses black keyboard keys for the silhouette and internal plastic casings from computer mice to create the smooth curved head shapes.', videoId: 'w3jLJU7DT5E' },
+  { slug: 'wifi', name: 'WiFi', top: 74.1, left: 15.8, components: 'Curved ribbon cables, tiny capacitors', fact: 'The WiFi waves are built using concentric rows of grey and rainbow ribbon cables, with tiny capacitors acting as the signal nodes.', videoId: 'z9w4_Q8bErs' },
+  { slug: 'kalilinux', name: 'Kali Linux', top: 20.3, left: 53.2, components: 'Metallic components, dragon logo outlines', fact: 'The Kali Linux dragon is mapped in shiny metallic parts representing advanced security auditing and network hacking tools.', videoId: 'yVpbFMhOAwE' },
+  { slug: 'linux', name: 'Linux', top: 22.6, left: 61.1, components: '1 laptop keyboard, yellow capacitors, key lock', fact: 'Tux the Penguin is crafted using keycaps from discarded student laptops, with yellow capacitors and a secure metal lock nearby representing operating system safety.', videoId: 'yVpbFMhOAwE' },
+  { slug: 'firewall', name: 'Firewall', top: 22.1, left: 69.4, components: 'Red glowing plastic, network cards, resistors', fact: 'The Firewall logo is built from network interface cards, with glowing red indicators and resistors representing packet filtering.', videoId: '3XFODda6YXo' },
+  { slug: 'google', name: 'Google', top: 32.7, left: 49.3, components: '5 Intel Core i7 processors, gold pins, blue LEDs', fact: 'The Google G logo is constructed from polished CPU heat sinks and gold-plated motherboard pins, representing the search core.', videoId: 'jpHJ64S2a8k' },
+  { slug: 'gemini', name: 'Gemini', top: 41.9, left: 48.9, components: 'Diamond cut heat sinks, blue glowing lights', fact: 'The Gemini star represents Google\'s AI future, positioned in the center, built from polished CPU heat sinks and gold-plated motherboard pins.', videoId: 'jpHJ64S2a8k' },
+  { slug: 'kafka', name: 'Kafka', top: 33.6, left: 70.2, components: 'Capacitors, node connectors', fact: 'Kafka is illustrated with node connections using capacitors and solder points, symbolizing real-time streaming data pipelines.', videoId: 'HXX8tQMRyS8' },
+  { slug: 'hadoop', name: 'Hadoop', top: 48.3, left: 70.6, components: 'Yellow keycaps, computer mouse casings', fact: 'The Hadoop elephant is built using yellow keyboard keys and computer mouse casing materials sourced from campus drives.', videoId: '3XFODda6YXo' },
+  { slug: 'golang', name: 'Go Lang', top: 53.9, left: 54.8, components: 'Blue keycaps, gopher mascot blocks', fact: 'The Go Gopher is built using blue keycaps from gaming keyboards, forming the shape of the mascot designed by Renee French.', videoId: 'upDLs1sn7g4' },
+  { slug: 'dinogame', name: 'Dino Game', top: 56.6, left: 63.5, components: 'Black keyboard keycaps, green PCB ground line', fact: 'Chrome\'s Dino T-Rex is built with black keycaps, with a green motherboard stripe as the desert floor.', videoId: '5FKnkv_gWwU' },
+  { slug: 'python', name: 'Python', top: 65.4, left: 55.8, components: '120 keyboard keys, yellow/blue wiring', fact: 'The Python logo is built from individual keyboard keycaps sorted into green/blue colors, representing scripting and intelligence.', videoId: 'Y8Tko2JC5Cs' },
+  { slug: 'php', name: 'PHP', top: 72.6, left: 55.6, components: 'Purple keycaps, transistors, circuit boards', fact: 'The PHP text is spelling out in purple keycaps, representing the backend engine that powers a large portion of the web.', videoId: 'upDLs1sn7g4' },
+  { slug: 'html', name: 'HTML', top: 71.6, left: 61.5, components: 'Orange capacitors, CPU fragments', fact: 'The HTML shield features orange-colored components representing the building blocks of the World Wide Web.', videoId: 'w3jLJU7DT5E' },
+  { slug: 'streamlit', name: 'Streamlit', top: 68.9, left: 65.5, components: 'Red glowing LEDs, red keycaps', fact: 'Streamlit represents rapid AI app sharing, constructed with red keycaps and glowing red circuit nodes.', videoId: 'rOTqEljQGpk' },
+  { slug: 'javascript', name: 'JavaScript', top: 74.6, left: 66.1, components: '90 yellow keyboard keys, old mouse circuit boards', fact: 'The yellow "JS" square is constructed from yellow keycaps (such as Page Down, Pause, and custom-painted keys) mounted on a matrix of mouse circuit boards.', videoId: 'upDLs1sn7g4' },
+  { slug: 'css', name: 'CSS', top: 70.9, left: 70.8, components: 'Blue keycaps, capacitor arrays', fact: 'The CSS layout is designed with blue keycaps and capacitor arrays to represent web stylesheet structure.', videoId: 'w3jLJU7DT5E' },
+  { slug: 'cpp', name: 'C++', top: 48.8, left: 38.2, components: '50 capacitors, 10 CPU pins, green PCBs', fact: 'The C++ logo features a dark green motherboard background, with blue and silver capacitors arranged to build the classic double-plus symbol.', videoId: 'mUQZ1gO0Sls' },
+  { slug: 'cobol', name: 'COBOL', top: 49.3, left: 32.3, components: 'Older retro transistors, capacitors', fact: 'COBOL represents business legacy computing, built with older components collected from Uttaranchal University laboratory basements.', videoId: '5FKnkv_gWwU' },
+  { slug: 'csharp', name: 'C#', top: 49.3, left: 43.8, components: 'Silver transistors, RAM elements', fact: 'C# is crafted from silver elements and memory card fragments forming the sharp sign logo.', videoId: 'mUQZ1gO0Sls' },
+  { slug: 'c', name: 'C', top: 48.8, left: 35.9, components: 'Grey capacitors, copper traces', fact: 'The letter C is outlined in grey capacitors and thick copper board traces, symbolizing the root of modern systems programming.', videoId: 'mUQZ1gO0Sls' }
+];
+
 function renderWallPreview() {
-  const wg = document.getElementById('wallGrid');
-  if (!wg || typeof wallEmojis === 'undefined') return;
+  const overlay = document.getElementById('hotspotsOverlay');
+  const container = document.getElementById('circuitContainer');
+  if (!overlay || !container) return;
   
   let pop = document.querySelector('.wall-popover');
   if (!pop) {
     pop = document.createElement('div');
     pop.className = 'wall-popover';
-    pop.innerHTML = '<span class="wp-name"></span><p class="wp-desc"></p><span style="display:block;margin-top:8px;font-size:0.6rem;color:var(--green);font-family:var(--font-mono);letter-spacing:1px;">CLICK TO EXPLORE ◈</span>';
+    pop.innerHTML = '<span class="wp-name"></span><p class="wp-desc"></p><span style="display:block;margin-top:8px;font-size:0.6rem;color:var(--green);font-family:var(--font-mono);letter-spacing:1px;">CLICK TO INSPECT NODE ◈</span>';
     document.body.appendChild(pop);
   }
 
-  wg.innerHTML = '';
-  wallEmojis.forEach((item) => {
-    const { i, c, l, d, s } = item;
-    const dCell = document.createElement('div');
-    dCell.className = `wall-cell ${c}`;
-    
-    // Fix icon paths if on subpage
-    let iconHtml = i;
-    if (IS_SUBPAGE) iconHtml = i.replace('src="icon/', 'src="../icon/');
-    
-    dCell.innerHTML = `<span>${iconHtml}</span><span class="wc-tip">${l}</span>`;
-    
-    dCell.addEventListener('mouseenter', (e) => {
-      pop.querySelector('.wp-name').textContent = l;
-      pop.querySelector('.wp-desc').textContent = d || 'A foundational technology in modern computing.';
+  overlay.innerHTML = '';
+  hotspotsData.forEach((node) => {
+    const hotspot = document.createElement('div');
+    hotspot.className = 'hotspot-node';
+    hotspot.style.top = `${node.top}%`;
+    hotspot.style.left = `${node.left}%`;
+    hotspot.setAttribute('data-slug', node.slug);
+    hotspot.innerHTML = '<div class="node-dot"></div><div class="node-pulse"></div>';
+
+    // Hover interactions
+    hotspot.addEventListener('mouseenter', (e) => {
+      pop.querySelector('.wp-name').textContent = node.name.toUpperCase() + ' NODE';
+      pop.querySelector('.wp-desc').textContent = node.fact.substring(0, 100) + '...';
       pop.classList.add('active');
-      positionPopover(e, dCell);
+      positionPopover(e, hotspot);
+      
+      // Highlight SVG paths connected to this node
+      document.querySelectorAll('.circuit-path').forEach(path => {
+        const nodes = path.getAttribute('data-nodes').split(',');
+        if (nodes.includes(node.slug)) {
+          path.classList.add('active');
+        }
+      });
+      playBeep(800, 0.02);
     });
 
-    dCell.addEventListener('mousemove', (e) => {
-      positionPopover(e, dCell);
+    hotspot.addEventListener('mousemove', (e) => {
+      positionPopover(e, hotspot);
     });
 
-    dCell.addEventListener('mouseleave', () => {
+    hotspot.addEventListener('mouseleave', () => {
       pop.classList.remove('active');
+      
+      // De-highlight paths
+      document.querySelectorAll('.circuit-path').forEach(path => {
+        path.classList.remove('active');
+      });
     });
 
-    dCell.addEventListener('click', (e) => {
-      if (s) {
-        window.location.href = (IS_SUBPAGE ? '' : 'pages/') + s + '.html';
-      } else {
-        e.stopPropagation();
-        pop.classList.toggle('active');
-        positionPopover(e, dCell);
-      }
+    // Click to Open Diagnostic Modal
+    hotspot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      pop.classList.remove('active');
+      openDiagnosticModal(node);
     });
 
-    wg.appendChild(dCell);
+    overlay.appendChild(hotspot);
   });
 
   function positionPopover(e, cell) {
@@ -286,21 +328,103 @@ function renderWallPreview() {
   document.addEventListener('click', () => {
     pop.classList.remove('active');
   });
+
+  // Hotspot Diagnostic Modal Logic
+  const modal = document.getElementById('hotspot-modal');
+  const modalClose = document.getElementById('modalCloseBtn');
   
-  setInterval(() => {
-    const cells = wg.querySelectorAll('.wall-cell');
-    if (cells.length === 0) return;
-    const idx = Math.floor(Math.random() * cells.length);
-    const cell = cells[idx];
-    if (cell) {
-      cell.style.background = 'rgba(0,255,136,0.12)';
-      cell.style.borderColor = 'rgba(0,255,136,0.4)';
-      setTimeout(() => {
-        cell.style.background = '';
-        cell.style.borderColor = '';
-      }, 600);
+  function openDiagnosticModal(node) {
+    if (!modal) return;
+    
+    // Set text contents
+    const mTitle = document.getElementById('modal-title');
+    const mComponents = document.getElementById('modal-components');
+    const mFact = document.getElementById('modal-fact');
+    const mDocLink = document.getElementById('modal-doc-link');
+    const mConsole = document.getElementById('modal-console-text');
+    const mConsoleStatus = document.getElementById('modal-console-status');
+    const mVideo = document.getElementById('modal-video');
+    const mPlaceholder = document.getElementById('modal-video-placeholder');
+
+    if (mTitle) mTitle.textContent = `${node.name} DIAGNOSTIC FEED`;
+    if (mComponents) mComponents.textContent = node.components;
+    if (mFact) mFact.textContent = node.fact;
+    if (mDocLink) {
+      mDocLink.href = (IS_SUBPAGE ? '' : 'pages/') + node.slug + '.html';
     }
-  }, 300);
+    if (mConsole) {
+      mConsole.textContent = `Inspecting logo layout for ${node.name}...`;
+      scrambleText(mConsole, 250);
+    }
+    if (mConsoleStatus) {
+      mConsoleStatus.textContent = 'SECURE_LINK_VERIFIED';
+      scrambleText(mConsoleStatus, 250);
+    }
+
+    // Set Video Iframe Src
+    if (mVideo && mPlaceholder) {
+      mVideo.style.display = 'none';
+      mPlaceholder.style.display = 'flex';
+      
+      // Wait slightly to simulate hardware loading, then show video
+      setTimeout(() => {
+        mVideo.src = `https://www.youtube.com/embed/${node.videoId}?autoplay=1&mute=1&loop=1&playlist=${node.videoId}`;
+        mVideo.style.display = 'block';
+        mPlaceholder.style.display = 'none';
+      }, 900);
+    }
+    
+    // Open modal
+    modal.classList.add('active');
+    playBeep(900, 0.08);
+    setTimeout(() => playBeep(1200, 0.08), 80);
+  }
+
+  function closeDiagnosticModal() {
+    if (!modal) return;
+    modal.classList.remove('active');
+    
+    // Clear video iframe to stop playback
+    const mVideo = document.getElementById('modal-video');
+    if (mVideo) mVideo.src = '';
+    
+    playBeep(400, 0.05);
+  }
+
+  if (modalClose) {
+    modalClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeDiagnosticModal();
+    });
+  }
+
+  // Close modal when clicking background
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeDiagnosticModal();
+    }
+  });
+
+  // Close modal with escape key
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeDiagnosticModal();
+    }
+  });
+
+  // Periodic random path flash to simulate network activity
+  setInterval(() => {
+    const paths = document.querySelectorAll('.circuit-path');
+    if (paths.length === 0) return;
+    const idx = Math.floor(Math.random() * paths.length);
+    const path = paths[idx];
+    if (path && !path.classList.contains('active')) {
+      path.classList.add('active');
+      setTimeout(() => {
+        path.classList.remove('active');
+      }, 1500);
+    }
+  }, 4000);
 }
 
 /* ─── TECH GRID RENDERER ─── */
