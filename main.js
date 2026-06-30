@@ -1358,6 +1358,7 @@ function initMobileFlipCards() {
 
 /* ─── HUD VIEWPORT & CONTROL DECK ─── */
 function initHUDFrame() {
+  if (document.querySelector('.hud-frame')) return; // Avoid duplicate frames if pre-rendered in HTML
   const frame = document.createElement('div');
   frame.className = 'hud-frame';
   frame.innerHTML = `
@@ -1367,6 +1368,93 @@ function initHUDFrame() {
     <div class="hud-corner bottom-right"><span class="hud-tag">E-WALL_HUD</span></div>
   `;
   document.body.appendChild(frame);
+}
+
+/* ─── HUD MATRIX SCANNING PAGE TRANSITIONS ─── */
+function initPageTransitions() {
+  // 1. Inject Styles dynamically
+  const style = document.createElement('style');
+  style.textContent = `
+    #page-transition-overlay {
+      position: fixed;
+      inset: 0;
+      background: #02050a;
+      z-index: 100000;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #page-transition-overlay::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: var(--cyan, #007acc);
+      box-shadow: 0 0 20px var(--cyan, #007acc), 0 0 40px var(--cyan, #007acc);
+      top: 0;
+      animation: scanLineOut 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    #page-transition-overlay.fade-out {
+      opacity: 0;
+    }
+    #page-transition-overlay.fade-in {
+      opacity: 1;
+      pointer-events: all;
+    }
+    #page-transition-overlay.fade-in::before {
+      top: 0;
+      animation: scanLineIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes scanLineOut {
+      0% { top: 0; opacity: 1; }
+      80% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+    @keyframes scanLineIn {
+      0% { top: 100%; opacity: 0; }
+      10% { opacity: 1; }
+      100% { top: 0; opacity: 1; }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // 2. Create Overlay Element
+  const overlay = document.createElement('div');
+  overlay.id = 'page-transition-overlay';
+  document.body.appendChild(overlay);
+
+  // 3. Trigger fade-out scanning sequence on load
+  requestAnimationFrame(() => {
+    overlay.classList.add('fade-out');
+  });
+
+  // 4. Intercept clicks on internal links for smooth transitions
+  document.addEventListener('click', (e) => {
+    const anchor = e.target.closest('a');
+    if (!anchor) return;
+    
+    const href = anchor.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('javascript:') || anchor.target === '_blank') return;
+    
+    // Ignore internal mailto / tel links
+    if (href.startsWith('mailto:') || href.startsWith('tel:')) return;
+
+    try {
+      const url = new URL(anchor.href, window.location.href);
+      if (url.origin !== window.location.origin) return;
+      
+      e.preventDefault();
+      overlay.classList.remove('fade-out');
+      overlay.classList.add('fade-in');
+      
+      setTimeout(() => {
+        window.location.href = anchor.href;
+      }, 450);
+    } catch (err) {}
+  });
 }
 
 /* ─── INIT ─── */
@@ -1380,6 +1468,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVisitorCounter();
   initMobileFlipCards();
   initHUDFrame();
+  initPageTransitions();
   addLog("System initialized. Welcome to USCS E-WALL.");
   
   // Initialize Boot Sequence
