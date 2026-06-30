@@ -14,13 +14,13 @@
     --card: rgba(6, 13, 22, 0.95);
     --ink: #ffffff;
     --ink-soft: #a0b8d0;
-    --line: rgba(63, 198, 241, 0.18);
-    --accent: #3fc6f1;
-    --accent-soft: #1c8fae;
+    --line: rgba(85, 124, 242, 0.18);
+    --accent: #557cf2;
+    --accent-soft: #2f53b8;
     --accent2: #ff3c5f;
-    --cyan: #3fc6f1;
+    --cyan: #557cf2;
     --teal: #1c8fae;
-    --green: #3fc6f1;
+    --green: #557cf2;
     --green2: #1c8fae;
     --shadow-sm: 0 4px 10px rgba(0,0,0,0.5);
     --shadow-md: 0 10px 35px rgba(0,0,0,0.8);
@@ -144,8 +144,8 @@
   }
   .card:hover{
     transform:translateY(-4px);
-    border-color:rgba(63, 198, 241, 0.3);
-    box-shadow:0 12px 30px rgba(63, 198, 241, 0.15);
+    border-color:rgba(85, 124, 242, 0.3);
+    box-shadow:0 12px 30px rgba(85, 124, 242, 0.15);
   }
 
   /* ===== HERO ===== */
@@ -153,7 +153,7 @@
   header.hero::before{
     content:"";position:absolute;inset:0;
     background:
-      radial-gradient(circle at 80% 10%, rgba(63,198,241,0.12), transparent 50%),
+      radial-gradient(circle at 80% 10%, rgba(85,124,242,0.12), transparent 50%),
       radial-gradient(circle at 10% 90%, rgba(255,60,95,0.10), transparent 50%);
     pointer-events:none;
   }
@@ -173,11 +173,11 @@
     line-height:1.06;
     font-weight:800;
     color:var(--ink);
-    text-shadow: 0 0 30px rgba(63, 198, 241, 0.3);
+    text-shadow: 0 0 30px rgba(85, 124, 242, 0.3);
     letter-spacing:1px;
   }
   @media (max-width:540px){ h1.title{font-size:42px;} }
-  h1.title span{color:var(--cyan); text-shadow:0 0 20px rgba(63,198,241,0.4);}
+  h1.title span{color:var(--cyan); text-shadow:0 0 20px rgba(85,124,242,0.4);}
   .subtitle{font-size:16.5px;color:var(--ink-soft);margin-top:18px;max-width:520px;line-height:1.65;font-weight:300;}
   
   .hero-meta{display:flex;gap:28px;margin-top:32px;flex-wrap:wrap;}
@@ -204,7 +204,7 @@
     100%{ width:440px;height:440px;opacity:0;}
   }
   @media (prefers-reduced-motion: reduce){ .pulse-ring{animation:none;display:none;} }
-  .cloud-icon{width:280px;height:280px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 35px rgba(63, 198, 241, 0.55)); transition: transform 0.3s ease;}
+  .cloud-icon{width:280px;height:280px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 35px rgba(85, 124, 242, 0.55)); transition: transform 0.3s ease;}
   .cloud-icon:hover{transform: scale(1.05);}
 
   p.body-text{max-width:680px; color:var(--ink-soft); margin-bottom:18px; font-size:15.5px;}
@@ -333,7 +333,7 @@
   #cursor-ring {
     position: fixed;
     width: 36px; height: 36px;
-    border: 1px solid rgba(63, 198, 241, 0.5);
+    border: 1px solid rgba(85, 124, 242, 0.5);
     border-radius: 50%;
     pointer-events: none;
     z-index: 99998;
@@ -513,9 +513,9 @@
     left: 30px;
     z-index: 9995;
     width: 64px; height: 64px;
-    background: rgba(63, 198, 241, 0.03);
+    background: rgba(85, 124, 242, 0.03);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(63, 198, 241, 0.1);
+    border: 1px solid rgba(85, 124, 242, 0.1);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -523,8 +523,8 @@
     font-size: 2.2rem;
     cursor: pointer;
     box-shadow: 
-      inset 0 0 20px rgba(63, 198, 241, 0.05),
-      0 0 30px rgba(63, 198, 241, 0.2);
+      inset 0 0 20px rgba(85, 124, 242, 0.05),
+      0 0 30px rgba(85, 124, 242, 0.2);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -560,10 +560,10 @@
 
   .cli-trigger:hover { 
     transform: scale(1.1) translateY(-5px);
-    background: rgba(63, 198, 241, 0.08);
+    background: rgba(85, 124, 242, 0.08);
     box-shadow: 
-      inset 0 0 30px rgba(63, 198, 241, 0.1),
-      0 0 50px rgba(63, 198, 241, 0.4);
+      inset 0 0 30px rgba(85, 124, 242, 0.1),
+      0 0 50px rgba(85, 124, 242, 0.4);
   }
   .cli-trigger:hover::before {
     animation-duration: 1.5s;
@@ -582,8 +582,8 @@
     content: '';
     position: absolute;
     inset: 0;
-    border: 1px solid rgba(63, 198, 241, 0.08);
-    box-shadow: inset 0 0 20px rgba(63, 198, 241, 0.03);
+    border: 1px solid rgba(85, 124, 242, 0.08);
+    box-shadow: inset 0 0 20px rgba(85, 124, 242, 0.03);
     pointer-events: none;
   }
 
@@ -641,7 +641,7 @@
     }
   }
 </style>
-<script>window.TECH_THEME_COLOR = '#3fc6f1';</script>
+<script>window.TECH_THEME_COLOR = '#557cf2';</script>
 </head>
 <body>
 
@@ -734,21 +734,21 @@
           <line x1="40" y1="120" x2="960" y2="120" stroke="#26262c" stroke-width="2"/>
           <g font-family="IBM Plex Mono, monospace">
             <!-- Whoppix -->
-            <circle cx="70" cy="120" r="6" fill="#3fc6f1"/>
+            <circle cx="70" cy="120" r="6" fill="#557cf2"/>
             <line x1="70" y1="120" x2="70" y2="74" stroke="#26262c" stroke-width="1.5"/>
             <text x="70" y="62" fill="#eceef0" font-size="12" text-anchor="middle" font-weight="600">2004</text>
             <text x="70" y="150" fill="#8d8d96" font-size="10.5" text-anchor="middle">Whoppix</text>
             <text x="70" y="163" fill="#8d8d96" font-size="10.5" text-anchor="middle">(Knoppix-based)</text>
 
             <!-- WHAX -->
-            <circle cx="220" cy="120" r="6" fill="#3fc6f1"/>
+            <circle cx="220" cy="120" r="6" fill="#557cf2"/>
             <line x1="220" y1="120" x2="220" y2="166" stroke="#26262c" stroke-width="1.5"/>
             <text x="220" y="62" fill="#8d8d96" font-size="11" text-anchor="middle">2005</text>
             <text x="220" y="182" fill="#eceef0" font-size="11.5" text-anchor="middle" font-weight="600">WHAX</text>
             <text x="220" y="195" fill="#8d8d96" font-size="10.5" text-anchor="middle">(Slax-based)</text>
 
             <!-- BackTrack -->
-            <circle cx="400" cy="120" r="8" fill="#3fc6f1" stroke="#0a0a0c" stroke-width="3"/>
+            <circle cx="400" cy="120" r="8" fill="#557cf2" stroke="#0a0a0c" stroke-width="3"/>
             <line x1="400" y1="120" x2="400" y2="74" stroke="#26262c" stroke-width="1.5"/>
             <text x="400" y="62" fill="#eceef0" font-size="12.5" text-anchor="middle" font-weight="700">May 2006</text>
             <text x="400" y="150" fill="#eceef0" font-size="12" text-anchor="middle" font-weight="600">BackTrack Linux</text>
@@ -769,7 +769,7 @@
             <text x="700" y="163" fill="#8d8d96" font-size="10.5" text-anchor="middle">Debian rebuild</text>
 
             <!-- Xfce switch -->
-            <circle cx="820" cy="120" r="6" fill="#3fc6f1"/>
+            <circle cx="820" cy="120" r="6" fill="#557cf2"/>
             <line x1="820" y1="120" x2="820" y2="166" stroke="#26262c" stroke-width="1.5"/>
             <text x="820" y="62" fill="#8d8d96" font-size="11" text-anchor="middle">2019</text>
             <text x="820" y="182" fill="#eceef0" font-size="11.5" text-anchor="middle" font-weight="600">Default → Xfce</text>
@@ -808,8 +808,8 @@
         <!-- stage boxes -->
         <g font-family="Inter">
           <!-- 1 Recon -->
-          <rect x="20" y="40" width="150" height="90" rx="8" fill="#141417" stroke="#3fc6f1" stroke-width="1.5"/>
-          <text x="95" y="65" fill="#3fc6f1" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">01 RECON</text>
+          <rect x="20" y="40" width="150" height="90" rx="8" fill="#141417" stroke="#557cf2" stroke-width="1.5"/>
+          <text x="95" y="65" fill="#557cf2" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">01 RECON</text>
           <text x="95" y="88" fill="#eceef0" font-size="12.5" text-anchor="middle" font-weight="600">Information</text>
           <text x="95" y="103" fill="#eceef0" font-size="12.5" text-anchor="middle" font-weight="600">Gathering</text>
           <text x="95" y="120" fill="#8d8d96" font-size="10.5" text-anchor="middle">Nmap · theHarvester</text>
@@ -819,8 +819,8 @@
           <polygon points="200,80 210,85 200,90" fill="#26262c"/>
 
           <!-- 2 Vuln -->
-          <rect x="210" y="40" width="150" height="90" rx="8" fill="#141417" stroke="#3fc6f1" stroke-width="1.5"/>
-          <text x="285" y="65" fill="#3fc6f1" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">02 ANALYSIS</text>
+          <rect x="210" y="40" width="150" height="90" rx="8" fill="#141417" stroke="#557cf2" stroke-width="1.5"/>
+          <text x="285" y="65" fill="#557cf2" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">02 ANALYSIS</text>
           <text x="285" y="88" fill="#eceef0" font-size="12.5" text-anchor="middle" font-weight="600">Vulnerability</text>
           <text x="285" y="103" fill="#eceef0" font-size="12.5" text-anchor="middle" font-weight="600">Scanning</text>
           <text x="285" y="120" fill="#8d8d96" font-size="10.5" text-anchor="middle">Nikto · OpenVAS</text>
@@ -847,8 +847,8 @@
           <polygon points="770,80 780,85 770,90" fill="#26262c"/>
 
           <!-- 5 Reporting -->
-          <rect x="780" y="40" width="140" height="90" rx="8" fill="#141417" stroke="#3fc6f1" stroke-width="1.5"/>
-          <text x="850" y="65" fill="#3fc6f1" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">05 REPORT</text>
+          <rect x="780" y="40" width="140" height="90" rx="8" fill="#141417" stroke="#557cf2" stroke-width="1.5"/>
+          <text x="850" y="65" fill="#557cf2" font-family="IBM Plex Mono" font-size="11" text-anchor="middle" font-weight="600">05 REPORT</text>
           <text x="850" y="88" fill="#eceef0" font-size="12.5" text-anchor="middle" font-weight="600">Reporting</text>
           <text x="850" y="120" fill="#8d8d96" font-size="10.5" text-anchor="middle">Dradis · Faraday</text>
 
