@@ -1,236 +1,654 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google — USCS E-WALL</title>
-  <link rel="stylesheet" href="../styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google — From a Dorm-Room Crawler to Alphabet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=JetBrains+Mono:wght@300;400;700&display=swap');
 
-  <!-- TECH THEME OVERRIDE -->
-  <script>window.TECH_THEME_COLOR = '#4285f4';</script>
-  <style>
-    :root {
-      --green: #4285f4 !important;
-      --cyan: #4285f4 !important;
-      --aura-color: #4285f4 !important;
-      --aura-glow: rgba(66,133,244,.12) !important;
+  :root{
+    --bg: #02050a;
+    --card: rgba(6, 13, 22, 0.95);
+    --ink: #ffffff;
+    --ink-soft: #a0b8d0;
+    --line: rgba(66, 133, 244, 0.18);
+    --blue: #4285f4;
+    --blue-deep: #357ae8;
+    --cyan: #34a853;
+    --teal: #34a853;
+    --amber: #fbbc05;
+    --shadow-sm: 0 4px 10px rgba(0,0,0,0.5);
+    --shadow-md: 0 10px 35px rgba(0,0,0,0.8);
+    --green: #34a853;
+    --green2: #4285f4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: linear-gradient(rgba(2, 5, 10, 0.92), rgba(2, 5, 10, 0.92)), url('../img/bg.jpeg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color:var(--ink);
+    font-family:'DM Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Website Premium Scanlines & Noise overlays */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9990;
+    opacity: 0.5;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.05) 3px, rgba(0,0,0,0.05) 4px);
+    pointer-events: none;
+    z-index: 9989;
+  }
+
+  h1,h2,.display{
+    font-family:'Bebas Neue',sans-serif;
+    margin:0;
+    letter-spacing:0.04em;
+  }
+  h3{
+    font-family:'JetBrains Mono',monospace;
+    margin:0;
+    letter-spacing:0.02em;
+    text-transform:uppercase;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--blue-deep); transition: color 0.2s ease; text-decoration: none;}
+  a:hover{color: var(--cyan); text-decoration: underline;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+  section{padding:96px 0; border-bottom: 1px solid var(--line);}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--blue);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before{
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(66, 133, 244, 0.15);
+  }
+  .lead{font-size:19px;color:var(--ink-soft);line-height:1.65;max-width:680px;font-weight:300;margin-bottom:40px;}
+
+  /* ===== NAV ===== */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(2, 5, 10, 0.88);
+    backdrop-filter:blur(20px) saturate(1.5);
+    border-bottom:1px solid var(--line);
+    box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+  }
+  nav .inner{
+    max-width:1080px;margin:0 auto;padding:14px 28px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    color: var(--ink);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .nav-logo .accent {
+    color: var(--teal);
+  }
+  @media(max-width: 480px) {
+    .nav-logo {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
     }
-    .content-section h2, .content-section h3, .sidebar-h, .nav-logo .accent, .nav-ticker-item:hover, .nav-ticker-item.active { color: #4285f4 !important; }
-    .content-section hr { background: linear-gradient(90deg, #4285f4, transparent) !important; }
-    .sidebar-links a:hover::before, .sidebar-links a:hover { color: #4285f4 !important; }
-    #scroll-progress { background: #4285f4 !important; box-shadow: 0 0 10px #4285f4 !important; }
-    .nav-ticker-item:hover { text-shadow: 0 0 10px rgba(66,133,244,.12) !important; }
-    .nav-ticker-item.active { border-bottom: 1px solid #4285f4 !important; }
-    .btn-primary { background: #4285f4 !important; }
-    .btn-primary:hover { box-shadow: 0 0 30px rgba(66,133,244,.12) !important; }
-    .hero-eyebrow .pulse { background: #4285f4 !important; box-shadow: 0 0 10px #4285f4 !important; }
-  </style>
+  }
+  @media(max-width: 360px) {
+    .nav-logo {
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+  }
+  nav ul{list-style:none;display:flex;gap:26px;margin:0;padding:0;}
+  nav ul a{
+    color:var(--ink);text-decoration:none;font-size:14px;font-weight:500;
+    opacity:0.75;transition:opacity .15s, color .15s;
+  }
+  nav ul a:hover{opacity:1;color:var(--blue-deep); text-decoration: none;}
+  @media (max-width:720px){ nav ul{display:none;} }
 
-    <style>
-      .content-section h2 {
-        display: inline-block;
-        padding-bottom: 8px;
-        border-bottom: 1px solid #4285f440;
-        position: relative;
-        text-shadow: 0 0 20px rgba(66,133,244,.12);
-      }
-      .content-section h2::before {
-        content: '>>';
-        font-family: var(--font-mono);
-        color: #4285f4;
-        margin-right: 12px;
-        font-size: 1.5rem;
-        opacity: 0.7;
-        text-shadow: 0 0 10px #4285f480;
-      }
-      .content-section ul li {
-        position: relative;
-        padding-left: 20px;
-        list-style: none;
-      }
-      .content-section ul li::before {
-        content: '◈';
-        position: absolute;
-        left: 0;
-        top: 2px;
-        color: #4285f4;
-        font-size: 0.8rem;
-        opacity: 0.8;
-      }
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid #4285f430;
-      }
-    </style>
+  /* ===== HERO ===== */
+  .hero{padding:104px 0 80px;position:relative;overflow:hidden;border-bottom:1px solid var(--line);}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr 0.85fr;gap:48px;align-items:center;position:relative;z-index:2;}
+  @media (max-width:860px){ .hero .wrap{grid-template-columns:1fr;} }
+  .hero h1.title{
+    font-size:64px;
+    line-height:1.06;
+    font-weight:800;
+    color:var(--ink);
+    text-shadow: 0 0 30px rgba(66, 133, 244, 0.3);
+    text-transform: uppercase;
+  }
+  .hero h1.title em{font-style:normal; color:var(--blue-deep); text-shadow:0 0 20px rgba(66, 133, 244, 0.4);}
+  @media (max-width:540px){ .hero h1.title{font-size:42px;} }
+  .hero p.subtitle{font-size:17px;color:var(--ink-soft);margin-top:18px;max-width:620px;line-height:1.6;font-weight:300;}
+  .stat-row{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap;}
+  .stat .num{font-family:'Bebas Neue',sans-serif;font-weight:800;font-size:32px;color:var(--blue-deep);letter-spacing:1px;}
+  .stat .label{font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+
+  /* cloud pulse signature */
+  .cloud-stage{display:flex;justify-content:center;align-items:center;position:relative;}
+  .pulse-ring{
+    position:absolute;border-radius:50%;border:2px solid var(--cyan);
+    width:240px;height:240px;opacity:0;
+    animation:pulse 2.8s ease-out infinite;
+  }
+  .pulse-ring.r2{animation-delay:.9s;}
+  .pulse-ring.r3{animation-delay:1.8s;}
+  @keyframes pulse{
+    0%{ width:200px;height:200px;opacity:.55;}
+    100%{ width:440px;height:440px;opacity:0;}
+  }
+  @media (prefers-reduced-motion: reduce){ .pulse-ring{animation:none;display:none;} }
+  .cloud-icon{width:280px;height:280px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 35px rgba(66, 133, 244, 0.45)); transition: transform 0.3s ease;}
+  .cloud-icon:hover{transform: scale(1.05);}
+
+  /* ===== SECTION LABEL ===== */
+  .sec-label{
+    display:inline-flex;align-items:center;gap:9px;
+    background:var(--card);
+    padding:7px 15px;border-radius:20px;
+    margin-bottom:26px;
+    box-shadow:var(--shadow-sm);
+    border:1px solid var(--line);
+  }
+  .sec-label .dot{width:8px;height:8px;border-radius:50%;}
+  .sec-label span{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+
+  h2.h-title{font-size:38px;font-weight:800;margin-bottom:14px;color:var(--ink);letter-spacing:1px;text-shadow:0 0 20px rgba(255,255,255,0.05);}
+  @media (max-width:540px){ h2.h-title{font-size:28px;} }
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    box-shadow:var(--shadow-md);
+    backdrop-filter:blur(10px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(66, 133, 244, 0.3);
+    box-shadow:0 12px 30px rgba(66, 133, 244, 0.15);
+  }
+
+  p.body-text{max-width:680px; color:var(--ink-soft); margin-bottom:18px; font-size:15.5px; line-height:1.65; font-weight:300;}
+  p.body-text strong{color:var(--ink); font-weight:600;}
+
+  /* ===== HORIZONTAL TIMELINE ===== */
+  .timeline-scroll{overflow-x:auto; padding-bottom:18px; margin:0 -28px; padding-left:28px; padding-right:28px;}
+  .timeline-scroll::-webkit-scrollbar {
+    height: 6px;
+  }
+  .timeline-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .timeline-scroll::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 3px;
+  }
+  .timeline-svg-holder{
+    min-width:1080px;
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .timeline-svg-holder svg text {
+    fill: var(--ink) !important;
+  }
+  .timeline-svg-holder svg g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+
+  /* ===== DIAGRAM PANEL ===== */
+  .diagram-panel{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:30px; margin-top:10px; overflow-x:auto;
+    box-shadow:var(--shadow-md); backdrop-filter:blur(10px);
+  }
+  .diagram-panel g[fill="#161b22"] {
+    fill: var(--card) !important;
+  }
+  .diagram-panel text[fill="#e6edf3"] {
+    fill: var(--ink) !important;
+  }
+  .diagram-panel text[fill="#8b949e"] {
+    fill: var(--ink-soft) !important;
+  }
+  .diagram-caption{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--ink-soft);
+    margin-top:14px; padding-top:14px; border-top:1px dashed var(--line); line-height:1.6;
+  }
+
+  /* ===== CONCEPTS GRID ===== */
+  .grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:40px; border:none; background:none;}
+  .grid .card{padding:26px;}
+  .grid .card h3{font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--blue-deep); margin-bottom:9px; display:flex; align-items:center; gap:8px;}
+  .grid .card p{font-size:13.5px; color:var(--ink-soft); line-height:1.5; margin:0;}
+  @media(max-width:760px){.grid{grid-template-columns:1fr;}}
+
+  /* ===== STATS ROW ===== */
+  .stats-row{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin-top:40px; border:none; background:none;}
+  .stats-row .stat{padding:24px 20px;}
+  .stats-row .stat strong{display:block; font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--blue-deep); font-weight:700; letter-spacing:1px;}
+  .stats-row .stat span{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em;}
+  @media(max-width:760px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+
+  /* ===== USE CASES ===== */
+  .case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:44px;}
+  @media (max-width:860px){ .case-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .case-grid{grid-template-columns:1fr;} }
+  .case{overflow:hidden;display:flex;flex-direction:column;}
+  .case .img-wrap{aspect-ratio:16/10;overflow:hidden;background:var(--bg);}
+  .case .img-wrap svg{width:100%;height:100%;transition: transform 0.5s ease;}
+  .case:hover .img-wrap svg{transform:scale(1.05);}
+  .case .body{padding:16px 18px 20px;}
+  .case .body .tag{font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--blue-deep);}
+  .case .body h4{font-family:'DM Sans',sans-serif;font-size:16.5px;font-weight:700;margin:6px 0 6px;color:var(--ink);}
+  .case .body p{font-size:13.5px;color:var(--ink-soft);margin:0;line-height:1.55;}
+
+  /* ===== REFERENCES & COURSES ===== */
+  .ref-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;margin-top:30px;}
+  .ref-item{
+    padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .ref-item .rtitle{font-weight:600;font-size:14.5px;color:var(--ink);}
+  .ref-item .rdesc{font-size:13px;color:var(--ink-soft);margin-top:3px;}
+  .ref-item a.go{
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;text-decoration:none;
+    background:var(--bg);padding:7px 14px;border-radius:7px;white-space:nowrap;
+    border:1px solid var(--line);
+    color: var(--blue-deep);
+    transition: all 0.2s ease;
+  }
+  .ref-item a.go:hover{background:var(--blue);color:#fff;border-color:var(--blue); text-decoration: none;}
   
+  .course-strip{
+    margin-top:36px;border-radius:16px;
+    background:linear-gradient(120deg,var(--blue),rgba(52,168,83,0.6));
+    padding:30px 32px;color:#fff;
+    box-shadow:var(--shadow-md);
+  }
+  .course-strip h3{font-family:'Bebas Neue',sans-serif;font-size:24px;color:#fff;margin-bottom:14px;letter-spacing:1px;}
+  .course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media (max-width:760px){ .course-grid{grid-template-columns:1fr;} }
+  .course-item{
+    background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
+    border-radius:10px;padding:14px 16px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .course-item:hover{
+    transform:translateY(-2px);
+    background:rgba(255,255,255,0.12);
+  }
+  .course-item a{color:#fff;text-decoration:none;font-weight:600;font-size:14px;}
+  .course-item a:hover{text-decoration: underline;}
+  .course-item p{color:rgba(255,255,255,0.8);font-size:12.5px;margin:6px 0 0;line-height:1.5;}
 
-    <style>
-      .content-section p {
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), transparent);
-        padding: 18px 24px;
-        border-radius: 4px;
-        border-left: 2px solid var(--green);
-        line-height: 1.8;
-      }
-      /* RICH UX CLASSES */
-      .info-card {
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 8px;
-        padding: 24px;
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
-        margin-bottom: 25px;
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-      .info-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        border-color: var(--green);
-      }
-      .ic-icon { font-size: 2.5rem; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; }
-      .ic-content p { margin-bottom: 15px; border: none; padding: 0; background: none; }
-      
-      .hl-box {
-        background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
-        border-left: 4px solid var(--green);
-        padding: 24px 30px;
-        border-radius: 0 8px 8px 0;
-        margin: 25px 0;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      }
+  footer{padding:40px 0 50px;border-top:1px solid var(--line);margin-top:30px;background:rgba(6, 13, 22, 0.6); text-align: left; color: var(--ink-soft); font-family: 'DM Sans', sans-serif;}
+  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  footer p{font-size:12.5px;color:var(--ink-soft);margin:0;}
 
-      .app-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
-        margin: 25px 0;
-      }
-      .app-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 22px;
-        border-radius: 8px;
-        transition: all 0.3s;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .app-card:hover {
-        border-color: var(--green);
-        background: rgba(255,255,255,0.03);
-        transform: translateY(-4px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-      }
-      .ac-icon { font-size: 2.2rem; margin-bottom: 5px; }
-      .ac-title { font-family: var(--font-mono); color: #fff; font-size: 0.9rem; letter-spacing: 1.5px; text-transform: uppercase; }
-      .ac-desc { font-size: 0.85rem; color: var(--text2); line-height: 1.5; }
+  .reveal{opacity:0; transform:translateY(16px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
 
-      .feature-list {
-        list-style: none !important;
-        padding: 0 !important;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-        margin: 25px 0 !important;
-      }
-      .feature-list li {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        padding: 18px;
-        border-radius: 8px;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        transition: transform 0.2s;
-      }
-      .feature-list li:hover {
-        transform: scale(1.02);
-        border-color: var(--green);
-      }
-      .feature-list li::before { display: none !important; }
-      .fl-icon { font-size: 1.8rem; color: var(--green); background: rgba(255,255,255,0.05); padding: 12px; border-radius: 50%; }
-      .fl-text { display: flex; flex-direction: column; gap: 6px; }
-      .fl-text strong { font-size: 0.95rem; color: #fff; letter-spacing: 0.5px; }
-      .fl-text span { font-size: 0.85rem; color: var(--text2); line-height: 1.4; }
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--cyan);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: width .15s, height .15s, background .15s;
+    mix-blend-mode: screen;
+  }
+  #cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(66, 133, 244, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: width .25s, height .25s, border-color .25s;
+  }
+  .cursor-big #cursor { width: 18px; height: 18px; background: var(--blue-deep); }
+  .cursor-big #cursor-ring { width: 56px; height: 56px; border-color: var(--blue-deep); }
 
-      @media (max-width: 768px) {
-        .feature-list { grid-template-columns: 1fr; }
-        .info-card { flex-direction: column; }
-      }
-    
-      /* HOVER EFFECTS FOR APP CARDS AND FEATURE LISTS */
-      .app-card {
-        position: relative;
-        overflow: hidden;
-        min-height: 160px;
-        display: block;
-        padding: 0;
-      }
-      .ac-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .ac-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-        padding: 22px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .app-card:hover .ac-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
+  /* ─── SCROLL PROGRESS ─── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--blue), var(--cyan), var(--blue-deep));
+    z-index: 10000;
+    box-shadow: 0 0 10px var(--blue);
+  }
 
-      .feature-list li {
-        position: relative;
-        overflow: hidden;
-        min-height: 120px;
-        display: block;
-        padding: 0;
-        text-align: center;
-      }
-      .fl-front {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-front {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      .fl-back {
-        position: absolute; inset: 0;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        padding: 18px;
-        background: rgba(255,255,255,0.02);
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.3s, transform 0.4s cubic-bezier(.165, .84, .44, 1);
-      }
-      .feature-list li:hover .fl-back {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      .fl-front .fl-icon { margin-bottom: 10px; }
-      .fl-front strong { margin-bottom: 0; }
+  /* ─── PARTICLE CANVAS ─── */
+  #particles-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+  }
 
-    </style>
+  /* ─── MENU TOGGLE ─── */
+  #menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 2001;
+    padding: 10px;
+  }
+  #menu-toggle span {
+    display: block;
+    width: 28px;
+    height: 2px;
+    background: var(--blue-deep);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  #menu-toggle span:nth-child(2) { width: 18px; align-self: flex-end; }
+  #menu-toggle:hover span:nth-child(2) { width: 28px; }
+
+  #menu-toggle.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); width: 28px; }
+  #menu-toggle.active span:nth-child(2) { opacity: 0; transform: translateX(20px); }
+  #menu-toggle.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); width: 28px; }
+
+  @media (max-width: 720px) {
+    #menu-toggle { display: flex; }
+  }
+
+  /* ─── MOBILE MENU ─── */
+  #mobile-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.98);
+    backdrop-filter: blur(20px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #mobile-menu.active { transform: translateX(0); }
+  .mm-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    text-align: center;
+    width: 100%;
+  }
+  .mm-content a {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  #mobile-menu.active .mm-content a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #mobile-menu.active .mm-content a:nth-child(1) { transition-delay: 0.1s; }
+  #mobile-menu.active .mm-content a:nth-child(2) { transition-delay: 0.2s; }
+  #mobile-menu.active .mm-content a:nth-child(3) { transition-delay: 0.3s; }
+  #mobile-menu.active .mm-content a:nth-child(4) { transition-delay: 0.4s; }
+  #mobile-menu.active .mm-content a:nth-child(5) { transition-delay: 0.5s; }
+  #mobile-menu.active .mm-content a:nth-child(6) { transition-delay: 0.6s; }
+
+  .mm-content a:hover { color: var(--blue-deep); transform: scale(1.05); letter-spacing: 10px; }
+
+  /* ─── CLI TERMINAL ─── */
+  #terminal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 5, 10, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+    display: none;
+    flex-direction: column;
+    padding: 40px;
+    font-family: var(--mono);
+    color: var(--blue);
+    text-align: left;
+  }
+  #terminal-overlay.active { display: flex; }
+
+  .term-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    opacity: 0.7;
+  }
+  #term-output {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .term-line { display: block; }
+  .term-line.cmd { color: var(--cyan); }
+  .term-line.cmd::before { content: "> "; }
+  .term-line.res { color: var(--ink-soft); }
+  .term-line.error { color: var(--blue-deep); }
+
+  .term-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px 20px;
+    border: 1px solid var(--line);
+  }
+  .term-prompt { color: var(--cyan); font-weight: bold; }
+  #term-input {
+    background: transparent;
+    border: none;
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+  }
+
+  /* CLI TRIGGER BUTTON */
+  .cli-trigger {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    z-index: 9995;
+    width: 64px; height: 64px;
+    background: rgba(66, 133, 244, 0.03);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(66, 133, 244, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    cursor: pointer;
+    box-shadow: 
+      inset 0 0 20px rgba(66, 133, 244, 0.05),
+      0 0 30px rgba(66, 133, 244, 0.2);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .cli-trigger::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(from 0deg, transparent, var(--blue), transparent, var(--cyan), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: cliRotate 4s linear infinite;
+  }
+
+  @keyframes cliRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
+
+  .cli-trigger span {
+    filter: drop-shadow(0 0 15px var(--blue));
+    animation: cliFloat 3s ease-in-out infinite;
+    display: block;
+  }
+
+  @keyframes cliFloat {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.1) translateY(-5px); }
+  }
+
+  .cli-trigger:hover { 
+    transform: scale(1.1) translateY(-5px);
+    background: rgba(66, 133, 244, 0.08);
+    box-shadow: 
+      inset 0 0 30px rgba(66, 133, 244, 0.1),
+      0 0 50px rgba(66, 133, 244, 0.4);
+  }
+  .cli-trigger:hover::before {
+    animation-duration: 1.5s;
+  }
+  @media(max-width: 768px) {
+    .cli-trigger { 
+      bottom: 25px; 
+      left: 20px; 
+      right: auto; 
+      width: 48px; 
+      height: 48px; 
+      font-size: 1.6rem;
+    }
+  }
+
+  /* ─── HUD SCANNER FRAME ─── */
+  .hud-frame {
+    position: fixed;
+    inset: 16px;
+    pointer-events: none;
+    z-index: 9998;
+    transition: inset 0.3s;
+  }
+
+  .hud-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(66, 133, 244, 0.08);
+    box-shadow: inset 0 0 20px rgba(66, 133, 244, 0.03);
+    pointer-events: none;
+  }
+
+  .hud-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--blue);
+    transition: border-color 0.3s;
+  }
+
+  .hud-corner.top-left {
+    top: 0; left: 0;
+    border-right: none; border-bottom: none;
+  }
+
+  .hud-corner.top-right {
+    top: 0; right: 0;
+    border-left: none; border-bottom: none;
+  }
+
+  .hud-corner.bottom-left {
+    bottom: 0; left: 0;
+    border-right: none; border-top: none;
+  }
+
+  .hud-corner.bottom-right {
+    bottom: 0; right: 0;
+    border-left: none; border-top: none;
+  }
+
+  .hud-tag {
+    font-family: var(--mono);
+    font-size: 8px;
+    color: var(--blue-deep);
+    position: absolute;
+    white-space: nowrap;
+    letter-spacing: 1px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .top-left .hud-tag { top: -14px; left: 0; }
+  .top-right .hud-tag { top: -14px; right: 0; text-align: right; }
+  .bottom-left .hud-tag { bottom: -14px; left: 0; }
+  .bottom-right .hud-tag { bottom: -14px; right: 0; text-align: right; }
+
+  @media (max-width: 768px) {
+    .hud-frame {
+      inset: 8px;
+    }
+    .hud-tag {
+      display: none;
+    }
+  }
+
+  a, button { cursor: none !important; }
+</style>
+<script>window.TECH_THEME_COLOR = '#4285f4';</script>
 </head>
 <body>
 
@@ -244,95 +662,30 @@
 <!-- PARTICLE CANVAS -->
 <canvas id="particles-canvas"></canvas>
 
-<!-- ─── SMART NAV ─── -->
-<div class="smart-nav">
-  <nav id="navbar">
+<!-- HUD VIEWPORT FRAME -->
+<div class="hud-frame">
+  <div class="hud-corner top-left"><span class="hud-tag">SYS_ACTIVE</span></div>
+  <div class="hud-corner top-right"><span class="hud-tag">USCS_OS v1.0.4</span></div>
+  <div class="hud-corner bottom-left"><span class="hud-tag">GRID_SEC_X9</span></div>
+  <div class="hud-corner bottom-right"><span class="hud-tag">E-WALL_HUD</span></div>
+</div>
+
+<!-- ---------- NAV ---------- -->
+<nav id="navbar">
+  <div class="inner">
     <a href="../index.html#home" class="nav-logo">USCS<span class="accent"> E-WALL</span></a>
-    <div class="nav-links">
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#wall">The Wall</a>
-      <a href="../index.html#materials">Materials</a>
-      <a href="../index.html#impact">Impact</a>
-      <a href="../index.html#creators">Team</a>
-    </div>
+    <ul>
+      <li><a href="#history">History</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#usecases">Use cases</a></li>
+      <li><a href="#learn">Learn</a></li>
+      <li><a href="#refs">References</a></li>
+    </ul>
     <button id="menu-toggle" aria-label="Toggle Menu">
       <span></span><span></span><span></span>
     </button>
-  </nav>
-
-  <div class="nav-ticker">
-    <div class="nav-ticker-track">
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-      <a href="onedrive.html" class="nav-ticker-item">One Drive</a><span class="sep">◈</span>
-      <a href="docker.html" class="nav-ticker-item">Docker</a><span class="sep">◈</span>
-      <a href="googledrive.html" class="nav-ticker-item">Google Drive</a><span class="sep">◈</span>
-      <a href="aws.html" class="nav-ticker-item">AWS</a><span class="sep">◈</span>
-      <a href="powerbi.html" class="nav-ticker-item">Power BI</a><span class="sep">◈</span>
-      <a href="mysql.html" class="nav-ticker-item">MySQL</a><span class="sep">◈</span>
-      <a href="mongodb.html" class="nav-ticker-item">MongoDB</a><span class="sep">◈</span>
-      <a href="vscode.html" class="nav-ticker-item">VS Code</a><span class="sep">◈</span>
-      <a href="github.html" class="nav-ticker-item">GitHub</a><span class="sep">◈</span>
-      <a href="kalilinux.html" class="nav-ticker-item">Kali Linux</a><span class="sep">◈</span>
-      <a href="encryption.html" class="nav-ticker-item">Encryption</a><span class="sep">◈</span>
-      <a href="linux.html" class="nav-ticker-item">Linux</a><span class="sep">◈</span>
-      <a href="bugbounty.html" class="nav-ticker-item">Bug Bounty</a><span class="sep">◈</span>
-      <a href="firewall.html" class="nav-ticker-item">Firewall</a><span class="sep">◈</span>
-      <a href="gemini.html" class="nav-ticker-item">Gemini</a><span class="sep">◈</span>
-      <a href="google.html" class="nav-ticker-item">Google</a><span class="sep">◈</span>
-      <a href="kafka.html" class="nav-ticker-item">Kafka</a><span class="sep">◈</span>
-      <a href="hadoop.html" class="nav-ticker-item">Hadoop</a><span class="sep">◈</span>
-      <a href="golang.html" class="nav-ticker-item">Go Lang</a><span class="sep">◈</span>
-      <a href="php.html" class="nav-ticker-item">PHP</a><span class="sep">◈</span>
-      <a href="html.html" class="nav-ticker-item">HTML</a><span class="sep">◈</span>
-      <a href="css.html" class="nav-ticker-item">CSS</a><span class="sep">◈</span>
-      <a href="javascript.html" class="nav-ticker-item">JS</a><span class="sep">◈</span>
-      <a href="streamlit.html" class="nav-ticker-item">Streamlit</a><span class="sep">◈</span>
-      <a href="binary.html" class="nav-ticker-item">Binary</a><span class="sep">◈</span>
-      <a href="assembly.html" class="nav-ticker-item">Assembly</a><span class="sep">◈</span>
-      <a href="fortran.html" class="nav-ticker-item">Fortran</a><span class="sep">◈</span>
-      <a href="cobol.html" class="nav-ticker-item">COBOL</a><span class="sep">◈</span>
-      <a href="c.html" class="nav-ticker-item">C</a><span class="sep">◈</span>
-      <a href="cpp.html" class="nav-ticker-item">C++</a><span class="sep">◈</span>
-      <a href="csharp.html" class="nav-ticker-item">C#</a><span class="sep">◈</span>
-      <a href="python.html" class="nav-ticker-item">Python</a><span class="sep">◈</span>
-      <a href="wifi.html" class="nav-ticker-item">WiFi</a><span class="sep">◈</span>
-      <a href="dinogame.html" class="nav-ticker-item">Dino Game</a><span class="sep">◈</span>
-    </div>
   </div>
-</div>
+</nav>
 
 <!-- MOBILE MENU OVERLAY -->
 <div id="mobile-menu">
@@ -345,308 +698,362 @@
   </div>
 </div>
 
-<!-- ─── SUBPAGE HERO ─── -->
-<section class="page-hero section-z">
-  <div class="hero-orb o1"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content-wrap" style="display: flex; align-items: center; justify-content: center; gap: 40px; text-align: left; flex-wrap: wrap; margin-top: 20px;">
-    <div class="reveal in d1" style="background: rgba(66,133,244,.12); border: 1px solid #4285f440; padding: 30px; border-radius: 28px; box-shadow: 0 15px 40px rgba(66,133,244,.12); display: flex; align-items: center; justify-content: center;">
-      <img src="../icon/google.png" style="width: 110px; height: 110px; object-fit: contain; filter: drop-shadow(0 0 20px #4285f4);" class="tech-hero-img">
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-      <div class="hero-eyebrow reveal in d2" style="border-color: #4285f440; background: rgba(66,133,244,.12); color: #4285f4; margin-bottom: 15px;">
-        <span class="pulse" style="background: #4285f4; animation: none; box-shadow: 0 0 10px #4285f4;"></span>
-        DOCUMENTATION ARCHIVE
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">search · advertising · cloud · AI · est. 1998</div>
+      <h1 class="title">A Stanford dorm-room project that became the index of the <em>entire internet</em>.</h1>
+      <p class="subtitle">Google began as "BackRub," a research project ranking web pages by their links rather than just keyword matches. That single insight — PageRank — grew into the world's dominant search engine and, eventually, the sprawling Alphabet conglomerate. This page covers where it came from, how its core search algorithm actually works, where the company operates today, and where to learn more.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="num">Jan 1996</div><div class="label">Research Project</div></div>
+        <div class="stat"><div class="num">Sep 1998</div><div class="label">Incorporated</div></div>
+        <div class="stat"><div class="num">Page & Brin</div><div class="label">Founders</div></div>
+        <div class="stat"><div class="num">Alphabet</div><div class="label">Parent Co. (2015)</div></div>
       </div>
-      <h1 class="reveal in d3" style="margin-bottom: 0; font-size: clamp(3rem, 7vw, 4.5rem); line-height: 1; letter-spacing: 2px; text-shadow: 0 0 30px rgba(66,133,244,.12);">
-        <span style="color: #fff;">Google</span>
-      </h1>
-      <p class="hero-tech-desc reveal in d4" style="margin-top: 15px; margin-bottom: 0; font-size: 1rem; color: var(--text2); max-width: 400px; font-weight: 300; line-height: 1.6; border-left: 2px solid rgba(255,255,255,0.1); padding-left: 15px;">The world's leading search engine and technology pioneer.</p>
+    </div>
+    <div class="cloud-stage">
+      <div class="pulse-ring r1"></div>
+      <div class="pulse-ring r2"></div>
+      <div class="pulse-ring r3"></div>
+      <img src="../icon/google.png" class="cloud-icon" alt="Google Logo">
+    </div>
+  </div>
+</header>
+
+<!-- ================= HISTORY ================= -->
+<section id="history">
+  <div class="wrap reveal">
+    <div class="sec-label"><span class="dot" style="background:var(--blue)"></span><span>01 — Origin</span></div>
+    <h2 class="h-title">From "BackRub" to a garage, to the world's most-used website</h2>
+    <p class="lead">The whole company traces back to a PhD dissertation topic that almost wasn't chosen.</p>
+
+    <p class="body-text">In <strong>1995</strong>, <strong>Larry Page</strong>, a computer science PhD student at Stanford, was searching for a dissertation topic and — on his advisor's encouragement — chose to study the link structure of the World Wide Web as a giant graph. Fellow Stanford student <strong>Sergey Brin</strong> joined his research project, nicknamed <strong>"BackRub,"</strong> which began crawling the web in <strong>March 1996</strong>. The pair, along with early collaborator <strong>Scott Hassan</strong>, developed the <strong>PageRank</strong> algorithm — instead of simply counting keyword matches, it treated each link to a page as a "vote" for that page's importance, producing dramatically more relevant results than existing search engines.</p>
+
+    <p class="body-text">Their 1998 paper, <strong>"The Anatomy of a Large-Scale Hypertextual Web Search Engine,"</strong> became one of the most downloaded academic papers in history. The growing project strained Stanford's infrastructure, so Page and Brin raised about $1 million from family, friends, and investors — including an early $100,000 check from Sun Microsystems co-founder <strong>Andy Bechtolsheim</strong>, written before the company even legally existed. On <strong>September 4, 1998</strong>, Page and Brin formally incorporated <strong>Google Inc.</strong> in a friend's garage in Menlo Park, California. The name was a deliberate misspelling of <strong>"googol"</strong> — the number 1 followed by 100 zeros — reflecting their ambition to organize an enormous amount of information.</p>
+
+    <p class="body-text">Growth was explosive: by the end of 1998 Google had indexed roughly 60 million pages; within a year it was processing 500,000 queries a day. The company moved to <strong>Mountain View, California</strong> in 2003, the location of its "Googleplex" headquarters ever since. Google went public in <strong>August 2004</strong>. Major expansions followed quickly — <strong>Gmail</strong> (2004), <strong>Google Maps</strong> (2005), the <strong>$1.65 billion acquisition of YouTube</strong> (2006), and <strong>Google Chrome</strong> (2008). In <strong>2015</strong>, Google reorganized under a new holding company, <strong>Alphabet Inc.</strong>, separating its core internet products from more experimental "Other Bets" ventures. Page and Brin stepped back from day-to-day leadership in <strong>December 2019</strong>, handing the CEO role to <strong>Sundar Pichai</strong>.</p>
+
+    <div class="timeline-scroll">
+      <div class="timeline-svg-holder">
+        <svg width="1080" height="240" viewBox="0 0 1080 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Timeline of Google's history from 1996 to 2015">
+          <line x1="40" y1="120" x2="1040" y2="120" stroke="#262837" stroke-width="2"/>
+          <g font-family="IBM Plex Mono, monospace">
+            <!-- 1996 BackRub -->
+            <circle cx="70" cy="120" r="7" fill="var(--amber)"/>
+            <line x1="70" y1="120" x2="70" y2="74" stroke="#262837" stroke-width="1.5"/>
+            <text x="70" y="62" fill="#eaecf4" font-size="12" text-anchor="middle" font-weight="600">1996</text>
+            <text x="70" y="150" fill="#8c8fa6" font-size="10.5" text-anchor="middle">"BackRub" project</text>
+            <text x="70" y="163" fill="#8c8fa6" font-size="10.5" text-anchor="middle">begins at Stanford</text>
+
+            <!-- 1998 incorporated -->
+            <circle cx="250" cy="120" r="9" fill="var(--blue)" stroke="#0a0b10" stroke-width="3"/>
+            <line x1="250" y1="120" x2="250" y2="74" stroke="#262837" stroke-width="1.5"/>
+            <text x="250" y="62" fill="#eaecf4" font-size="13" text-anchor="middle" font-weight="700">Sep 1998</text>
+            <text x="250" y="150" fill="#eaecf4" font-size="12" text-anchor="middle" font-weight="700">Google Inc. founded</text>
+            <text x="250" y="163" fill="#8c8fa6" font-size="10.5" text-anchor="middle">in a Menlo Park garage</text>
+
+            <!-- 2003 Mountain View -->
+            <circle cx="420" cy="120" r="6" fill="var(--cyan)"/>
+            <line x1="420" y1="120" x2="420" y2="166" stroke="#262837" stroke-width="1.5"/>
+            <text x="420" y="62" fill="#8c8fa6" font-size="11" text-anchor="middle">2003</text>
+            <text x="420" y="182" fill="#eaecf4" font-size="11.5" text-anchor="middle" font-weight="600">Moves to</text>
+            <text x="420" y="195" fill="#8c8fa6" font-size="10.5" text-anchor="middle">Mountain View, CA</text>
+
+            <!-- 2004 IPO + Gmail -->
+            <circle cx="580" cy="120" r="7" fill="var(--blue)"/>
+            <line x1="580" y1="120" x2="580" y2="74" stroke="#262837" stroke-width="1.5"/>
+            <text x="580" y="62" fill="#eaecf4" font-size="12" text-anchor="middle" font-weight="600">2004</text>
+            <text x="580" y="150" fill="#eaecf4" font-size="12" text-anchor="middle" font-weight="600">IPO &amp; Gmail launch</text>
+            <text x="580" y="163" fill="#8c8fa6" font-size="10.5" text-anchor="middle">lists on NASDAQ</text>
+
+            <!-- 2006 YouTube -->
+            <circle cx="730" cy="120" r="6" fill="var(--cyan)"/>
+            <line x1="730" y1="120" x2="730" y2="166" stroke="#262837" stroke-width="1.5"/>
+            <text x="730" y="62" fill="#8c8fa6" font-size="11" text-anchor="middle">2006</text>
+            <text x="730" y="182" fill="#eaecf4" font-size="11.5" text-anchor="middle" font-weight="600">Acquires YouTube</text>
+            <text x="730" y="195" fill="#8c8fa6" font-size="10.5" text-anchor="middle">$1.65 billion</text>
+
+            <!-- 2008 Chrome -->
+            <circle cx="880" cy="120" r="6" fill="var(--amber)"/>
+            <line x1="880" y1="120" x2="880" y2="74" stroke="#262837" stroke-width="1.5"/>
+            <text x="880" y="62" fill="#8c8fa6" font-size="11" text-anchor="middle">2008</text>
+            <text x="880" y="150" fill="#eaecf4" font-size="12" text-anchor="middle" font-weight="600">Chrome launches</text>
+
+            <!-- 2015 Alphabet -->
+            <circle cx="1010" cy="120" r="9" fill="var(--blue)" stroke="#0a0b10" stroke-width="3"/>
+            <line x1="1010" y1="120" x2="1010" y2="166" stroke="#262837" stroke-width="1.5"/>
+            <text x="1010" y="62" fill="#8c8fa6" font-size="11" text-anchor="middle">2015</text>
+            <text x="1010" y="182" fill="#eaecf4" font-size="12.5" text-anchor="middle" font-weight="700">Alphabet Inc. formed</text>
+            <text x="1010" y="195" fill="#8c8fa6" font-size="10.5" text-anchor="middle">Google becomes a subsidiary</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><strong>1998</strong><span>Year founded</span></div>
+      <div class="stat"><strong>$1M</strong><span>Original seed funding</span></div>
+      <div class="stat"><strong>60M</strong><span>Pages indexed by end of '98</span></div>
+      <div class="stat"><strong>90%+</strong><span>Global search market share*</span></div>
     </div>
   </div>
 </section>
 
-<div class="subpage-container section-z" style="position: relative; overflow: hidden;">
-<div class="tech-watermark" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%) rotate(-5deg); font-family: var(--font-disp); font-size: clamp(8rem, 20vw, 25rem); color: #4285f4; opacity: 0.03; pointer-events: none; z-index: -1; white-space: nowrap; user-select: none;">Google</div>
-  
-  <!-- SIDEBAR NAVIGATION -->
-  <aside class="sidebar">
-    <span class="sidebar-h">CONTENTS</span>
-    <ul class="sidebar-links">
-      <li><a href="#history">History</a></li>
-      <li><a href="#why">Why Use This?</a></li>
-      <li><a href="#applications">Applications</a></li>
-      <li><a href="#facts">Key Facts</a></li>
-      <li><a href="#learn">Resources</a></li>
-    </ul>
-  </aside>
+<!-- ================= HOW IT WORKS ================= -->
+<section id="how">
+  <div class="wrap reveal">
+    <div class="sec-label"><span class="dot" style="background:var(--teal)"></span><span>02 — Mechanics</span></div>
+    <h2 class="h-title">The core idea: links as votes</h2>
+    <p class="lead">PageRank's breakthrough was treating the web itself as a kind of democracy — a page is important if other important pages link to it.</p>
 
-  <!-- CONTENT ARTICLES -->
-  <main class="content-section">
+    <div class="diagram-panel">
+      <svg width="100%" height="340" viewBox="0 0 940 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of how PageRank ranks web pages based on incoming links">
+        <g font-family="Inter">
+          <!-- nodes -->
+          <circle cx="160" cy="80" r="26" fill="#15161f" stroke="#262837" stroke-width="1.5"/>
+          <text x="160" y="85" fill="#eaecf4" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">Page A</text>
 
-    <section id="history">
-      <h2>History</h2>
-      <div class="info-card">
-        <div class="ic-icon">🕰️</div>
-        <div class="ic-content">
-          <p>Google was founded on September 4, 1998 by Larry Page and Sergey Brin as a Stanford University PhD project. The name derives from 'googol' (10^100), reflecting the mission to organize vast information. The PageRank algorithm, which ranked pages by the number and quality of links pointing to them, was revolutionary. Google went public in August 2004. Alphabet Inc. was created as Google's parent company in 2015. Google now processes over 8.5 billion searches per day.</p>
-        </div>
-      </div>
-    </section>
+          <circle cx="320" cy="170" r="26" fill="#15161f" stroke="#262837" stroke-width="1.5"/>
+          <text x="320" y="175" fill="#eaecf4" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">Page B</text>
 
-    
+          <circle cx="160" cy="260" r="26" fill="#15161f" stroke="#262837" stroke-width="1.5"/>
+          <text x="160" y="265" fill="#eaecf4" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">Page C</text>
 
-    <section id="why">
-      <h2>Why We Use Google</h2>
-      <div class="hl-box">
-        Google's search algorithms consider hundreds of factors including content quality, page speed, mobile-friendliness, backlinks, and increasingly AI-powered relevance signals (MUM, BERT, RankBrain). For developers and businesses, understanding Google's ecosystem — Search Console, Ads, Analytics, Cloud, and APIs — is essential.
-      </div>
-    </section>
+          <circle cx="480" cy="120" r="26" fill="#15161f" stroke="#262837" stroke-width="1.5"/>
+          <text x="480" y="125" fill="#eaecf4" font-size="11" text-anchor="middle" font-family="IBM Plex Mono">Page D</text>
 
-    <section id="applications">
-      <h2>Applications &amp; Use Cases</h2>
-      <div class="app-grid">
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">⚙️</span>
-            <span class="ac-title">Web search (8.5...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Web search (8.5 billion daily queries)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🔌</span>
-            <span class="ac-title">Google Ads (pay-per-click...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Google Ads (pay-per-click digital advertising)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🗄️</span>
-            <span class="ac-title">Google Analytics (website...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Google Analytics (website traffic analysis)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🐍</span>
-            <span class="ac-title">Google Maps and navigation</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Google Maps and navigation</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🚀</span>
-            <span class="ac-title">YouTube (video hosting,...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">YouTube (video hosting, owned by Google)</span>
-          </div>
-        </div>
-        <div class="app-card">
-          <div class="ac-front">
-            <span class="ac-icon">🛠️</span>
-            <span class="ac-title">Google Cloud Platform...</span>
-          </div>
-          <div class="ac-back">
-            <span class="ac-desc">Google Cloud Platform (compute, storage, AI)</span>
-          </div>
-        </div>
-        
-      </div>
-    </section>
+          <!-- the important page, larger -->
+          <circle cx="620" cy="200" r="44" fill="#0f1018" stroke="var(--blue)" stroke-width="3"/>
+          <text x="620" y="195" fill="var(--blue)" font-size="12.5" text-anchor="middle" font-family="IBM Plex Mono" font-weight="700">Page E</text>
+          <text x="620" y="212" fill="var(--amber)" font-size="10.5" text-anchor="middle" font-family="IBM Plex Mono">HIGH RANK</text>
 
-    <section id="facts">
-      <h2>Key Facts &amp; Features</h2>
-      <ul class="feature-list">
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🧠</span>
-            <strong>Google holds ~92%</strong>
-          </div>
-          <div class="fl-back">
-            <span>Google holds ~92% global search market share</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">🎯</span>
-            <strong>Core Web Vitals</strong>
-          </div>
-          <div class="fl-back">
-            <span>Core Web Vitals measure user experience signals for SEO</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚡</span>
-            <strong>BERT (2019) and MUM (2021)</strong>
-          </div>
-          <div class="fl-back">
-            <span>AI models improving search understanding</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">⚠️</span>
-            <strong>Knowledge Graph contains</strong>
-          </div>
-          <div class="fl-back">
-            <span>Knowledge Graph contains 500+ billion facts about real-world entities</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">📌</span>
-            <strong>Google Search Console</strong>
-          </div>
-          <div class="fl-back">
-            <span>Google Search Console is free for webmasters to monitor site performance</span>
-          </div>
-        </li>
-        <li>
-          <div class="fl-front">
-            <span class="fl-icon">💡</span>
-            <strong>Google processes 2+</strong>
-          </div>
-          <div class="fl-back">
-            <span>Google processes 2+ trillion searches per year globally</span>
-          </div>
-        </li>
-        
-      </ul>
-    </section>
+          <!-- arrows pointing into E -->
+          <line x1="184" y1="92" x2="585" y2="185" stroke="var(--blue)" stroke-width="1.5"/>
+          <polygon points="580,178 590,184 582,192" fill="var(--blue)"/>
 
-    <section id="learn">
-      <h2>Where to Learn</h2>
+          <line x1="344" y1="182" x2="582" y2="198" stroke="var(--blue)" stroke-width="1.5"/>
+          <polygon points="578,192 590,198 580,205" fill="var(--blue)"/>
 
-      <h3>Online Courses</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Google%20Google%20Digital%20Garage', '_blank')" style="cursor: pointer;" title="Go to Google Digital Garage">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>Google Digital Garage</strong>
-          </div>
-          <div class="fl-back">
-            <span>Fundamentals of Digital Marketing (free, certified)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Google%20Google%20Analytics%20Academy%20(analytics.google.com%2Flearn)', '_blank')" style="cursor: pointer;" title="Go to Google Analytics Academy (analytics.google.com/learn)">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>Google Analytics Academy (analytics.google.com/learn)</strong>
-          </div>
-          <div class="fl-back">
-            <span>Google Analytics Academy (analytics.google.com/learn)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Google%20Coursera', '_blank')" style="cursor: pointer;" title="Go to Coursera">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>Coursera</strong>
-          </div>
-          <div class="fl-back">
-            <span>Google IT Support Professional Certificate</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Google%20Google%20Search%20Central', '_blank')" style="cursor: pointer;" title="Go to Google Search Central">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📙</span>
-            <strong>Google Search Central</strong>
-          </div>
-          <div class="fl-back">
-            <span>SEO Documentation (developers.google.com/search)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
+          <line x1="184" y1="252" x2="582" y2="215" stroke="var(--blue)" stroke-width="1.5"/>
+          <polygon points="578,210 590,213 582,222" fill="var(--blue)"/>
 
-      <h3>Books &amp; References</h3>
-      <ul class="feature-list" style="margin-top: 15px !important;">
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Google%20'In%20The%20Plex'', '_blank')" style="cursor: pointer;" title="Go to 'In The Plex'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">🎓</span>
-            <strong>'In The Plex'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Steven Levy (history of Google)</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Google%20'SEO%202024'', '_blank')" style="cursor: pointer;" title="Go to 'SEO 2024'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">💻</span>
-            <strong>'SEO 2024'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Adam Clarke</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-        <li onclick="window.open('https://duckduckgo.com/?q=!ducky+Google%20'Google%20Analytics%20Breakthrough'', '_blank')" style="cursor: pointer;" title="Go to 'Google Analytics Breakthrough'">
-          
-          <div class="fl-front">
-            <span class="fl-icon">📘</span>
-            <strong>'Google Analytics Breakthrough'</strong>
-          </div>
-          <div class="fl-back">
-            <span>Feras Alhlou, Shiraz Asif & Eric Fettman</span>
-          </div>
-        
-          <div style="position: absolute; top: 12px; right: 12px; opacity: 0.3; font-size: 1.1rem; font-family: var(--font-mono);" class="link-arrow">↗</div>
-        </li>
-              </ul>
-    </section>
-  </main>
-</div>
+          <line x1="504" y1="135" x2="600" y2="175" stroke="var(--blue)" stroke-width="1.5"/>
+          <polygon points="595,168 605,174 597,182" fill="var(--blue)"/>
 
-<!-- ─── FOOTER ─── -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <span class="f-brand-name">USCS<span class="a"> E-WALL</span></span>
-      <p>An e-waste art installation by <strong>USCS (Uttaranchal School of Computing Sciences)</strong>, celebrating the IT field through creative reuse of technology.</p>
+          <!-- B also links to A, lesser weight -->
+          <line x1="300" y1="150" x2="180" y2="100" stroke="#262837" stroke-width="1.5"/>
+          <polygon points="184,108 175,98 188,98" fill="#262837"/>
+
+          <!-- legend box -->
+          <rect x="40" y="290" width="860" height="40" rx="8" fill="#0f1018" stroke="#262837" stroke-dasharray="3,3"/>
+          <text x="60" y="315" fill="#c4c7d6" font-size="12" font-family="IBM Plex Mono">Pages A, B, C, D all link to Page E → Page E inherits authority from each of them, ranking it highest</text>
+        </g>
+      </svg>
+      <p class="diagram-caption">PageRank recursively weighs each link by the importance of the page sending it — a link from a well-linked page counts more than a link from an obscure one, which is what made early Google results dramatically more relevant than competitors.</p>
     </div>
-    <div>
-      <div class="f-col-h">Navigate</div>
-      <ul class="f-lnks">
-        <li><a href="../index.html#about">About Project</a></li>
-        <li><a href="../index.html#wall">Interactive Wall</a></li>
-        <li><a href="../index.html#materials">Raw Materials</a></li>
-        <li><a href="../index.html#impact">Our Impact</a></li>
-        <li><a href="../index.html#creators">The Team</a></li>
-      </ul>
+
+    <div class="grid" style="margin-top:50px;">
+      <div class="card"><h3>◆ Crawling</h3><p>Automated bots ("spiders") continuously discover new and updated pages across the web by following links.</p></div>
+      <div class="card"><h3>◆ Indexing</h3><p>Crawled content is processed and stored in a massive searchable database, organized by the words and topics it contains.</p></div>
+      <div class="card"><h3>◆ PageRank</h3><p>The original link-based authority algorithm — still one ingredient among hundreds in how modern Google ranks results.</p></div>
+      <div class="card"><h3>◆ Ranking signals</h3><p>Today's algorithm combines hundreds of factors beyond links — relevance, freshness, page speed, and more.</p></div>
+      <div class="card"><h3>◆ Knowledge Graph</h3><p>A structured database of real-world entities and their relationships, powering direct-answer info boxes in search results.</p></div>
+      <div class="card"><h3>◆ Ads auction</h3><p>Google's primary revenue engine — advertisers bid in real time for ad placement alongside organic search results.</p></div>
     </div>
   </div>
-  <div class="footer-btm">
-    <span class="f-copy">© 2026 USCS E-WALL PROJECT — BUILT FROM DISCARDED TECH</span>
-    <span class="f-status"><span class="f-dot"></span>INSTALLATION LIVE</span>
+</section>
+
+<!-- ================= USE CASES ================= -->
+<section id="usecases">
+  <div class="wrap reveal">
+    <div class="sec-label"><span class="dot" style="background:var(--cyan)"></span><span>03 — Applications</span></div>
+    <h2 class="h-title">What Google actually is today</h2>
+    <p class="lead">"Google" stopped meaning just a search box a long time ago — it's now a sprawling ecosystem spanning nearly every category of consumer and enterprise technology.</p>
+
+    <div class="case-grid">
+      <div class="case card">
+        <div class="img-wrap">
+          <svg viewBox="0 0 100 100" style="background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 168, 83, 0.05))">
+            <text x="50%" y="55%" font-size="40" text-anchor="middle" dominant-baseline="middle">🔍</text>
+          </svg>
+        </div>
+        <div class="body">
+          <span class="tag">Usecase 01</span>
+          <h4>Search & Information</h4>
+          <p>Google Search remains the company's core product and the dominant way most of the world finds information online.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap">
+          <svg viewBox="0 0 100 100" style="background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 168, 83, 0.05))">
+            <text x="50%" y="55%" font-size="40" text-anchor="middle" dominant-baseline="middle">💰</text>
+          </svg>
+        </div>
+        <div class="body">
+          <span class="tag">Usecase 02</span>
+          <h4>Advertising</h4>
+          <p>Google Ads and its ad-auction systems form the company's primary revenue engine, powering free consumer software globally.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap">
+          <svg viewBox="0 0 100 100" style="background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 168, 83, 0.05))">
+            <text x="50%" y="55%" font-size="40" text-anchor="middle" dominant-baseline="middle">📧</text>
+          </svg>
+        </div>
+        <div class="body">
+          <span class="tag">Usecase 03</span>
+          <h4>Productivity & Mail</h4>
+          <p>Gmail, Docs, Sheets, Drive, and Calendar form Google Workspace, hosting billions of individual and business workflows daily.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap">
+          <svg viewBox="0 0 100 100" style="background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 168, 83, 0.05))">
+            <text x="50%" y="55%" font-size="40" text-anchor="middle" dominant-baseline="middle">📱</text>
+          </svg>
+        </div>
+        <div class="body">
+          <span class="tag">Usecase 04</span>
+          <h4>Mobile & Hardware</h4>
+          <p>Android powers the vast majority of smartphones globally, supported by hardware ecosystems like Pixel phones.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap">
+          <svg viewBox="0 0 100 100" style="background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 168, 83, 0.05))">
+            <text x="50%" y="55%" font-size="40" text-anchor="middle" dominant-baseline="middle">☁️</text>
+          </svg>
+        </div>
+        <div class="body">
+          <span class="tag">Usecase 05</span>
+          <h4>Cloud Computing</h4>
+          <p>Google Cloud Platform (GCP) provides enterprise hosting, database administration, and container nodes globally.</p>
+        </div>
+      </div>
+      <div class="case card">
+        <div class="img-wrap">
+          <svg viewBox="0 0 100 100" style="background: linear-gradient(135deg, rgba(66, 133, 244, 0.1), rgba(52, 168, 83, 0.05))">
+            <text x="50%" y="55%" font-size="40" text-anchor="middle" dominant-baseline="middle">🧠</text>
+          </svg>
+        </div>
+        <div class="body">
+          <span class="tag">Usecase 06</span>
+          <h4>Artificial Intelligence</h4>
+          <p>Through DeepMind, Google conducts research on the Gemini model family, creating agentic architectures and tools.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LEARN MORE ================= -->
+<section id="learn">
+  <div class="wrap reveal">
+    <div class="sec-label"><span class="dot" style="background:var(--amber)"></span><span>04 — Go Deeper</span></div>
+    <h2 class="h-title">Free, official places to actually learn it</h2>
+    <p class="lead">From understanding how Search itself works to building on Google's own developer platforms.</p>
+
+    <div class="ref-list">
+      <div class="ref-item card">
+        <div>
+          <div class="rtitle">How Search Works — Google</div>
+          <div class="rdesc">Google's own official, visual explanation of crawling, indexing, and ranking pipelines.</div>
+        </div>
+        <a class="go" href="https://www.google.com/intl/en_uk/search/howsearchworks/" target="_blank" rel="noopener">Read Guide →</a>
+      </div>
+      <div class="ref-item card">
+        <div>
+          <div class="rtitle">Google Search Central</div>
+          <div class="rdesc">Official technical documentation detailing indexing configurations and mobile crawling specifications.</div>
+        </div>
+        <a class="go" href="https://developers.google.com/search/docs" target="_blank" rel="noopener">Read Docs →</a>
+      </div>
+      <div class="ref-item card">
+        <div>
+          <div class="rtitle">The Original PageRank Paper</div>
+          <div class="rdesc">Page and Brin's landmark 1998 academic paper detailing the web graph ranking systems.</div>
+        </div>
+        <a class="go" href="https://research.google/pubs/the-anatomy-of-a-large-scale-hypertextual-web-search-engine/" target="_blank" rel="noopener">View Paper →</a>
+      </div>
+    </div>
+
+    <div class="course-strip">
+      <h3>Recommended Learning Tracks</h3>
+      <div class="course-grid">
+        <div class="course-item">
+          <a href="https://grow.google/" target="_blank" rel="noopener">Grow with Google</a>
+          <p>Official, career-ready programs covering data analysis, marketing, and IT systems administration.</p>
+        </div>
+        <div class="course-item">
+          <a href="https://www.cloudskillsboost.google/" target="_blank" rel="noopener">Google Cloud Skills Boost</a>
+          <p>Hands-on sandbox labs designed for practicing cloud deployment and virtual machine setup.</p>
+        </div>
+        <div class="course-item">
+          <a href="https://cloud.google.com/learn/certification" target="_blank" rel="noopener">Cloud Certifications</a>
+          <p>Credential paths verifying architecting proficiency on Google Cloud Platform ecosystems.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= REFERENCES ================= -->
+<section id="refs" style="border-bottom:none;">
+  <div class="wrap reveal">
+    <div class="sec-label"><span class="dot" style="background:var(--blue)"></span><span>05 — Sources</span></div>
+    <h2 class="h-title">References</h2>
+
+    <div class="ref-list" style="margin-top:24px;">
+      <div class="ref-item card">
+        <div>
+          <div class="rtitle">History of Google — Wikipedia</div>
+          <div class="rdesc">Detailed founding story, product launch timeline, and the reorganization under Alphabet.</div>
+        </div>
+        <a class="go" href="https://en.wikipedia.org/wiki/History_of_Google" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+      <div class="ref-item card">
+        <div>
+          <div class="rtitle">Google — Wikipedia</div>
+          <div class="rdesc">Foundational overview of corporate milestones, initial public offering, and name origins.</div>
+        </div>
+        <a class="go" href="https://en.wikipedia.org/wiki/Google" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+      <div class="ref-item card">
+        <div>
+          <div class="rtitle">Larry Page — Wikipedia</div>
+          <div class="rdesc">Biographical data tracing Stanford research contributions and early system designs.</div>
+        </div>
+        <a class="go" href="https://en.wikipedia.org/wiki/Larry_Page" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+      <div class="ref-item card">
+        <div>
+          <div class="rtitle">Larry Page — Britannica Money</div>
+          <div class="rdesc">Corporate reference cataloguing initial board formations and key acquisitions.</div>
+        </div>
+        <a class="go" href="https://www.britannica.com/money/Larry-Page" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+      <div class="ref-item card">
+        <div>
+          <div class="rtitle">Sergey Brin and Larry Page — Lemelson-MIT</div>
+          <div class="rdesc">Historical index documenting engineering patents and development hierarchies.</div>
+        </div>
+        <a class="go" href="https://lemelson.mit.edu/resources/sergey-brin-and-larry-page" target="_blank" rel="noopener">Visit Source →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="brand" style="gap: 12px; display: flex; align-items: center; flex-wrap: wrap;">
+      <a href="../index.html#home" class="nav-logo" style="font-size: 1.2rem; letter-spacing: 2px;">USCS<span class="accent"> E-WALL</span></a>
+      <span style="opacity: 0.3;">|</span>
+      <span style="font-size: 12.5px; color: var(--ink-soft);">Educational overview — not an official Google page.</span>
+    </div>
+    <p>Sources cited above · Page last assembled June 2026</p>
   </div>
 </footer>
-
 
 <!-- ─── CLI TERMINAL OVERLAY ─── -->
 <div id="terminal-overlay">
@@ -666,8 +1073,14 @@
 
 <button class="cli-trigger" id="cli-open"><span>🤖</span></button>
 
-
 <script src="../data.js"></script>
 <script src="../main.js"></script>
+<script>
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); } });
+  },{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+
 </body>
 </html>

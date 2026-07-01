@@ -1429,6 +1429,11 @@ function initPageTransitions() {
   // 3. Trigger fade-out scanning sequence on load
   requestAnimationFrame(() => {
     overlay.classList.add('fade-out');
+    setTimeout(() => {
+      if (overlay.classList.contains('fade-out')) {
+        overlay.style.display = 'none';
+      }
+    }, 450);
   });
 
   // 4. Intercept clicks on internal links for smooth transitions
@@ -1447,6 +1452,8 @@ function initPageTransitions() {
       if (url.origin !== window.location.origin) return;
       
       e.preventDefault();
+      overlay.style.display = 'flex';
+      overlay.offsetHeight; // Force reflow
       overlay.classList.remove('fade-out');
       overlay.classList.add('fade-in');
       
